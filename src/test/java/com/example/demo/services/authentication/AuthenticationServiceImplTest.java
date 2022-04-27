@@ -5,8 +5,10 @@ import com.example.demo.dto.responses.LoginResponseDTO;
 import com.example.demo.entities.UserEntity;
 import com.example.demo.exceptions.InvalidTokenException;
 import com.example.demo.exceptions.UsernamePasswordInvalidException;
-import com.example.demo.repositories.UserRepo;
-import com.example.demo.securityproviders.JWTProvider;
+import com.example.demo.repositories.UserRepository;
+import com.example.demo.security.providers.JWTProvider;
+import com.example.demo.services.implementations.AuthenticationServiceImpl;
+import com.example.demo.services.interfaces.AuthenticationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -25,21 +27,21 @@ import static org.mockito.Mockito.*;
 public class AuthenticationServiceImplTest {
     UserEntity initialUser;
     AuthenticationService authService;
-    UserRepo userRepo;
+    UserRepository userRepository;
     PasswordEncoder passwordEncoder;
     JWTProvider jwtProvider;
     ModelMapper modelMapper;
 
     @BeforeEach
     public void beforeEach() {
-        userRepo = mock(UserRepo.class);
+        userRepository = mock(UserRepository.class);
         passwordEncoder = mock(PasswordEncoder.class);
         jwtProvider = mock(JWTProvider.class);
         modelMapper = mock(ModelMapper.class);
-        authService = new AuthenticationServiceImpl(userRepo, passwordEncoder, jwtProvider, modelMapper);
+        authService = new AuthenticationServiceImpl(userRepository, passwordEncoder, jwtProvider, modelMapper);
         initialUser = mock(UserEntity.class);
-        when(userRepo.findByUsername(anyString())).thenReturn(Optional.ofNullable(null));
-        when(userRepo.findByUsername("username")).thenReturn(Optional.of(initialUser));
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.ofNullable(null));
+        when(userRepository.findByUsername("username")).thenReturn(Optional.of(initialUser));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
         when(passwordEncoder.matches("password", initialUser.getPassword())).thenReturn(true);
         when(jwtProvider.generateAccessToken(initialUser)).thenReturn("accessToken");
@@ -49,8 +51,8 @@ public class AuthenticationServiceImplTest {
         when(jwtProvider.validateRefreshToken("validRefreshToken")).thenReturn(true);
         when(jwtProvider.getUserIdFromJWT(anyString())).thenReturn(2);
         when(jwtProvider.getUserIdFromJWT("validRefreshToken")).thenReturn(1);
-        when(userRepo.findById(anyLong())).thenReturn(Optional.ofNullable(null));
-        when(userRepo.findById(1L)).thenReturn(Optional.of(initialUser));
+        when(userRepository.findById(anyLong())).thenReturn(Optional.ofNullable(null));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(initialUser));
     }
 
     @Test
@@ -108,6 +110,6 @@ public class AuthenticationServiceImplTest {
         assertNull(authenticationService.getJwtProvider());
         assertNull(authenticationService.getModelMapper());
         assertNull(authenticationService.getPasswordEncoder());
-        assertNull(authenticationService.getUserRepo());
+        assertNull(authenticationService.getUserRepository());
     }
 }
