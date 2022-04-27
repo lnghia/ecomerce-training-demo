@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.NoSuchElementException;
+
 @ControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UsernamePasswordInvalidException.class)
@@ -58,6 +60,24 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         ResponseBodyDTO response = new ResponseBodyDTO();
 
         response.getErrors().put(exception.getHeaderName(), exception.getMessage());
+
+        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserExistedException.class)
+    protected ResponseEntity<Object> handleUserExistedException(UserExistedException exception, WebRequest request) {
+        ResponseBodyDTO response = new ResponseBodyDTO();
+
+        response.getErrors().put("email", "Email has been registered");
+
+        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    protected ResponseEntity<Object> handleNoSuchElementException(NoSuchElementException exception, WebRequest request) {
+        ResponseBodyDTO response = new ResponseBodyDTO();
+
+        response.getErrors().put("id", "Resources doesn't exist");
 
         return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
     }
