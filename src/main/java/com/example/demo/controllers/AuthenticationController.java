@@ -6,15 +6,11 @@ import com.example.demo.dto.requests.RegisterRequestDTO;
 import com.example.demo.dto.responses.LoginResponseDTO;
 import com.example.demo.dto.responses.ResponseBodyDTO;
 import com.example.demo.dto.responses.UserResponseDTO;
+import com.example.demo.entities.CustomUserDetails;
 import com.example.demo.entities.RoleEntity;
 import com.example.demo.entities.UserEntity;
-import com.example.demo.securityproviders.JWTProvider;
-import com.example.demo.services.authentication.AuthenticationService;
-import com.example.demo.services.permission.PermissionService;
-import com.example.demo.services.role.RoleService;
-import com.example.demo.services.user.UserService;
-import com.example.demo.services.userrole.UserRoleService;
-import com.example.demo.userdetails.CustomUserDetails;
+import com.example.demo.security.providers.JWTProvider;
+import com.example.demo.services.interfaces.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +45,7 @@ public class AuthenticationController {
     @Autowired
     private UserRoleService userRoleService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/test")
     public String test() {
         UserEntity user = ((CustomUserDetails) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getUser();
@@ -70,7 +67,7 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<ResponseBodyDTO> register(@Valid @RequestBody RegisterRequestDTO request) {
         UserEntity newUser = modelMapper.map(request, UserEntity.class);
-        UserResponseDTO userResponseDTO = userService.createUser(newUser);
+        UserResponseDTO userResponseDTO = userService.createNormalUser(newUser);
         ResponseBodyDTO response = ResponseBodyDTO.builder().data(userResponseDTO).build();
 
         return ResponseEntity.ok(response);
