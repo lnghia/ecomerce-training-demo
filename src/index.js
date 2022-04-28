@@ -2,12 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import TopBar from './component/js/TopBar';
+import Footer from './component/js/Footer';
+import Categories from './component/js/Categories';
+import Features from './component/js/Features';
+import NavBar from './component/js/NavBar';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    <TopBar />
+    <NavBar />
+    <Features />
     <App />
+    <Footer />
   </React.StrictMode>
 );
 
