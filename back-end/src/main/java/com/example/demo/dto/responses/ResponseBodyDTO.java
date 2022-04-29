@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 @Builder(toBuilder = true)
 public class ResponseBodyDTO<T> {
+    private String status;
     private T data;
     private HashMap<String, String> errors;
 
