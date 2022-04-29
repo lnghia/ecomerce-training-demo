@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class AssignRoleToUserRequestDTO {
+public class AssignRoleToUserRequestDto {
     @NotNull
     @ValidUserId
     private Long userId;

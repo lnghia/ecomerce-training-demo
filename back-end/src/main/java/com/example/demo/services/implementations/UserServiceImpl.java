@@ -1,6 +1,6 @@
 package com.example.demo.services.implementations;
 
-import com.example.demo.dto.responses.UserResponseDTO;
+import com.example.demo.dto.responses.UserResponseDto;
 import com.example.demo.entities.RoleEntity;
 import com.example.demo.entities.UserEntity;
 import com.example.demo.exceptions.UserExistedException;
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO createNormalUser(UserEntity newUser) {
+    public UserResponseDto createNormalUser(UserEntity newUser) {
         Optional<UserEntity> userEntity = userRepository.findByUsername(newUser.getEmail());
 
         if (userEntity.isPresent()) {
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
         newUser.setUsername(newUser.getEmail());
         newUser.setRoles(Set.of(roleEntity.get()));
 
-        return modelMapper.map(userRepository.save(newUser), UserResponseDTO.class);
+        return modelMapper.map(userRepository.save(newUser), UserResponseDto.class);
     }
 
 

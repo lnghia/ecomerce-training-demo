@@ -1,7 +1,7 @@
 package com.example.demo.services.authentication;
 
 
-import com.example.demo.dto.responses.LoginResponseDTO;
+import com.example.demo.dto.responses.LoginResponseDto;
 import com.example.demo.entities.UserEntity;
 import com.example.demo.exceptions.InvalidTokenException;
 import com.example.demo.exceptions.UsernamePasswordInvalidException;
@@ -57,7 +57,7 @@ public class AuthenticationServiceImplTest {
 
     @Test
     void authenticateUser_ShouldReturnLoginResponseDTO_WhenCredentialsValid() {
-        LoginResponseDTO result = authService.authenticateUser("username", "password");
+        LoginResponseDto result = authService.authenticateUser("username", "password");
 
         verify(jwtProvider).generateAccessToken(initialUser);
         verify(jwtProvider).generateRefreshToken(initialUser);
@@ -88,7 +88,7 @@ public class AuthenticationServiceImplTest {
 
     @Test
     void refreshAccessToken_ShouldReturnLoginResponseDTO_WhenRefreshTokenValid() {
-        LoginResponseDTO result = authService.refreshAccessToken("validRefreshToken");
+        LoginResponseDto result = authService.refreshAccessToken("validRefreshToken");
 
         verify(jwtProvider).generateAccessToken(initialUser);
         verify(jwtProvider).generateRefreshToken(initialUser);

@@ -1,7 +1,7 @@
 package com.example.demo.services.interfaces;
 
-import com.example.demo.dto.responses.ProductResponseDTO;
+import com.example.demo.dto.responses.ProductResponseDto;
 
 public interface ProductService {
-    ProductResponseDTO findById(long id);
+    ProductResponseDto findById(long id);
 }

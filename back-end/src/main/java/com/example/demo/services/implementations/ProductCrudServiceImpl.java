@@ -1,7 +1,7 @@
 package com.example.demo.services.implementations;
 
-import com.example.demo.dto.requests.CreateProductRequestDTO;
-import com.example.demo.dto.responses.ProductResponseDTO;
+import com.example.demo.dto.requests.CreateProductRequestDto;
+import com.example.demo.dto.responses.ProductResponseDto;
 import com.example.demo.entities.*;
 import com.example.demo.repositories.ProductRepository;
 import com.example.demo.services.interfaces.*;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @NoArgsConstructor
-public class ProductCRUDServiceImpl implements ProductCRUDService {
+public class ProductCrudServiceImpl implements ProductCrudService {
     private ModelMapper modelMapper;
 
     private GenderCrudService genderCrudService;
@@ -30,7 +30,7 @@ public class ProductCRUDServiceImpl implements ProductCRUDService {
     private ProductRepository productRepository;
 
     @Autowired
-    public ProductCRUDServiceImpl(ModelMapper modelMapper,
+    public ProductCrudServiceImpl(ModelMapper modelMapper,
                                   GenderCrudService genderCrudService,
                                   SportCrudService sportCrudService,
                                   UpperCrudService upperCrudService,
@@ -49,7 +49,7 @@ public class ProductCRUDServiceImpl implements ProductCRUDService {
     }
 
     @Override
-    public ProductResponseDTO createProduct(CreateProductRequestDTO createProductRequestDTO) {
+    public ProductResponseDto createProduct(CreateProductRequestDto createProductRequestDTO) {
         Long genderId = createProductRequestDTO.getGenderId();
         Long sportId = createProductRequestDTO.getSportId();
         Long upperId = createProductRequestDTO.getUpperId();
@@ -82,6 +82,6 @@ public class ProductCRUDServiceImpl implements ProductCRUDService {
 
         productEntity = productRepository.save(productEntity);
 
-        return modelMapper.map(productEntity, ProductResponseDTO.class);
+        return modelMapper.map(productEntity, ProductResponseDto.class);
     }
 }

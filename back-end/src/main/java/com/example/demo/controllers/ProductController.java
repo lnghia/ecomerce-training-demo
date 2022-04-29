@@ -1,10 +1,10 @@
 package com.example.demo.controllers;
 
 import com.example.demo.dto.requests.AddSizeToProductRequestDto;
-import com.example.demo.dto.requests.CreateProductRequestDTO;
-import com.example.demo.dto.responses.ProductResponseDTO;
-import com.example.demo.dto.responses.ResponseBodyDTO;
-import com.example.demo.services.interfaces.ProductCRUDService;
+import com.example.demo.dto.requests.CreateProductRequestDto;
+import com.example.demo.dto.responses.ProductResponseDto;
+import com.example.demo.dto.responses.ResponseBodyDto;
+import com.example.demo.services.interfaces.ProductCrudService;
 import com.example.demo.services.interfaces.ProductService;
 import com.example.demo.services.interfaces.ProductSizeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,33 +21,33 @@ public class ProductController {
     private ProductService productService;
 
     @Autowired
-    private ProductCRUDService productCRUDService;
+    private ProductCrudService productCRUDService;
 
     @Autowired
     private ProductSizeService productSizeService;
 
     @GetMapping
-    public ResponseEntity<ResponseBodyDTO> getProduct(@RequestParam Long id) {
-        ProductResponseDTO productResponseDTO = productService.findById(id);
-        ResponseBodyDTO responseBodyDTO = ResponseBodyDTO.builder().data(productResponseDTO).build();
+    public ResponseEntity<ResponseBodyDto> getProduct(@RequestParam Long id) {
+        ProductResponseDto productResponseDTO = productService.findById(id);
+        ResponseBodyDto responseBodyDTO = ResponseBodyDto.builder().data(productResponseDTO).build();
 
         return ResponseEntity.ok(responseBodyDTO);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "/create")
-    public ResponseEntity<ResponseBodyDTO> createProduct(@Valid @RequestBody CreateProductRequestDTO createProductRequestDTO) {
-        ProductResponseDTO productResponseDTO = productCRUDService.createProduct(createProductRequestDTO);
-        ResponseBodyDTO responseBodyDTO = ResponseBodyDTO.builder().data(productResponseDTO).build();
+    public ResponseEntity<ResponseBodyDto> createProduct(@Valid @RequestBody CreateProductRequestDto createProductRequestDTO) {
+        ProductResponseDto productResponseDTO = productCRUDService.createProduct(createProductRequestDTO);
+        ResponseBodyDto responseBodyDTO = ResponseBodyDto.builder().data(productResponseDTO).build();
 
         return ResponseEntity.ok(responseBodyDTO);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(path = "/add_size")
-    public ResponseEntity<ResponseBodyDTO> addSizeToProduct(@Valid @RequestBody AddSizeToProductRequestDto requestDto) {
+    public ResponseEntity<ResponseBodyDto> addSizeToProduct(@Valid @RequestBody AddSizeToProductRequestDto requestDto) {
         productSizeService.addSizeToProduct(requestDto);
 
-        return ResponseEntity.ok(ResponseBodyDTO.builder().status("200").build());
+        return ResponseEntity.ok(ResponseBodyDto.builder().status("200").build());
     }
 }

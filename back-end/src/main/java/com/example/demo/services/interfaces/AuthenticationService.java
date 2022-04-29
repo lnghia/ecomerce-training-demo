@@ -1,9 +1,9 @@
 package com.example.demo.services.interfaces;
 
-import com.example.demo.dto.responses.LoginResponseDTO;
+import com.example.demo.dto.responses.LoginResponseDto;
 
 public interface AuthenticationService {
-    LoginResponseDTO authenticateUser(String username, String password);
+    LoginResponseDto authenticateUser(String username, String password);
 
-    LoginResponseDTO refreshAccessToken(String refreshToken);
+    LoginResponseDto refreshAccessToken(String refreshToken);
 }

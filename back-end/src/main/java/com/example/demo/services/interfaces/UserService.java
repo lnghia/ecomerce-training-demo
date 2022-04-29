@@ -1,6 +1,6 @@
 package com.example.demo.services.interfaces;
 
-import com.example.demo.dto.responses.UserResponseDTO;
+import com.example.demo.dto.responses.UserResponseDto;
 import com.example.demo.entities.RoleEntity;
 import com.example.demo.entities.UserEntity;
 
@@ -11,7 +11,7 @@ public interface UserService {
 
     UserEntity getUserByUsername(String username);
 
-    UserResponseDTO createNormalUser(UserEntity newUser);
+    UserResponseDto createNormalUser(UserEntity newUser);
 
     Collection<RoleEntity> getUserGrantedPermissions(long id);
 

@@ -1,6 +1,6 @@
 package com.example.demo.exceptions;
 
-import com.example.demo.dto.responses.ResponseBodyDTO;
+import com.example.demo.dto.responses.ResponseBodyDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -19,7 +19,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-        ResponseBodyDTO response = new ResponseBodyDTO();
+        ResponseBodyDto response = new ResponseBodyDto();
 
         response.getErrors().put("authorization", "Unauthorised");
 

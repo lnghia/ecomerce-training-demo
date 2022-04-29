@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class CreateProductRequestDTO {
+public class CreateProductRequestDto {
     @NotNull
     private Long genderId;
 

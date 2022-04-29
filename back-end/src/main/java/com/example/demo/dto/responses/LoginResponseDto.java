@@ -7,8 +7,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class GenderResponseDTO {
-    private Long id;
+public class LoginResponseDto {
+    private String accessToken;
 
-    private String name;
+    private String refreshToken;
 }

@@ -1,7 +1,7 @@
 package com.example.demo.security.filters;
 
 import com.example.demo.configurations.security.PermittedUrlsUtil;
-import com.example.demo.dto.responses.ResponseBodyDTO;
+import com.example.demo.dto.responses.ResponseBodyDto;
 import com.example.demo.entities.CustomUserDetails;
 import com.example.demo.entities.UserEntity;
 import com.example.demo.security.providers.JWTProvider;
@@ -61,7 +61,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
                     }
                 }
             } catch (JwtException exception) {
-                ResponseBodyDTO responseBodyDTO = new ResponseBodyDTO();
+                ResponseBodyDto responseBodyDTO = new ResponseBodyDto();
 
                 responseBodyDTO.getErrors().put("JWT token", "Invalid token");
 

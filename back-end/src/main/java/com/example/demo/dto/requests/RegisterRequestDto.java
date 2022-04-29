@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class RegisterRequestDTO {
+public class RegisterRequestDto {
     @NotNull
     @Email
     private String email;

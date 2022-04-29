@@ -1,6 +1,6 @@
 package com.example.demo.services.implementations;
 
-import com.example.demo.dto.responses.LoginResponseDTO;
+import com.example.demo.dto.responses.LoginResponseDto;
 import com.example.demo.entities.UserEntity;
 import com.example.demo.exceptions.InvalidTokenException;
 import com.example.demo.exceptions.UsernamePasswordInvalidException;
@@ -37,13 +37,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public LoginResponseDTO authenticateUser(String username, String password) {
+    public LoginResponseDto authenticateUser(String username, String password) {
         Optional<UserEntity> user = userRepository.findByUsername(username);
 
         if (user.isPresent() && passwordEncoder.matches(password, user.get().getPassword())) {
             String accessToken = jwtProvider.generateAccessToken(user.get());
             String refreshToken = jwtProvider.generateRefreshToken(user.get());
-            LoginResponseDTO loginResponseDTO = new LoginResponseDTO(accessToken, refreshToken);
+            LoginResponseDto loginResponseDTO = new LoginResponseDto(accessToken, refreshToken);
 
             return loginResponseDTO;
         }
@@ -52,7 +52,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public LoginResponseDTO refreshAccessToken(String refreshToken) {
+    public LoginResponseDto refreshAccessToken(String refreshToken) {
         if (jwtProvider.validateRefreshToken(refreshToken)) {
             long userId = jwtProvider.getUserIdFromJWT(refreshToken);
             Optional<UserEntity> user = userRepository.findById(userId);
@@ -61,7 +61,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 String newAccessToken = jwtProvider.generateAccessToken(user.get());
                 String newRefreshToken = jwtProvider.generateRefreshToken(user.get());
 
-                return LoginResponseDTO.builder().accessToken(newAccessToken).refreshToken(newRefreshToken).build();
+                return LoginResponseDto.builder().accessToken(newAccessToken).refreshToken(newRefreshToken).build();
             }
         }
 

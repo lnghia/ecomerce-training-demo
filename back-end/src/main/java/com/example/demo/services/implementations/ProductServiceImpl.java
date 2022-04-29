@@ -1,6 +1,6 @@
 package com.example.demo.services.implementations;
 
-import com.example.demo.dto.responses.ProductResponseDTO;
+import com.example.demo.dto.responses.ProductResponseDto;
 import com.example.demo.entities.ProductEntity;
 import com.example.demo.exceptions.ProductNotFoundException;
 import com.example.demo.repositories.GenderRepository;
@@ -33,13 +33,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponseDTO findById(long id) {
+    public ProductResponseDto findById(long id) {
         Optional<ProductEntity> productEntity = productRepository.findById(id);
 
         if (!productEntity.isPresent()) {
             throw new ProductNotFoundException();
         }
 
-        return modelMapper.map(productEntity.orElse(null), ProductResponseDTO.class);
+        return modelMapper.map(productEntity.orElse(null), ProductResponseDto.class);
     }
 }

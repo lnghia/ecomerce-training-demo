@@ -1,11 +1,11 @@
 package com.example.demo.controllers;
 
-import com.example.demo.dto.requests.AssignRoleToUserRequestDTO;
-import com.example.demo.dto.requests.LoginRequestDTO;
-import com.example.demo.dto.requests.RegisterRequestDTO;
-import com.example.demo.dto.responses.LoginResponseDTO;
-import com.example.demo.dto.responses.ResponseBodyDTO;
-import com.example.demo.dto.responses.UserResponseDTO;
+import com.example.demo.dto.requests.AssignRoleToUserRequestDto;
+import com.example.demo.dto.requests.LoginRequestDto;
+import com.example.demo.dto.requests.RegisterRequestDto;
+import com.example.demo.dto.responses.LoginResponseDto;
+import com.example.demo.dto.responses.ResponseBodyDto;
+import com.example.demo.dto.responses.UserResponseDto;
 import com.example.demo.entities.CustomUserDetails;
 import com.example.demo.entities.RoleEntity;
 import com.example.demo.entities.UserEntity;
@@ -55,44 +55,44 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseBodyDTO> login(@Valid @RequestBody LoginRequestDTO request) {
+    public ResponseEntity<ResponseBodyDto> login(@Valid @RequestBody LoginRequestDto request) {
         String username = request.getUsername();
         String password = request.getPassword();
-        LoginResponseDTO loginResponseDTO = authService.authenticateUser(username, password);
-        ResponseBodyDTO responseBodyDTO = ResponseBodyDTO.builder().data(loginResponseDTO).build();
+        LoginResponseDto loginResponseDTO = authService.authenticateUser(username, password);
+        ResponseBodyDto responseBodyDTO = ResponseBodyDto.builder().data(loginResponseDTO).build();
 
         return ResponseEntity.ok(responseBodyDTO);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseBodyDTO> register(@Valid @RequestBody RegisterRequestDTO request) {
+    public ResponseEntity<ResponseBodyDto> register(@Valid @RequestBody RegisterRequestDto request) {
         UserEntity newUser = modelMapper.map(request, UserEntity.class);
-        UserResponseDTO userResponseDTO = userService.createNormalUser(newUser);
-        ResponseBodyDTO response = ResponseBodyDTO.builder().data(userResponseDTO).build();
+        UserResponseDto userResponseDTO = userService.createNormalUser(newUser);
+        ResponseBodyDto response = ResponseBodyDto.builder().data(userResponseDTO).build();
 
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/refresh_tokens")
-    public ResponseEntity<ResponseBodyDTO> refreshTokens(@RequestHeader(value = "Refresh-Token", required = true) String refreshToken) {
-        LoginResponseDTO responseDTO = authService.refreshAccessToken(refreshToken);
+    public ResponseEntity<ResponseBodyDto> refreshTokens(@RequestHeader(value = "Refresh-Token", required = true) String refreshToken) {
+        LoginResponseDto responseDTO = authService.refreshAccessToken(refreshToken);
 
-        return ResponseEntity.ok(ResponseBodyDTO.builder().data(responseDTO).build());
+        return ResponseEntity.ok(ResponseBodyDto.builder().data(responseDTO).build());
     }
 
     @GetMapping("/ttt")
-    public ResponseEntity<ResponseBodyDTO> ttt() {
+    public ResponseEntity<ResponseBodyDto> ttt() {
         ArrayList<RoleEntity> tmp = new ArrayList<>(userService.getUserGrantedPermissions(1L));
 
-        return ResponseEntity.ok(ResponseBodyDTO.builder().data(tmp).build());
+        return ResponseEntity.ok(ResponseBodyDto.builder().data(tmp).build());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/assign_role")
-    public ResponseEntity<ResponseBodyDTO> assignRoleToUser(@Valid @RequestBody AssignRoleToUserRequestDTO requestBody) {
-        UserResponseDTO userResponseDTO = userRoleService.assignRoleToUser(requestBody.getUserId(), requestBody.getRoleId());
+    public ResponseEntity<ResponseBodyDto> assignRoleToUser(@Valid @RequestBody AssignRoleToUserRequestDto requestBody) {
+        UserResponseDto userResponseDTO = userRoleService.assignRoleToUser(requestBody.getUserId(), requestBody.getRoleId());
 
-        return ResponseEntity.ok(ResponseBodyDTO.builder().data(userResponseDTO).build());
+        return ResponseEntity.ok(ResponseBodyDto.builder().data(userResponseDTO).build());
     }
 
 //    @GetMapping("/iii")

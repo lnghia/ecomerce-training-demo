@@ -5,17 +5,17 @@ import lombok.Builder;
 import java.util.HashMap;
 
 @Builder(toBuilder = true)
-public class ResponseBodyDTO<T> {
+public class ResponseBodyDto<T> {
     private String status;
     private T data;
     private HashMap<String, String> errors;
 
-    public ResponseBodyDTO() {
+    public ResponseBodyDto() {
         data = null;
         errors = new HashMap<>();
     }
 
-    public ResponseBodyDTO(String status, T data, HashMap<String, String> errors) {
+    public ResponseBodyDto(String status, T data, HashMap<String, String> errors) {
         this.data = data;
         this.errors = errors;
     }

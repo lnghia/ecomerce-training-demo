@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class ProductResponseDTO {
+public class ProductResponseDto {
     private Long id;
 
     private GenderEntity gender;

@@ -1,6 +1,6 @@
 package com.example.demo.services.implementations;
 
-import com.example.demo.dto.responses.UserResponseDTO;
+import com.example.demo.dto.responses.UserResponseDto;
 import com.example.demo.entities.RoleEntity;
 import com.example.demo.entities.UserEntity;
 import com.example.demo.repositories.RoleRepository;
@@ -30,7 +30,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
-    public UserResponseDTO assignRoleToUser(long userId, long roleId) {
+    public UserResponseDto assignRoleToUser(long userId, long roleId) {
         Optional<UserEntity> userEntity = userRepository.findById(userId);
         UserEntity user = userEntity.get();
         RoleEntity roleEntity = roleRepository.getById(roleId);
@@ -38,6 +38,6 @@ public class UserRoleServiceImpl implements UserRoleService {
         user.getRoles().add(roleEntity);
         user = userRepository.save(user);
 
-        return modelMapper.map(user, UserResponseDTO.class);
+        return modelMapper.map(user, UserResponseDto.class);
     }
 }

@@ -1,6 +1,6 @@
 package com.example.demo.services.implementations;
 
-import com.example.demo.dto.responses.GenderResponseDTO;
+import com.example.demo.dto.responses.GenderResponseDto;
 import com.example.demo.entities.GenderEntity;
 import com.example.demo.repositories.GenderRepository;
 import com.example.demo.services.interfaces.GenderService;
@@ -23,10 +23,10 @@ public class GenderServiceImpl implements GenderService {
     }
 
     @Override
-    public GenderResponseDTO save(GenderEntity genderEntity) {
+    public GenderResponseDto save(GenderEntity genderEntity) {
         genderEntity = genderRepository.save(genderEntity);
 
-        return modelMapper.map(genderEntity, GenderResponseDTO.class);
+        return modelMapper.map(genderEntity, GenderResponseDto.class);
     }
 
     @Override

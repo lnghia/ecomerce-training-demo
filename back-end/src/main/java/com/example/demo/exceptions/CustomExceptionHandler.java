@@ -1,6 +1,6 @@
 package com.example.demo.exceptions;
 
-import com.example.demo.dto.responses.ResponseBodyDTO;
+import com.example.demo.dto.responses.ResponseBodyDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UsernamePasswordInvalidException.class)
     public ResponseEntity<Object> handleUsernamePasswordInvalidException(UsernamePasswordInvalidException exception, WebRequest webRequest) {
-        ResponseBodyDTO response = new ResponseBodyDTO();
+        ResponseBodyDto response = new ResponseBodyDto();
 
         response.getErrors().put("credentials", "Invalid username or password");
 
@@ -27,7 +27,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<Object> handleInvalidTokenException(InvalidTokenException exception, WebRequest webRequest) {
-        ResponseBodyDTO response = new ResponseBodyDTO();
+        ResponseBodyDto response = new ResponseBodyDto();
 
         response.getErrors().put("JWT token", "Invalid token");
 
@@ -36,7 +36,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatus status, WebRequest webRequest) {
-        ResponseBodyDTO response = new ResponseBodyDTO();
+        ResponseBodyDto response = new ResponseBodyDto();
 
         exception.getBindingResult().getFieldErrors().forEach(error -> {
             response.getErrors().put(error.getField(), error.getDefaultMessage());
@@ -47,7 +47,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     protected ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException exception, WebRequest webRequest) {
-        ResponseBodyDTO response = new ResponseBodyDTO();
+        ResponseBodyDto response = new ResponseBodyDto();
 
         response.getErrors().put("user", "User not found");
 
@@ -57,7 +57,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(MissingRequestHeaderException.class)
     @ResponseBody
     protected ResponseEntity<Object> handleMissingRequestHeaderException(MissingRequestHeaderException exception, WebRequest request) {
-        ResponseBodyDTO response = new ResponseBodyDTO();
+        ResponseBodyDto response = new ResponseBodyDto();
 
         response.getErrors().put(exception.getHeaderName(), exception.getMessage());
 
@@ -66,7 +66,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UserExistedException.class)
     protected ResponseEntity<Object> handleUserExistedException(UserExistedException exception, WebRequest request) {
-        ResponseBodyDTO response = new ResponseBodyDTO();
+        ResponseBodyDto response = new ResponseBodyDto();
 
         response.getErrors().put("email", "Email has been registered");
 
@@ -75,7 +75,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NoSuchElementException.class)
     protected ResponseEntity<Object> handleNoSuchElementException(NoSuchElementException exception, WebRequest request) {
-        ResponseBodyDTO response = new ResponseBodyDTO();
+        ResponseBodyDto response = new ResponseBodyDto();
 
         response.getErrors().put("id", "Resources doesn't exist");
 
@@ -84,7 +84,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UpperNotFoundException.class)
     protected ResponseEntity<Object> handleUpperNotFoundException(UpperNotFoundException exception, WebRequest request) {
-        ResponseBodyDTO response = new ResponseBodyDTO();
+        ResponseBodyDto response = new ResponseBodyDto();
 
         response.getErrors().put("upperId", "upper not found");
 
@@ -93,7 +93,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CategoryNotFoundException.class)
     protected ResponseEntity<Object> handleCategoryNotFoundException(CategoryNotFoundException exception, WebRequest request) {
-        ResponseBodyDTO response = new ResponseBodyDTO();
+        ResponseBodyDto response = new ResponseBodyDto();
 
         response.getErrors().put("categoryId", "category not found");
 
@@ -102,7 +102,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(SportNotFoundException.class)
     protected ResponseEntity<Object> handleSportNotFoundException(SportNotFoundException exception, WebRequest request) {
-        ResponseBodyDTO response = new ResponseBodyDTO();
+        ResponseBodyDto response = new ResponseBodyDto();
 
         response.getErrors().put("sportId", "sport not found");
 
@@ -111,7 +111,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(SizeNotFoundException.class)
     protected ResponseEntity<Object> handleSizeNotFoundException(SizeNotFoundException exception, WebRequest request) {
-        ResponseBodyDTO response = new ResponseBodyDTO();
+        ResponseBodyDto response = new ResponseBodyDto();
 
         response.getErrors().put("sizeId", "size not found");
 
@@ -120,7 +120,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ProductNotFoundException.class)
     protected ResponseEntity<Object> handleProductNotFoundException(ProductNotFoundException exception, WebRequest request) {
-        ResponseBodyDTO response = new ResponseBodyDTO();
+        ResponseBodyDto response = new ResponseBodyDto();
 
         response.getErrors().put("productId", "product not found");
 
@@ -129,7 +129,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CollectionNotFoundException.class)
     protected ResponseEntity<Object> handleCollectionNotFoundException(CollectionNotFoundException exception, WebRequest request) {
-        ResponseBodyDTO response = new ResponseBodyDTO();
+        ResponseBodyDto response = new ResponseBodyDto();
 
         response.getErrors().put("collectionId", "collection not found");
 
@@ -138,7 +138,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(GenderNotFoundException.class)
     protected ResponseEntity<Object> handleGenderNotFoundException(GenderNotFoundException exception, WebRequest request) {
-        ResponseBodyDTO response = new ResponseBodyDTO();
+        ResponseBodyDto response = new ResponseBodyDto();
 
         response.getErrors().put("genderId", "gender not found");
 
@@ -147,7 +147,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(MidsoleNotFoundException.class)
     protected ResponseEntity<Object> handleMidsoleNotFoundException(MidsoleNotFoundException exception, WebRequest request) {
-        ResponseBodyDTO response = new ResponseBodyDTO();
+        ResponseBodyDto response = new ResponseBodyDto();
 
         response.getErrors().put("midsoleId", "midsole not found");
 
