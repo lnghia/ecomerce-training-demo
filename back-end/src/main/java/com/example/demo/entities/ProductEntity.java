@@ -3,7 +3,6 @@ package com.example.demo.entities;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -53,16 +52,16 @@ public class ProductEntity extends Auditable {
     @JoinColumn(name = "midsole_id", referencedColumnName = "id")
     private MidsoleEntity midsole;
 
-    @ManyToMany
-    @JoinTable(name = "product_collection", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "collection_id"), uniqueConstraints = {@UniqueConstraint(columnNames = {"product_id", "collection_id"})})
-    private Set<CollectionEntity> collections;
+    @ManyToOne
+    @JoinColumn(name = "collection_id", referencedColumnName = "id")
+    private CollectionEntity collection;
 
-    @ManyToMany
-    @JoinTable(name = "product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"), uniqueConstraints = {@UniqueConstraint(columnNames = {"product_id", "category_id"})})
-    private Set<CategoryEntity> categories;
+    @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private CategoryEntity category;
 
-    @OneToMany(mappedBy = "product")
-    private Set<ProductSizeEntity> sizes;
+//    @OneToMany(mappedBy = "product")
+//    private Set<ProductSizeEntity> sizes;
 
     private boolean isDeleted = false;
 }
