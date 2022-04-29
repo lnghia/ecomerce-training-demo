@@ -14,14 +14,6 @@ import javax.persistence.*;
 @Builder(toBuilder = true)
 @IdClass(ProductSizeId.class)
 public class ProductSizeEntity {
-//    @Id
-//    @Column(name = "product_id")
-//    private int productId;
-//
-//    @Id
-//    @Column(name = "size_id")
-//    private int sizeId;
-
     @Id
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
