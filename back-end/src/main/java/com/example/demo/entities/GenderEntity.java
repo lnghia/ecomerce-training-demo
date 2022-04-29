@@ -3,7 +3,6 @@ package com.example.demo.entities;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table(name = "genders")
@@ -19,6 +18,6 @@ public class GenderEntity {
 
     private String name;
 
-    @OneToMany(mappedBy = "gender")
-    private Set<ProductEntity> products;
+//    @OneToMany(mappedBy = "gender", fetch = FetchType.LAZY)
+//    private Set<ProductEntity> products;
 }
