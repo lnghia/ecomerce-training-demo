@@ -1,9 +1,13 @@
 package com.example.demo.dto.responses;
 
 import com.example.demo.entities.*;
+import lombok.*;
 
-import java.util.Set;
-
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
 public class ProductResponseDTO {
     private Long id;
 
@@ -35,9 +39,7 @@ public class ProductResponseDTO {
 
     private MidsoleEntity midsole;
 
-    private Set<CollectionEntity> collections;
+    private CollectionEntity collection;
 
-    private Set<CategoryEntity> categories;
-
-    private Set<ProductSizeEntity> sizes;
+    private CategoryEntity category;
 }
