@@ -81,4 +81,76 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
         return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(UpperNotFoundException.class)
+    protected ResponseEntity<Object> handleUpperNotFoundException(UpperNotFoundException exception, WebRequest request) {
+        ResponseBodyDTO response = new ResponseBodyDTO();
+
+        response.getErrors().put("upperId", "upper not found");
+
+        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    protected ResponseEntity<Object> handleCategoryNotFoundException(CategoryNotFoundException exception, WebRequest request) {
+        ResponseBodyDTO response = new ResponseBodyDTO();
+
+        response.getErrors().put("categoryId", "category not found");
+
+        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(SportNotFoundException.class)
+    protected ResponseEntity<Object> handleSportNotFoundException(SportNotFoundException exception, WebRequest request) {
+        ResponseBodyDTO response = new ResponseBodyDTO();
+
+        response.getErrors().put("sportId", "sport not found");
+
+        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(SizeNotFoundException.class)
+    protected ResponseEntity<Object> handleSizeNotFoundException(SizeNotFoundException exception, WebRequest request) {
+        ResponseBodyDTO response = new ResponseBodyDTO();
+
+        response.getErrors().put("sizeId", "size not found");
+
+        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    protected ResponseEntity<Object> handleProductNotFoundException(ProductNotFoundException exception, WebRequest request) {
+        ResponseBodyDTO response = new ResponseBodyDTO();
+
+        response.getErrors().put("productId", "product not found");
+
+        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CollectionNotFoundException.class)
+    protected ResponseEntity<Object> handleCollectionNotFoundException(CollectionNotFoundException exception, WebRequest request) {
+        ResponseBodyDTO response = new ResponseBodyDTO();
+
+        response.getErrors().put("collectionId", "collection not found");
+
+        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(GenderNotFoundException.class)
+    protected ResponseEntity<Object> handleGenderNotFoundException(GenderNotFoundException exception, WebRequest request) {
+        ResponseBodyDTO response = new ResponseBodyDTO();
+
+        response.getErrors().put("genderId", "gender not found");
+
+        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MidsoleNotFoundException.class)
+    protected ResponseEntity<Object> handleMidsoleNotFoundException(MidsoleNotFoundException exception, WebRequest request) {
+        ResponseBodyDTO response = new ResponseBodyDTO();
+
+        response.getErrors().put("midsoleId", "midsole not found");
+
+        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+    }
 }
