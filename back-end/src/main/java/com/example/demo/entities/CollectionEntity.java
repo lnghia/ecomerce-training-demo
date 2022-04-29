@@ -21,6 +21,6 @@ public class CollectionEntity {
 
     private String description;
 
-    @ManyToMany(mappedBy = "collections")
+    @OneToMany(mappedBy = "collection")
     private Set<ProductEntity> products;
 }
