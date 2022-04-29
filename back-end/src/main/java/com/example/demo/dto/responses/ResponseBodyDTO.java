@@ -15,7 +15,7 @@ public class ResponseBodyDTO<T> {
         errors = new HashMap<>();
     }
 
-    public ResponseBodyDTO(T data, HashMap<String, String> errors) {
+    public ResponseBodyDTO(String status, T data, HashMap<String, String> errors) {
         this.data = data;
         this.errors = errors;
     }
