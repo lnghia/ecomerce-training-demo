@@ -12,7 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class ProductEntity {
+public class ProductEntity extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -63,4 +63,6 @@ public class ProductEntity {
 
     @OneToMany(mappedBy = "product")
     private Set<ProductSizeEntity> sizes;
+
+    private boolean isDeleted = false;
 }

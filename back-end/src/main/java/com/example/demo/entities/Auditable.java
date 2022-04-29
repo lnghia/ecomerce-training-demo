@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 public class Auditable {
     @CreatedBy
     @Column(name = "created_by")
-    private UserEntity createdBy;
+    private String createdBy;
 
     @CreatedDate
     @Column(name = "created_date")
@@ -29,7 +29,7 @@ public class Auditable {
 
     @LastModifiedBy
     @Column(name = "last_modified_by")
-    private UserEntity lastModifiedBy;
+    private String lastModifiedBy;
 
     @LastModifiedDate
     @Column(name = "last_modified_date")
