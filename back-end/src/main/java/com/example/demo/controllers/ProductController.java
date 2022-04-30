@@ -35,7 +35,7 @@ public class ProductController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping(path = "/create")
+    @PostMapping()
     public ResponseEntity<ResponseBodyDto> createProduct(@Valid @RequestBody CreateProductRequestDto createProductRequestDTO) {
         ProductResponseDto productResponseDTO = productCRUDService.createProduct(createProductRequestDTO);
         ResponseBodyDto responseBodyDTO = ResponseBodyDto.builder().data(productResponseDTO).build();
