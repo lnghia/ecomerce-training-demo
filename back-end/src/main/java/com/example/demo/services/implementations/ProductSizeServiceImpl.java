@@ -1,6 +1,7 @@
 package com.example.demo.services.implementations;
 
 import com.example.demo.dto.requests.AddSizeToProductRequestDto;
+import com.example.demo.dto.requests.ProductSizeDto;
 import com.example.demo.entities.ProductEntity;
 import com.example.demo.entities.ProductSizeEntity;
 import com.example.demo.entities.SizeEntity;
@@ -14,7 +15,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @NoArgsConstructor
@@ -47,11 +52,7 @@ public class ProductSizeServiceImpl implements ProductSizeService {
                 .product(productEntity)
                 .inStock(inStock).build();
 
-//        try {
         productSizeRepository.save(productSizeEntity);
-//        } catch (Exception exception) {
-//            throw new RuntimeException();
-//        }
     }
 
     @Override
@@ -64,9 +65,14 @@ public class ProductSizeServiceImpl implements ProductSizeService {
         }
 
         ProductEntity product = productEntity.get();
-        for (var productSizeDto : addSizeToProductRequestDto.getProductSizeDto()) {
-            createProductSize(product, productSizeDto.getSizeId(), productSizeDto.getNumber());
-        }
+        Map<Long, Integer> sizes = addSizeToProductRequestDto.getProductSizeDto().stream().collect(Collectors.toMap(ProductSizeDto::getSizeId, ProductSizeDto::getNumber));
+        ArrayList<SizeEntity> sizeEntities = sizeService.findByIds(sizes.keySet());
+        List<ProductSizeEntity> productSizeEntities = sizeEntities.stream().map(sizeEntity -> ProductSizeEntity.builder()
+                .size(sizeEntity)
+                .product(product)
+                .inStock(sizes.get(sizeEntity.getId()))
+                .build()).collect(Collectors.toList());
+        productSizeRepository.saveAll(productSizeEntities);
 
         return true;
     }
