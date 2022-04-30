@@ -15,7 +15,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -66,7 +65,7 @@ public class ProductSizeServiceImpl implements ProductSizeService {
 
         ProductEntity product = productEntity.get();
         Map<Long, Integer> sizes = addSizeToProductRequestDto.getProductSizeDto().stream().collect(Collectors.toMap(ProductSizeDto::getSizeId, ProductSizeDto::getNumber));
-        ArrayList<SizeEntity> sizeEntities = sizeService.findByIds(sizes.keySet());
+        List<SizeEntity> sizeEntities = sizeService.findByIds(sizes.keySet());
         List<ProductSizeEntity> productSizeEntities = sizeEntities.stream().map(sizeEntity -> ProductSizeEntity.builder()
                 .size(sizeEntity)
                 .product(product)

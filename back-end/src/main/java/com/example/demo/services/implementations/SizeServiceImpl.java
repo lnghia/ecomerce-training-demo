@@ -9,7 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -38,8 +38,8 @@ public class SizeServiceImpl implements SizeService {
     }
 
     @Override
-    public ArrayList<SizeEntity> findByIds(Set<Long> ids) {
-        ArrayList<SizeEntity> sizeEntities = (ArrayList<SizeEntity>) sizeRepository.findAllById(ids);
+    public List<SizeEntity> findByIds(Set<Long> ids) {
+        List<SizeEntity> sizeEntities = sizeRepository.findAllById(ids);
 
         return sizeEntities;
     }
