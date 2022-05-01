@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @NoArgsConstructor
@@ -21,13 +22,14 @@ public class CategoryCrudServiceImpl implements CategoryCrudService {
     }
 
     @Override
-    public CategoryEntity findById(Long id) {
-        Optional<CategoryEntity> categoryEntity = categoryRepository.findById(id);
+    public List findByIds(Set<Long> ids) {
+        int countExist = 0;
+        List<CategoryEntity> categoryEntities = categoryRepository.findAllById(ids);
 
-        if (categoryEntity.isPresent()) {
-            return categoryEntity.get();
+        if (categoryEntities.size() != ids.size()) {
+            throw new CategoryNotFoundException();
         }
 
-        throw new CategoryNotFoundException();
+        return categoryEntities;
     }
 }
