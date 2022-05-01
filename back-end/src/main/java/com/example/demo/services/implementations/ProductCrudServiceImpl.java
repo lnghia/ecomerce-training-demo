@@ -1,14 +1,21 @@
 package com.example.demo.services.implementations;
 
 import com.example.demo.dto.requests.CreateProductRequestDto;
+import com.example.demo.dto.requests.UpdateProductRequestDto;
 import com.example.demo.dto.responses.ProductResponseDto;
 import com.example.demo.entities.*;
+import com.example.demo.exceptions.ProductNotFoundException;
 import com.example.demo.repositories.ProductRepository;
 import com.example.demo.services.interfaces.*;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @NoArgsConstructor
@@ -19,63 +26,46 @@ public class ProductCrudServiceImpl implements ProductCrudService {
 
     private SportCrudService sportCrudService;
 
-    private UpperCrudService upperCrudService;
-
-    private MidsoleCrudService midsoleCrudService;
-
-    private CollectionCrudService collectionCrudService;
-
     private CategoryCrudService categoryCrudService;
 
     private ProductRepository productRepository;
+
+    private TechnologyService technologyService;
 
     @Autowired
     public ProductCrudServiceImpl(ModelMapper modelMapper,
                                   GenderCrudService genderCrudService,
                                   SportCrudService sportCrudService,
-                                  UpperCrudService upperCrudService,
-                                  MidsoleCrudService midsoleCrudService,
-                                  CollectionCrudService collectionCrudService,
                                   CategoryCrudService categoryCrudService,
-                                  ProductRepository productRepository) {
+                                  ProductRepository productRepository,
+                                  TechnologyService technologyService) {
         this.modelMapper = modelMapper;
         this.genderCrudService = genderCrudService;
         this.sportCrudService = sportCrudService;
-        this.upperCrudService = upperCrudService;
-        this.midsoleCrudService = midsoleCrudService;
-        this.collectionCrudService = collectionCrudService;
         this.categoryCrudService = categoryCrudService;
         this.productRepository = productRepository;
+        this.technologyService = technologyService;
     }
 
     @Override
     public ProductResponseDto createProduct(CreateProductRequestDto createProductRequestDTO) {
         Long genderId = createProductRequestDTO.getGenderId();
         Long sportId = createProductRequestDTO.getSportId();
-        Long upperId = createProductRequestDTO.getUpperId();
-        Long midsoleId = createProductRequestDTO.getMidsoleId();
-        Long collectionId = createProductRequestDTO.getCollectionId();
-        Long categoryId = createProductRequestDTO.getCategoryId();
-        CollectionEntity collectionEntity = null;
+        Set<Long> categoryIds = createProductRequestDTO.getCategoryIds();
+        Set<Long> technologyIds = createProductRequestDTO.getTechnologyIds();
 
         GenderEntity genderEntity = genderCrudService.findById(genderId);
         SportEntity sportEntity = sportCrudService.findById(sportId);
-        UpperEntity upperEntity = upperCrudService.findById(upperId);
-        MidsoleEntity midsoleEntity = midsoleCrudService.findById(midsoleId);
-        if (collectionId != null) {
-            collectionEntity = collectionCrudService.findById(collectionId);
-        }
-        CategoryEntity categoryEntity = categoryCrudService.findById(categoryId);
+        List<CategoryEntity> categoryEntities = categoryCrudService.findByIds(categoryIds);
+        List<TechnologyEntity> technologyEntities = technologyService.findByIds(technologyIds);
 
         ProductEntity productEntity = ProductEntity.builder()
-                .collection(collectionEntity)
+                .categories(categoryEntities.stream().collect(Collectors.toSet()))
+                .technologies(technologyEntities.stream().collect(Collectors.toSet()))
                 .gender(genderEntity)
-                .midsole(midsoleEntity)
                 .sport(sportEntity)
                 .price(createProductRequestDTO.getPrice())
                 .year(createProductRequestDTO.getYear())
-                .upper(upperEntity)
-                .category(categoryEntity)
                 .name(createProductRequestDTO.getName())
                 .description(createProductRequestDTO.getDescription())
                 .build();
@@ -83,5 +73,26 @@ public class ProductCrudServiceImpl implements ProductCrudService {
         productEntity = productRepository.save(productEntity);
 
         return modelMapper.map(productEntity, ProductResponseDto.class);
+    }
+
+    @Override
+    public ProductResponseDto updateProduct(UpdateProductRequestDto updateProductRequestDto) {
+        ProductEntity productEntity = findById(updateProductRequestDto.getProductId());
+
+        modelMapper.map(updateProductRequestDto, productEntity);
+        productEntity = productRepository.save(productEntity);
+
+        return modelMapper.map(productEntity, ProductResponseDto.class);
+    }
+
+    @Override
+    public ProductEntity findById(Long id) {
+        Optional<ProductEntity> productEntity = productRepository.findById(id);
+
+        if (!productEntity.isPresent()) {
+            throw new ProductNotFoundException();
+        }
+
+        return productEntity.get();
     }
 }
