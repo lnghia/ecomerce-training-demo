@@ -41,6 +41,10 @@ public class SizeServiceImpl implements SizeService {
     public List<SizeEntity> findByIds(Set<Long> ids) {
         List<SizeEntity> sizeEntities = sizeRepository.findAllById(ids);
 
+        if (sizeEntities.size() != ids.size()) {
+            throw new SizeNotFoundException();
+        }
+
         return sizeEntities;
     }
 }
