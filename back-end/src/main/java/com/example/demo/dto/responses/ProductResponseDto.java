@@ -1,7 +1,11 @@
 package com.example.demo.dto.responses;
 
-import com.example.demo.entities.*;
+import com.example.demo.entities.CategoryEntity;
+import com.example.demo.entities.GenderEntity;
+import com.example.demo.entities.SportEntity;
 import lombok.*;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -35,11 +39,7 @@ public class ProductResponseDto {
 
     private SportEntity sport;
 
-    private UpperEntity upper;
-
-    private MidsoleEntity midsole;
-
-    private CollectionEntity collection;
+    private Set<ProductSizeResponseDto> sizes;
 
     private CategoryEntity category;
 }
