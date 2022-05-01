@@ -10,9 +10,15 @@ import com.example.demo.services.interfaces.product.ProductService;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @NoArgsConstructor
@@ -41,5 +47,33 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return modelMapper.map(productEntity.orElse(null), ProductResponseDto.class);
+    }
+
+    @Override
+    public List<ProductResponseDto> findAllWithFilterAndSort(List<Long> categoryIds, Long genderId, Long sportId, List<Long> technologyIds, String name, int page, int size, String sortType, String sortBy) {
+        Pageable pageable = null;
+        if (sortType != null && sortBy != null && !sortType.isEmpty() && !sortBy.isEmpty()) {
+            pageable = PageRequest.of(page, size, Sort.by(sortType.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy));
+        } else {
+            pageable = PageRequest.of(page, size);
+        }
+
+        List<ProductResponseDto> result = null;
+        List<String> categoryIdsInString = categoryIds != null ? categoryIds.stream().map(id -> id.toString()).collect(Collectors.toList()) : new ArrayList<>();
+        List<String> technologyIdsInString = technologyIds != null ? technologyIds.stream().map(id -> id.toString()).collect(Collectors.toList()) : new ArrayList<>();
+
+        List<ProductEntity> productEntities = productRepository.findAllFilter(
+                categoryIdsInString,
+                genderId,
+                sportId,
+                technologyIdsInString,
+                name,
+                pageable
+        );
+        result = productEntities.stream().map(productEntity -> {
+            return modelMapper.map(productEntity, ProductResponseDto.class);
+        }).collect(Collectors.toList());
+
+        return result;
     }
 }

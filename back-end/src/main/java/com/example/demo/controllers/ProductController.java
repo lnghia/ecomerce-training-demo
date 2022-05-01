@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.dto.requests.product.AddSizeToProductRequestDto;
 import com.example.demo.dto.requests.product.CreateProductRequestDto;
+import com.example.demo.dto.requests.product.FilterProductsRequestDto;
 import com.example.demo.dto.requests.product.UpdateProductRequestDto;
 import com.example.demo.dto.responses.ResponseBodyDto;
 import com.example.demo.dto.responses.product.ProductResponseDto;
@@ -14,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/product")
@@ -58,5 +60,33 @@ public class ProductController {
         ProductResponseDto productResponseDto = productCRUDService.updateProduct(requestDto);
 
         return ResponseEntity.ok(ResponseBodyDto.builder().status("200").data(productResponseDto).build());
+    }
+
+    @PostMapping(path = "/search")
+    public ResponseEntity<ResponseBodyDto> getProducts(@Valid @RequestBody FilterProductsRequestDto requestDto) {
+        int size = requestDto.getSize();
+        int page = requestDto.getPage();
+        String name = requestDto.getName();
+        Long genderId = requestDto.getGenderId();
+        Long sportId = requestDto.getSportId();
+        List<Long> categoryIds = requestDto.getCategoryIds();
+        List<Long> technologyIds = requestDto.getTechnologyIds();
+        String sortType = requestDto.getSortType();
+        String sortBy = requestDto.getSortBy();
+
+        List<ProductResponseDto> products = productService.findAllWithFilterAndSort(
+                categoryIds,
+                genderId,
+                sportId,
+                technologyIds,
+                name,
+                page,
+                size,
+                sortType,
+                sortBy
+        );
+        ResponseBodyDto responseBodyDto = ResponseBodyDto.builder().status("200").data(products).build();
+
+        return ResponseEntity.ok(responseBodyDto);
     }
 }

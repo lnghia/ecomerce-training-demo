@@ -11,6 +11,7 @@ public class ResponseBodyDto<T> {
     private HashMap<String, String> errors;
 
     public ResponseBodyDto() {
+        status = "";
         data = null;
         errors = new HashMap<>();
     }
