@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -26,15 +27,8 @@ public class CreateProductRequestDto {
     private Long sportId;
 
     @NotNull
-    private Long upperId;
+    private Set<Long> technologyIds;
 
     @NotNull
-    private Long midsoleId;
-
-    private Long collectionId;
-
-    @NotNull
-    private Long categoryId;
-
-//    private ProductSizeNumberDto[] sizeIds;
+    private Set<Long> categoryIds;
 }
