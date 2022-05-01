@@ -153,4 +153,13 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
         return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(TechnologyNotFoundException.class)
+    protected ResponseEntity<Object> handleTechnologyNotFoundException(TechnologyNotFoundException exception, WebRequest request) {
+        ResponseBodyDto response = new ResponseBodyDto();
+
+        response.getErrors().put("technologyId", "technology not found");
+
+        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+    }
 }
