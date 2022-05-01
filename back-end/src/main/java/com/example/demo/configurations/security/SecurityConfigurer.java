@@ -3,7 +3,7 @@ package com.example.demo.configurations.security;
 import com.example.demo.exceptions.RestAccessDeniedHandler;
 import com.example.demo.exceptions.RestAuthenticationEntryPoint;
 import com.example.demo.security.filters.JWTAuthFilter;
-import com.example.demo.services.CustomUserDetailsService;
+import com.example.demo.services.interfaces.UserDetail.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;

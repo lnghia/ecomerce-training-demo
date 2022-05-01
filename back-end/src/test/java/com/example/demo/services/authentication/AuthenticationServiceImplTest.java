@@ -1,14 +1,14 @@
 package com.example.demo.services.authentication;
 
 
-import com.example.demo.dto.responses.LoginResponseDto;
+import com.example.demo.dto.responses.authentication.LoginResponseDto;
 import com.example.demo.entities.UserEntity;
 import com.example.demo.exceptions.InvalidTokenException;
 import com.example.demo.exceptions.UsernamePasswordInvalidException;
 import com.example.demo.repositories.UserRepository;
 import com.example.demo.security.providers.JWTProvider;
-import com.example.demo.services.implementations.AuthenticationServiceImpl;
-import com.example.demo.services.interfaces.AuthenticationService;
+import com.example.demo.services.implementations.authentication.AuthenticationServiceImpl;
+import com.example.demo.services.interfaces.authentication.AuthenticationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;

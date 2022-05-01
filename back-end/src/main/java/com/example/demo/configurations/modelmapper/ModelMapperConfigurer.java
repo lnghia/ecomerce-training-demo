@@ -1,6 +1,6 @@
 package com.example.demo.configurations.modelmapper;
 
-import com.example.demo.dto.responses.ProductSizeResponseDto;
+import com.example.demo.dto.responses.product.ProductSizeResponseDto;
 import com.example.demo.entities.ProductSizeEntity;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;

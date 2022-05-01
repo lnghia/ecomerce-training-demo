@@ -5,7 +5,7 @@ import com.example.demo.dto.responses.ResponseBodyDto;
 import com.example.demo.entities.CustomUserDetails;
 import com.example.demo.entities.UserEntity;
 import com.example.demo.security.providers.JWTProvider;
-import com.example.demo.services.interfaces.UserService;
+import com.example.demo.services.interfaces.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;

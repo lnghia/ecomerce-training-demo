@@ -1,6 +1,6 @@
 package com.example.demo.validations.validators;
 
-import com.example.demo.services.interfaces.UserService;
+import com.example.demo.services.interfaces.user.UserService;
 import com.example.demo.validations.interfaces.ValidUserId;
 import org.springframework.beans.factory.annotation.Autowired;
 

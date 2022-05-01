@@ -1,6 +1,6 @@
 package com.example.demo.validations.validators;
 
-import com.example.demo.services.interfaces.RoleService;
+import com.example.demo.services.interfaces.role.RoleService;
 import com.example.demo.validations.interfaces.ValidRoleId;
 import org.springframework.beans.factory.annotation.Autowired;
 

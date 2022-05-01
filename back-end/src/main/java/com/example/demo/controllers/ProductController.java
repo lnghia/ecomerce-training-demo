@@ -1,13 +1,13 @@
 package com.example.demo.controllers;
 
-import com.example.demo.dto.requests.AddSizeToProductRequestDto;
-import com.example.demo.dto.requests.CreateProductRequestDto;
-import com.example.demo.dto.requests.UpdateProductRequestDto;
-import com.example.demo.dto.responses.ProductResponseDto;
+import com.example.demo.dto.requests.product.AddSizeToProductRequestDto;
+import com.example.demo.dto.requests.product.CreateProductRequestDto;
+import com.example.demo.dto.requests.product.UpdateProductRequestDto;
 import com.example.demo.dto.responses.ResponseBodyDto;
-import com.example.demo.services.interfaces.ProductCrudService;
-import com.example.demo.services.interfaces.ProductService;
-import com.example.demo.services.interfaces.ProductSizeService;
+import com.example.demo.dto.responses.product.ProductResponseDto;
+import com.example.demo.services.interfaces.product.ProductCrudService;
+import com.example.demo.services.interfaces.product.ProductService;
+import com.example.demo.services.interfaces.product.ProductSizeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

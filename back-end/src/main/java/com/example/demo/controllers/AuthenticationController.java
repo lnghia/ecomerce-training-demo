@@ -1,16 +1,20 @@
 package com.example.demo.controllers;
 
-import com.example.demo.dto.requests.AssignRoleToUserRequestDto;
-import com.example.demo.dto.requests.LoginRequestDto;
-import com.example.demo.dto.requests.RegisterRequestDto;
-import com.example.demo.dto.responses.LoginResponseDto;
+import com.example.demo.dto.requests.authentication.RegisterRequestDto;
+import com.example.demo.dto.requests.product.AssignRoleToUserRequestDto;
+import com.example.demo.dto.requests.product.LoginRequestDto;
 import com.example.demo.dto.responses.ResponseBodyDto;
-import com.example.demo.dto.responses.UserResponseDto;
+import com.example.demo.dto.responses.authentication.LoginResponseDto;
+import com.example.demo.dto.responses.user.UserResponseDto;
 import com.example.demo.entities.CustomUserDetails;
 import com.example.demo.entities.RoleEntity;
 import com.example.demo.entities.UserEntity;
 import com.example.demo.security.providers.JWTProvider;
-import com.example.demo.services.interfaces.*;
+import com.example.demo.services.interfaces.authentication.AuthenticationService;
+import com.example.demo.services.interfaces.permission.PermissionService;
+import com.example.demo.services.interfaces.role.RoleService;
+import com.example.demo.services.interfaces.user.UserRoleService;
+import com.example.demo.services.interfaces.user.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
