@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.dto.requests.AddSizeToProductRequestDto;
 import com.example.demo.dto.requests.CreateProductRequestDto;
+import com.example.demo.dto.requests.UpdateProductRequestDto;
 import com.example.demo.dto.responses.ProductResponseDto;
 import com.example.demo.dto.responses.ResponseBodyDto;
 import com.example.demo.services.interfaces.ProductCrudService;
@@ -35,7 +36,7 @@ public class ProductController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<ResponseBodyDto> createProduct(@Valid @RequestBody CreateProductRequestDto createProductRequestDTO) {
         ProductResponseDto productResponseDTO = productCRUDService.createProduct(createProductRequestDTO);
         ResponseBodyDto responseBodyDTO = ResponseBodyDto.builder().data(productResponseDTO).build();
@@ -49,5 +50,13 @@ public class ProductController {
         productSizeService.addSizeToProduct(requestDto);
 
         return ResponseEntity.ok(ResponseBodyDto.builder().status("200").build());
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping
+    public ResponseEntity<ResponseBodyDto> updateProduct(@Valid @RequestBody UpdateProductRequestDto requestDto) {
+        ProductResponseDto productResponseDto = productCRUDService.updateProduct(requestDto);
+
+        return ResponseEntity.ok(ResponseBodyDto.builder().status("200").data(productResponseDto).build());
     }
 }
