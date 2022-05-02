@@ -1,6 +1,12 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { logoutAction } from "../../redux/slices/authenticationSlice";
+import { loginSuccessSelector } from "../../redux/selectors";
 
 const NavBar = () => {
+    const dispatch = useDispatch();
+    const loginSuccess = useSelector(loginSuccessSelector);
+
     return (
         <div className="container-fluid mb-5">
             <div className="row border-top px-xl-5">
@@ -54,22 +60,22 @@ const NavBar = () => {
                                 <a href="contact.html" className="nav-item nav-link">Contact</a>
                             </div>
                             <div className="navbar-nav ml-auto py-0">
-                                <a href className="nav-item nav-link">Login</a>
-                                <a href className="nav-item nav-link">Register</a>
+                                {loginSuccess != true ? <a href='/login' className="nav-item nav-link" style={{cursor: 'pointer'}}>Login</a> : <a href className="nav-item nav-link" style={{cursor: 'pointer'}}>Logout</a>}
+                                {loginSuccess != true && <a href className="nav-item nav-link" style={{cursor: 'pointer'}}>Register</a>}
                             </div>
                         </div>
                     </nav>
                     <div id="header-carousel" className="carousel slide" data-ride="carousel">
                         <div className="carousel-inner">
                             <div className="carousel-item active" style={{ height: '410px' }}>
-                                <img className="img-fluid" src="img/carousel-1.jpg" alt="Image" />
-                                <div className="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                                <img className="img-fluid" src="assets/bg.jpg" alt="Image" />
+                                {/* <div className="carousel-caption d-flex flex-column align-items-center justify-content-center">
                                     <div className="p-3" style={{ maxWidth: '700px' }}>
                                         <h4 className="text-light text-uppercase font-weight-medium mb-3">10% Off Your First Order</h4>
                                         <h3 className="display-4 text-white font-weight-semi-bold mb-4">Fashionable Dress</h3>
                                         <a href className="btn btn-light py-2 px-3">Shop Now</a>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                             <div className="carousel-item" style={{ height: '410px' }}>
                                 <img className="img-fluid" src="img/carousel-2.jpg" alt="Image" />

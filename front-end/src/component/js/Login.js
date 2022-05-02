@@ -1,18 +1,22 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import "../css/Login.css";
 import { login } from "../../api/Authentication";
+import { loginAction } from "../../redux/slices/authenticationSlice";
 
 
 const Login = (props) => {
     const { register, formState: { errors }, handleSubmit } = useForm();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const onSubmit = async data => {
         let loginSuccess = await login(data.email, data.password);
 
-        if(loginSuccess) {
+        if (loginSuccess) {
+            dispatch(loginAction());
             navigate('/');
         }
     }
