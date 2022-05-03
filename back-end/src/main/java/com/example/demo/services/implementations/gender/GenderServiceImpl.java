@@ -8,7 +8,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class GenderServiceImpl implements GenderService {
@@ -34,5 +36,17 @@ public class GenderServiceImpl implements GenderService {
         Optional<GenderEntity> genderEntity = genderRepository.findById(id);
 
         return genderEntity.orElse(null);
+    }
+
+    @Override
+    public List<GenderResponseDto> findAll() {
+        List<GenderEntity> genders = genderRepository.findAll();
+        List<GenderResponseDto> result = null;
+
+        result = genders.stream().map(genderEntity -> {
+            return modelMapper.map(genderEntity, GenderResponseDto.class);
+        }).collect(Collectors.toList());
+
+        return result;
     }
 }
