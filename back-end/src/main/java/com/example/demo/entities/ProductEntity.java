@@ -57,4 +57,6 @@ public class ProductEntity extends Auditable {
     private Set<ProductSizeEntity> sizes;
 
     private boolean isDeleted = false;
+
+    private String thumbnail;
 }

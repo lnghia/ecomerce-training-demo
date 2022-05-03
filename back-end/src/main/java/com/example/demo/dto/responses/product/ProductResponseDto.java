@@ -42,4 +42,6 @@ public class ProductResponseDto {
     private Set<ProductSizeResponseDto> sizes;
 
     private CategoryEntity category;
+
+    private String thumbnail;
 }
