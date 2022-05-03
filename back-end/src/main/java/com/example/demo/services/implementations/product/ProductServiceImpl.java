@@ -67,7 +67,7 @@ public class ProductServiceImpl implements ProductService {
                 genderId,
                 sportId,
                 technologyIdsInString,
-                name,
+                name != null ? name : "",
                 pageable
         );
         result = productEntities.stream().map(productEntity -> {

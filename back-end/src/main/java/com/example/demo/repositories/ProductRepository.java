@@ -20,7 +20,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long>, J
                     "b.is_deleted = false " +
                     "and (:gender_id is null or (cast(b.gender_id as varchar) = cast(:gender_id as varchar))) " +
                     "and (:sport_id is null  or (cast(b.sport_id as varchar) = cast(:sport_id as varchar))) " +
-                    "and (:name is null or :name='' or lower(name) like %:name%)" +
+                    "and ((:name is null) or (:name='') or (lower(name) like %:name%))" +
                     "and (coalesce(:category_ids) is null or (cast(b.category_id as varchar) in (:category_ids))) " +
                     "and (coalesce(:technology_ids) is null or (cast(b.technology_id as varchar) in (:technology_ids))))",
             countQuery =
@@ -32,7 +32,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long>, J
                             "b.is_deleted = false " +
                             "and (:gender_id is null or (cast(b.gender_id as varchar) = cast(:gender_id as varchar))) " +
                             "and (:sport_id is null  or (cast(b.sport_id as varchar) = cast(:sport_id as varchar))) " +
-                            "and (:name is null or :name='' or lower(name) like %:name%)" +
+                            "and ((:name is null) or (:name='') or (lower(name) like %:name%))" +
                             "and (coalesce(:category_ids) is null or (cast(b.category_id as varchar) in (:category_ids))) " +
                             "and (coalesce(:technology_ids) is null or (cast(b.technology_id as varchar) in (:technology_ids)))",
             nativeQuery = true)
