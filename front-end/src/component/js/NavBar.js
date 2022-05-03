@@ -1,11 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutAction } from "../../redux/slices/authenticationSlice";
 import { loginSuccessSelector } from "../../redux/selectors";
 
+import { fetchCategories } from "../../api/category";
+import { fetchGenders } from "../../api/gender";
+import { fetchSports } from "../../api/sport";
+import { fetchTechnologies } from "../../api/technology";
+
 const NavBar = () => {
     const dispatch = useDispatch();
     const loginSuccess = useSelector(loginSuccessSelector);
+    const [sportList, setSportList] = useState([]);
+    const [categoryList, setCategoryList] = useState([]);
+    const [genderList, setGenderList] = useState([]);
+    const [technologyList, setTechnologyList] = useState([]);
+
+    useEffect(async () => {
+        let categories = await fetchCategories();
+        let sports = await fetchSports();
+        let genders = await fetchGenders();
+        let technologies = await fetchTechnologies();
+
+        setCategoryList(categories);
+        setTechnologyList(technologies);
+        setGenderList(genders);
+        setSportList(sports);
+    }, [])
 
     return (
         <div className="container-fluid mb-5">
@@ -18,22 +39,40 @@ const NavBar = () => {
                     <nav className="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical">
                         <div className="navbar-nav w-100 overflow-hidden" style={{ height: '410px' }}>
                             <div className="nav-item dropdown">
-                                <a href="#" className="nav-link" data-toggle="dropdown">Dresses <i className="fa fa-angle-down float-right mt-1" /></a>
+                                <a href="#" className="nav-link" data-toggle="dropdown">Gender<i className="fa fa-angle-down float-right mt-1" /></a>
                                 <div className="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
-                                    <a href className="dropdown-item">Men's Dresses</a>
-                                    <a href className="dropdown-item">Women's Dresses</a>
-                                    <a href className="dropdown-item">Baby's Dresses</a>
+                                    {
+                                        genderList.map(gender => {
+                                            return <a href="#" key={gender.id} className="dropdown-item">{gender.name}</a>
+                                        })
+                                    }
                                 </div>
                             </div>
-                            <a href className="nav-item nav-link">Shirts</a>
-                            <a href className="nav-item nav-link">Jeans</a>
-                            <a href className="nav-item nav-link">Swimwear</a>
-                            <a href className="nav-item nav-link">Sleepwear</a>
-                            <a href className="nav-item nav-link">Sportswear</a>
-                            <a href className="nav-item nav-link">Jumpsuits</a>
-                            <a href className="nav-item nav-link">Blazers</a>
-                            <a href className="nav-item nav-link">Jackets</a>
-                            <a href className="nav-item nav-link">Shoes</a>
+                            <div className="nav-item dropdown">
+                                <a href="#" className="nav-link" data-toggle="dropdown">Technology<i className="fa fa-angle-down float-right mt-1" /></a>
+                                <div className="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
+                                    {
+                                        technologyList.map(technology => {
+                                            return <a href="#" key={technology.id} className="dropdown-item">{technology.name}</a>
+                                        })
+                                    }
+                                </div>
+                            </div>
+                            <div className="nav-item dropdown">
+                                <a href="#" className="nav-link" data-toggle="dropdown">Sport<i className="fa fa-angle-down float-right mt-1" /></a>
+                                <div className="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
+                                    {
+                                        sportList.map(sport => {
+                                            return <a href="#" key={sport.id} className="dropdown-item">{sport.name}</a>
+                                        })
+                                    }
+                                </div>
+                            </div>
+                            {
+                                categoryList.map(category => {
+                                    return <a href="#" key={category.id} className="nav-item nav-link">{category.name}</a>
+                                })
+                            }
                         </div>
                     </nav>
                 </div>
@@ -60,8 +99,8 @@ const NavBar = () => {
                                 <a href="contact.html" className="nav-item nav-link">Contact</a>
                             </div>
                             <div className="navbar-nav ml-auto py-0">
-                                {loginSuccess != true ? <a href='/login' className="nav-item nav-link" style={{cursor: 'pointer'}}>Login</a> : <a href className="nav-item nav-link" style={{cursor: 'pointer'}}>Logout</a>}
-                                {loginSuccess != true && <a href className="nav-item nav-link" style={{cursor: 'pointer'}}>Register</a>}
+                                {loginSuccess != true ? <a href='/login' className="nav-item nav-link" style={{ cursor: 'pointer' }}>Login</a> : <a href className="nav-item nav-link" style={{ cursor: 'pointer' }}>Logout</a>}
+                                {loginSuccess != true && <a href className="nav-item nav-link" style={{ cursor: 'pointer' }}>Register</a>}
                             </div>
                         </div>
                     </nav>
@@ -77,7 +116,7 @@ const NavBar = () => {
                                     </div>
                                 </div> */}
                             </div>
-                            <div className="carousel-item" style={{ height: '410px' }}>
+                            {/* <div className="carousel-item" style={{ height: '410px' }}>
                                 <img className="img-fluid" src="img/carousel-2.jpg" alt="Image" />
                                 <div className="carousel-caption d-flex flex-column align-items-center justify-content-center">
                                     <div className="p-3" style={{ maxWidth: '700px' }}>
@@ -86,7 +125,7 @@ const NavBar = () => {
                                         <a href className="btn btn-light py-2 px-3">Shop Now</a>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                         <a className="carousel-control-prev" href="#header-carousel" data-slide="prev">
                             <div className="btn btn-dark" style={{ width: '45px', height: '45px' }}>
