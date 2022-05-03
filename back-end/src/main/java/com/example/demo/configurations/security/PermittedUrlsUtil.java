@@ -12,6 +12,10 @@ public class PermittedUrlsUtil {
             add("/api/auth/register");
             add("/api/auth/refresh_tokens");
             add("/api/product/search");
+            add("/api/category");
+            add("/api/sport");
+            add("/api/technology");
+            add("/api/gender");
         }
     };
 
