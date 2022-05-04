@@ -12,8 +12,46 @@ const fetchFeaturedProducts = async () => {
         let data = response.data.data;
 
         return data;
+    } catch (error) {
+        raiseErrorMessages(error.response.data.errors);
+
+        return [];
     }
-    catch (error) {
+}
+
+export const fetchProductImages = async (id) => {
+    try {
+        let response = await AxiosClient.get("/product/images?id=" + toString(id));
+        let data = response.data.data;
+
+        return data;
+    } catch (error) {
+        raiseErrorMessages(error.response.data.errors);
+
+        return [];
+    }
+}
+
+export const fetchProductDetail = async (id) => {
+    try {
+        let response = await AxiosClient.get("/product?id=" + id);
+        let data = response.data.data;
+
+        return data;
+    } catch (error) {
+        raiseErrorMessages(error.response.data.errors);
+
+        return [];
+    }
+}
+
+export const fetchProductTechnologies = async (id) => {
+    try {
+        let response = await AxiosClient.get("/product/technology?id=" + id);
+        let data = response.data.data;
+
+        return data;
+    } catch (error) {
         raiseErrorMessages(error.response.data.errors);
 
         return [];
