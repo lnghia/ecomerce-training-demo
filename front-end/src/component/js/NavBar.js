@@ -16,16 +16,24 @@ const NavBar = () => {
     const [genderList, setGenderList] = useState([]);
     const [technologyList, setTechnologyList] = useState([]);
 
-    useEffect(async () => {
-        let categories = await fetchCategories();
-        let sports = await fetchSports();
-        let genders = await fetchGenders();
-        let technologies = await fetchTechnologies();
+    function handleLogout(e) {
+        dispatch(logoutAction());
+    }
 
-        setCategoryList(categories);
-        setTechnologyList(technologies);
-        setGenderList(genders);
-        setSportList(sports);
+    useEffect(() => {
+        async function fetchData() {
+            let categories = await fetchCategories();
+            let sports = await fetchSports();
+            let genders = await fetchGenders();
+            let technologies = await fetchTechnologies();
+
+            setCategoryList(categories);
+            setTechnologyList(technologies);
+            setGenderList(genders);
+            setSportList(sports);
+        }
+
+        fetchData();
     }, [])
 
     return (
@@ -99,7 +107,7 @@ const NavBar = () => {
                                 <a href="contact.html" className="nav-item nav-link">Contact</a>
                             </div>
                             <div className="navbar-nav ml-auto py-0">
-                                {loginSuccess != true ? <a href='/login' className="nav-item nav-link" style={{ cursor: 'pointer' }}>Login</a> : <a href className="nav-item nav-link" style={{ cursor: 'pointer' }}>Logout</a>}
+                                {loginSuccess != true ? <a href='/login' className="nav-item nav-link" style={{ cursor: 'pointer' }}>Login</a> : <a href='/login' onClick={handleLogout} className="nav-item nav-link" style={{ cursor: 'pointer' }}>Logout</a>}
                                 {loginSuccess != true && <a href className="nav-item nav-link" style={{ cursor: 'pointer' }}>Register</a>}
                             </div>
                         </div>
