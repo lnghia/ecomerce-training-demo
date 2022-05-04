@@ -9,8 +9,8 @@ const login = async (email, inputPassword) => {
         password: inputPassword
     })
         .then((response) => {
-            let accessToken = response.data.accessToken;
-            let refreshToken = response.data.refreshToken;
+            let accessToken = response.data.data.accessToken;
+            let refreshToken = response.data.data.refreshToken;
             window.localStorage.setItem('accessToken', accessToken);
             window.localStorage.setItem('refreshToken', refreshToken);
             loginSuccess = true;
