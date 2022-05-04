@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { selectProductAction } from '../../redux/slices/productSlice';
+import { useNavigate } from 'react-router-dom';
 
 const ProductCard = (props) => {
-    const detailUrl = "/product?id=" + toString(props.id);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    function handleProductCardClick() {
+        dispatch(selectProductAction(props.productId));
+        navigate("/product");
+    }
 
     return (
         <div className="col-lg-3 col-md-6 col-sm-12 pb-1">
@@ -17,7 +26,7 @@ const ProductCard = (props) => {
                     </div>
                 </div>
                 <div className="card-footer d-flex justify-content-between bg-light border">
-                    <a href={detailUrl} className="btn btn-sm text-dark p-0"><i className="fas fa-eye text-primary mr-1" />View Detail</a>
+                    <button onClick={handleProductCardClick} className="btn btn-sm text-dark p-0"><i className="fas fa-eye text-primary mr-1" />View Detail</button>
                     <a href='#' className="btn btn-sm text-dark p-0"><i className="fas fa-shopping-cart text-primary mr-1" />Add To Cart</a>
                 </div>
             </div>
