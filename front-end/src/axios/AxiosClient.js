@@ -10,7 +10,7 @@ AxiosClient.interceptors.request.use(
         const accessToken = window.localStorage.getItem("accessToken");
         const refreshToken = window.localStorage.getItem("refreshToken");
         if (accessToken) {
-            config.headers['Authorization'] = 'Bearer' + accessToken;
+            config.headers['Authorization'] = 'Bearer ' + accessToken;
         }
         if (refreshToken) {
             config.headers['Refresh-Token'] = refreshToken;
