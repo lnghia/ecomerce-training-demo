@@ -14,12 +14,14 @@ const FeaturedProducts = (props) => {
     const [productList, setProductList] = useState([]);
     // const productList = useSelector(productListSelector);
 
-    useEffect(async () => {
-        let rs = await fetchFeaturedProducts();
-        setProductList(rs);
-    }, []);
+    useEffect(() => {
+        async function fetchData() {
+            let rs = await fetchFeaturedProducts();
+            setProductList(rs);
+        }
 
-    console.log(productList);
+        fetchData();
+    }, []);
 
     return (
         <div className="container-fluid pt-5">
@@ -29,7 +31,7 @@ const FeaturedProducts = (props) => {
             <div className="row px-xl-5 pb-3">
                 {
                     productList.map(product => {
-                        return <ProductCard id={product.id} name={product.name} price={product.price} img={product.thumbnail} /> // need img={product.img}
+                        return <ProductCard key={product.id} productId={product.id} name={product.name} price={product.price} img={product.thumbnail} /> // need img={product.img}
                     })
                 }
             </div>
