@@ -3,57 +3,67 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import "../css/Login.css";
+import FormErrorMsg from "./ErrorMessageInForm";
 import { login } from "../../api/Authentication";
 import { loginAction } from "../../redux/slices/authenticationSlice";
+
+import { Modal } from "react-bootstrap";
+// import {$, jQuery} from "jquery";
 
 
 const Login = (props) => {
     const { register, formState: { errors }, handleSubmit } = useForm();
-    const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [showModal, setShowModal] = useState(false);
 
-    const onSubmit = async data => {
-        let loginSuccess = await login(data.email, data.password);
+    const handleClose = () => setShowModal(false);
+    const handleShow = () => setShowModal(true);
+
+    const onSubmit = data => {
+        async function fetchLogin() {
+            let rs = await login(data.email, data.password);
+
+            return rs;
+        }
+
+        let loginSuccess = fetchLogin();
 
         if (loginSuccess) {
             dispatch(loginAction());
-            navigate('/');
+            // $('#exampleModalCenter').modal('hide');
         }
     }
 
     return (
-        <div>
-            <div className="sidenav">
-                {/* <img src="/assets/bg.jpg" className="card-img" /> */}
-                {/* <div className="hero">
-                    <img src="/assets/bg.jpg" className="card-img" />
-                    <div className="card-img-overlay">
-                        <h2>E Shopper<br /> Login Page</h2>
+        <Modal id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" show={props.show}>
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Login</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                </div> */}
-            </div>
-            <div className="main">
-                <div className="col-md-6 col-sm-12">
-                    <div className="login-form">
+                    <div class="modal-body">
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div className="form-group">
                                 <label>Email</label>
                                 <input {...register("email", { required: true, pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g })} type="text" className="form-control" placeholder="Email" />
-                                {errors.email?.type === 'required' && "Email is required"}
-                                {errors.email?.type === 'pattern' && "Invalid email"}
+                                {errors.email?.type === 'required' && <FormErrorMsg message="Email is required" />}
+                                {errors.email?.type === 'pattern' && <FormErrorMsg message="Invalid email" />}
                             </div>
                             <div className="form-group">
                                 <label>Password</label>
                                 <input {...register("password", { required: true })} type="password" className="form-control" placeholder="Password" />
-                                {errors.password?.type === 'required' && "Password is required"}
+                                {errors.password?.type === 'required' && <FormErrorMsg message="Password is required" />}
                             </div>
-                            <button type="submit" className="btn btn-dark">Login</button>
-                            <button type="submit" className="btn btn-secondary ml-2">Register</button>
+                            <button type="submit" class="btn btn-primary">Login</button>
+                            <button type="button" class="btn btn-secondary ml-2" data-dismiss="modal">Close</button>
                         </form>
                     </div>
                 </div>
             </div>
-        </div>
+        </Modal>
     );
 }
 
