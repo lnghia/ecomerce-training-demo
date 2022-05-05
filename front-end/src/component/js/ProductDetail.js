@@ -8,6 +8,8 @@ import ProductDetailImgs from "./ProductDetailImgs";
 import ProductInfo from "./ProductInfo";
 import { useSelector } from "react-redux";
 import { selectedProductIdSelector } from "../../redux/selectors";
+import ProductSpecifications from "./ProductSpecifications";
+import StarRatingForRating from "./StarRatingForRating";
 
 import { fetchProductDetail } from "../../api/product";
 
@@ -28,8 +30,8 @@ const ProductDetail = (props) => {
 
     return (
         <>
-            {/* <TopBar />
-            <NavBar /> */}
+            <TopBar />
+            <NavBar />
             <Header pageName="PRODUCT DETAIL" />
             {
                 product != null &&
@@ -47,15 +49,15 @@ const ProductDetail = (props) => {
                             <div class="tab-content">
                                 <div class="tab-pane fade show active" id="tab-pane-1">
                                     <h4 class="mb-3">Product Description</h4>
-                                    <p>{product.description}</p><br/>
-                                    
+                                    <p>{product.description}</p><br />
+                                    <ProductSpecifications sport={product.sport.name} year={product.year} technologies={product.technologies} />
                                 </div>
-                                {/* <div class="tab-pane fade" id="tab-pane-3">
+                                <div class="tab-pane fade" id="tab-pane-3">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <h4 class="mb-4">1 review for "Colorful Stylish Shirt"</h4>
                                             <div class="media mb-4">
-                                                <img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;" />
+                                                <img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style={{ width: "45px" }} />
                                                 <div class="media-body">
                                                     <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
                                                     <div class="text-primary mb-2">
@@ -75,11 +77,7 @@ const ProductDetail = (props) => {
                                             <div class="d-flex my-3">
                                                 <p class="mb-0 mr-2">Your Rating * :</p>
                                                 <div class="text-primary">
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
+                                                    <StarRatingForRating />
                                                 </div>
                                             </div>
                                             <form>
@@ -101,14 +99,14 @@ const ProductDetail = (props) => {
                                             </form>
                                         </div>
                                     </div>
-                                </div> */}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             }
-            {/* <Features />
-            <Footer /> */}
+            <Features />
+            <Footer />
         </>
     )
 }
