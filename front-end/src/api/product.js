@@ -34,7 +34,7 @@ export const fetchProductImages = async (id) => {
 
 export const fetchProductDetail = async (id) => {
     try {
-        let response = await AxiosClient.get("/product?id=" + id);
+        let response = await AxiosClient.get("/product/" + id);
         let data = response.data.data;
 
         return data;
@@ -55,6 +55,48 @@ export const fetchProductTechnologies = async (id) => {
         raiseErrorMessages(error.response.data.errors);
 
         return [];
+    }
+}
+
+export const rateProduct = async (ratedProductId, review, stars) => {
+    try {
+        let response = await AxiosClient.post("/product/rate_product?productId=" + ratedProductId, {
+            comment: review,
+            rating: stars
+        });
+        let data = response.data.data;
+
+        return true;
+    } catch (error) {
+        raiseErrorMessages(error.response.data.errors);
+
+        return false;
+    }
+}
+
+export const findUserReviewOnProduct = async (productId) => {
+    try {
+        let response = await AxiosClient.get("/product/user_review_on_product?productId=" + productId);
+        let data = response.data.data;
+
+        return data;
+    } catch (error) {
+        raiseErrorMessages(error.response.data.errors);
+
+        return null;
+    }
+}
+
+export const fetchReviewsOnProduct = async (productId, page, size) => {
+    try {
+        let response = await AxiosClient.get(`/product/ratings?productId=${productId}&page=${page}&size=${size}`);
+        let data = response.data.data;
+
+        return data;
+    } catch (error) {
+        raiseErrorMessages(error.response.data.errors);
+
+        return null;
     }
 }
 
