@@ -6,21 +6,28 @@ export const authenticationSlice = createSlice({
         loginSuccess: false,
         accessToken: "",
         refreshToken: "",
+        openLoginModal: true
     },
     reducers: {
         loginAction: state => {
             state.loginSuccess = true;
-            state.accessToken = window.localStorage.getItem("accessToken");
-            state.refreshToken = window.localStorage.getItem("refreshToken");
+            // state.accessToken = window.localStorage.getItem("accessToken");
+            // state.refreshToken = window.localStorage.getItem("refreshToken");
         },
         logoutAction: state => {
             state.loginSuccess = false;
-            state.accessToken = "";
-            state.refreshToken = "";
+            window.localStorage.setItem("accessToken", "");
+            window.localStorage.setItem("refreshToken", "");
+        },
+        showLoginModalAction: state => {
+            state.openLoginModal = true;
+        },
+        closeLoginModalAction: state => {
+            state.openLoginModal = false;
         }
     }
 })
 
-export const {loginAction, logoutAction} = authenticationSlice.actions;
+export const { loginAction, logoutAction, showLoginModalAction, closeLoginModalAction } = authenticationSlice.actions;
 
 export default authenticationSlice.reducer;

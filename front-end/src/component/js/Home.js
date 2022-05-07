@@ -8,7 +8,7 @@ import FeaturedProducts from "./FeaturedProducts";
 const Home = () => {
     return (
         <>
-            <TopBar />
+            {/* <TopBar /> */}
             <NavBar />
             <FeaturedProducts />
             <Features />

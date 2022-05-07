@@ -14,36 +14,27 @@ import { Modal } from "react-bootstrap";
 const Login = (props) => {
     const { register, formState: { errors }, handleSubmit } = useForm();
     const dispatch = useDispatch();
-    const [showModal, setShowModal] = useState(false);
 
-    const handleClose = () => setShowModal(false);
-    const handleShow = () => setShowModal(true);
+    const onSubmit = async data => {
+        let loginSuccess = await login(data.email, data.password);
 
-    const onSubmit = data => {
-        async function fetchLogin() {
-            let rs = await login(data.email, data.password);
-
-            return rs;
-        }
-
-        let loginSuccess = fetchLogin();
+        console.log(loginSuccess);
 
         if (loginSuccess) {
             dispatch(loginAction());
+            props.onCloseLoginModal();
             // $('#exampleModalCenter').modal('hide');
         }
     }
 
+    const closeLoginModal = () => {
+        props.onCloseLoginModal();
+    }
+
     return (
         <Modal id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" show={props.show}>
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div>
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Login</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
                     <div class="modal-body">
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div className="form-group">
@@ -58,7 +49,7 @@ const Login = (props) => {
                                 {errors.password?.type === 'required' && <FormErrorMsg message="Password is required" />}
                             </div>
                             <button type="submit" class="btn btn-primary">Login</button>
-                            <button type="button" class="btn btn-secondary ml-2" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary ml-2" onClick={closeLoginModal} >Close</button>
                         </form>
                     </div>
                 </div>
