@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import StarRatings from 'react-star-ratings';
 
 const StarRatingForRating = (props) => {
-    const [rating, setRating] = useState(0);
+    const [rating, setRating] = useState(props.currRating);
 
     const setNewRating = (newRating) => {
         setRating(newRating);
-        console.log(rating);
+        props.onChangeRating(newRating);
     }
 
     return (
