@@ -163,4 +163,13 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
         return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleGlobalException(Exception exception, WebRequest request) {
+        ResponseBodyDto response = new ResponseBodyDto();
+
+        response.getErrors().put("error", exception.getStackTrace());
+
+        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+    }
 }
