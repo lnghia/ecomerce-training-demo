@@ -31,7 +31,11 @@ const FeaturedProducts = (props) => {
             <div className="row px-xl-5 pb-3">
                 {
                     productList.map(product => {
-                        return <ProductCard key={product.id} productId={product.id} name={product.name} price={product.price} img={product.thumbnail} /> // need img={product.img}
+                        return (
+                            <div className="col-lg-3 col-md-6 col-sm-12 pb-1">
+                                <ProductCard key={product.id} productId={product.id} name={product.name} price={product.price} img={product.thumbnail} /> // need img={product.img}
+                            </div>
+                        )
                     })
                 }
             </div>
