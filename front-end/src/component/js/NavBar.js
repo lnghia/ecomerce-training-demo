@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutAction } from "../../redux/slices/authenticationSlice";
+import { updateCategoryListAction, updateSportListAction, updateTechnologyListAction, updateGenderListAction } from "../../redux/slices/categorySlice";
 import { loginSuccessSelector } from "../../redux/selectors";
 import Login from "./Login";
 
@@ -22,8 +23,20 @@ const NavBar = () => {
         dispatch(logoutAction());
     }
 
-    const handleCloseLoginModal = () => setShowLoginModal(false);
-    const handleShowLoginModal = () => setShowLoginModal(true);
+    function handleCloseLoginModal() {
+        setShowLoginModal(false);
+    }
+
+    function handleShowLoginModal() {
+        setShowLoginModal(true);
+    }
+
+    function updateCategoryState() {
+        dispatch(updateCategoryListAction(categoryList));
+        dispatch(updateGenderListAction(genderList));
+        dispatch(updateSportListAction(sportList));
+        dispatch(updateTechnologyListAction(technologyList));
+    }
 
     useEffect(() => {
         async function fetchData() {
@@ -36,6 +49,11 @@ const NavBar = () => {
             setTechnologyList(technologies);
             setGenderList(genders);
             setSportList(sports);
+
+            dispatch(updateCategoryListAction(categories));
+            dispatch(updateGenderListAction(genders));
+            dispatch(updateSportListAction(sports));
+            dispatch(updateTechnologyListAction(technologies));
         }
 
         fetchData();
