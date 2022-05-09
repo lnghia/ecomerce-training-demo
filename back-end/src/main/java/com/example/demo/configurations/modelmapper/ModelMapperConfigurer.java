@@ -2,12 +2,12 @@ package com.example.demo.configurations.modelmapper;
 
 import com.example.demo.dto.responses.product.ProductSizeResponseDto;
 import com.example.demo.entities.ProductSizeEntity;
-import org.modelmapper.Conditions;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
+import org.modelmapper.*;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.time.LocalDateTime;
 
 @Configuration
 public class ModelMapperConfigurer {
@@ -21,6 +21,8 @@ public class ModelMapperConfigurer {
 
         resolveCircularReferencedBetweenProductAndProductSizeWhenMapping(modelMapper);
 
+        modelMapper.addConverter(timeConverter);
+
         return modelMapper;
     }
 
@@ -32,4 +34,11 @@ public class ModelMapperConfigurer {
             }
         });
     }
+
+    public static Converter<LocalDateTime, String> timeConverter = new AbstractConverter<>() {
+        @Override
+        protected String convert(LocalDateTime localDateTime) {
+            return null == localDateTime ? null : String.valueOf(localDateTime);
+        }
+    };
 }
