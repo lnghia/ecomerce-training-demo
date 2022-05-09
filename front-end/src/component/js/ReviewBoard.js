@@ -12,7 +12,6 @@ const ReviewBoard = (props) => {
     const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
-        console.log(currPage);
         const fetchReviews = async () => {
             let result = await fetchReviewsOnProduct(props.productId, currPage - 1, 3);
             setReviews(result.content);
