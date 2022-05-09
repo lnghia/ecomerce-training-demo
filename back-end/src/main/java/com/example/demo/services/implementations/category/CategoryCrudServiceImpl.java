@@ -1,5 +1,7 @@
 package com.example.demo.services.implementations.category;
 
+import com.example.demo.dto.requests.category.CreateCategoryRequestDto;
+import com.example.demo.dto.requests.category.UpdateCategoryRequestDto;
 import com.example.demo.dto.responses.category.CategoryResponseDto;
 import com.example.demo.entities.CategoryEntity;
 import com.example.demo.exceptions.CategoryNotFoundException;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -50,4 +53,37 @@ public class CategoryCrudServiceImpl implements CategoryCrudService {
 
         return result;
     }
+
+    @Override
+    public CategoryResponseDto createCategory(CreateCategoryRequestDto requestDto) {
+        CategoryEntity categoryEntity = new CategoryEntity();
+
+        modelMapper.map(requestDto, categoryEntity);
+        categoryEntity = categoryRepository.save(categoryEntity);
+
+        return modelMapper.map(categoryEntity, CategoryResponseDto.class);
+    }
+
+    @Override
+    public CategoryResponseDto updateCategory(UpdateCategoryRequestDto requestDto) {
+        CategoryEntity categoryEntity = findById(requestDto.getCategoryId());
+
+        modelMapper.map(requestDto, categoryEntity);
+        categoryEntity = categoryRepository.save(categoryEntity);
+
+        return modelMapper.map(categoryEntity, CategoryResponseDto.class);
+    }
+
+    @Override
+    public CategoryEntity findById(Long id) {
+        Optional<CategoryEntity> categoryEntity = categoryRepository.findById(id);
+
+        if (!categoryEntity.isPresent()) {
+            throw new CategoryNotFoundException();
+        }
+
+        return categoryEntity.get();
+    }
+
+
 }

@@ -1,5 +1,8 @@
 package com.example.demo.services.implementations.gender;
 
+import com.example.demo.dto.requests.gender.CreateGenderRequestDto;
+import com.example.demo.dto.requests.gender.DeleteGenderRequestDto;
+import com.example.demo.dto.requests.gender.UpdateGenderRequestDto;
 import com.example.demo.dto.responses.gender.GenderResponseDto;
 import com.example.demo.entities.GenderEntity;
 import com.example.demo.repositories.GenderRepository;
@@ -48,5 +51,30 @@ public class GenderServiceImpl implements GenderService {
         }).collect(Collectors.toList());
 
         return result;
+    }
+
+    @Override
+    public GenderResponseDto createGender(CreateGenderRequestDto requestDto) {
+        GenderEntity genderEntity = new GenderEntity();
+
+        modelMapper.map(requestDto, genderEntity);
+        genderEntity = genderRepository.save(genderEntity);
+
+        return modelMapper.map(genderEntity, GenderResponseDto.class);
+    }
+
+    @Override
+    public GenderResponseDto updateGender(UpdateGenderRequestDto requestDto) {
+        GenderEntity genderEntity = findById(requestDto.getGenderId());
+
+        modelMapper.map(requestDto, genderEntity);
+        genderEntity = genderRepository.save(genderEntity);
+
+        return modelMapper.map(genderEntity, GenderResponseDto.class);
+    }
+
+    @Override
+    public GenderResponseDto deleteGender(DeleteGenderRequestDto requestDto) {
+        return null;
     }
 }

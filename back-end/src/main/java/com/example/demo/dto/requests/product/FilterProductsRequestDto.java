@@ -14,9 +14,9 @@ import java.util.List;
 public class FilterProductsRequestDto {
     private String name;
 
-    private Long genderId;
+    private List<Long> genderIds;
 
-    private Long sportId;
+    private List<Long> sportIds;
 
     private List<Long> categoryIds;
 
@@ -24,7 +24,7 @@ public class FilterProductsRequestDto {
 
     private int page = 0;
 
-    private int size = 10;
+    private int size = 9;
 
     private String sortType;
 
