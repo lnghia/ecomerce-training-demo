@@ -41,6 +41,8 @@ public class ProductEntity extends Auditable {
 
     private int year;
 
+    private String title;
+
     @OneToOne
     @JoinColumn(name = "sport_id", referencedColumnName = "id")
     private SportEntity sport;
@@ -49,7 +51,7 @@ public class ProductEntity extends Auditable {
     @JoinTable(name = "product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<CategoryEntity> categories;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "product_technology", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "technology_id"))
     private Set<TechnologyEntity> technologies;
 
