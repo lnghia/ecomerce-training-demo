@@ -5,6 +5,7 @@ import Home from './component/js/Home';
 import TopBar from './component/js/TopBar';
 import Footer from "./component/js/Footer";
 import ProductDetail from "./component/js/ProductDetail";
+import Shop from './component/js/Shop';
 import { Routes, Route, Link } from "react-router-dom";
 
 function App() {
@@ -13,7 +14,8 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
-        <Route path='/product' element={<ProductDetail />} /> 
+        <Route path='/product' element={<ProductDetail />} />
+        <Route path='/shop' element={<Shop />} />
       </Routes>
       {/* <TopBar /> */}
       {/* <Home /> */}
