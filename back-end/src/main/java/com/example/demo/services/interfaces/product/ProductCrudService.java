@@ -12,5 +12,7 @@ public interface ProductCrudService {
 
     ProductEntity findById(Long id);
 
+    Boolean deleteProduct(Long id);
+
 //    ProductResponseDTO addSizeToProduct(AddSizeToProductRequestDto addSizeToProductRequestDto);
 }

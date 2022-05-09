@@ -99,4 +99,18 @@ public class ProductCrudServiceImpl implements ProductCrudService {
 
         return productEntity.get();
     }
+
+    @Override
+    public Boolean deleteProduct(Long id) {
+        Optional<ProductEntity> productEntity = productRepository.findById(id);
+
+        if (!productEntity.isPresent()) {
+            throw new ProductNotFoundException();
+        }
+
+        productEntity.get().setDeleted(true);
+        productRepository.save(productEntity.get());
+
+        return true;
+    }
 }
