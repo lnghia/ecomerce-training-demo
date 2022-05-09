@@ -3,6 +3,7 @@ package com.example.demo.dto.responses.product;
 import com.example.demo.entities.CategoryEntity;
 import com.example.demo.entities.GenderEntity;
 import com.example.demo.entities.SportEntity;
+import com.example.demo.entities.TechnologyEntity;
 import lombok.*;
 
 import java.util.Set;
@@ -41,7 +42,9 @@ public class ProductResponseDto {
 
     private Set<ProductSizeResponseDto> sizes;
 
-    private CategoryEntity category;
+    private Set<CategoryEntity> categories;
+
+    private Set<TechnologyEntity> technologies;
 
     private String thumbnail;
 }
