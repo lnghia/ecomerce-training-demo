@@ -100,27 +100,24 @@ export const fetchReviewsOnProduct = async (productId, page, size) => {
     }
 }
 
-// const fetchProductList = async () => {
-//     var loginSuccess = false;
+export const fetchProductList = async (genderFilters, sportFilters, technologyFilters, typeFilters, keyword) => {
+    try {
+        let response = await AxiosClient.post('/product/search', {
+            name: keyword,
+            genderId: genderFilters,
+            sportId: sportFilters,
+            categoryIds: typeFilters,
+            technologyIds: technologyFilters
+        });
+        let data = response.data.data;
 
-//     await AxiosClient.post("/auth/login", {
-//         username: email,
-//         password: inputPassword
-//     })
-//         .then((response) => {
-//             let accessToken = response.data.accessToken;
-//             let refreshToken = response.data.refreshToken;
-//             window.localStorage.setItem('accessToken', accessToken);
-//             window.localStorage.setItem('refreshToken', refreshToken);
-//             loginSuccess = true;
-//         })
-//         .catch((error) => {
-//             raiseErrorMessages(error.response.data.errors);
-//             loginSuccess = false;
-//         });
+        return data;
+    } catch (error) {
+        raiseErrorMessages(error.response.data.errors);
 
-//     return loginSuccess;
-// }
+        return null;
+    }
+}
 
 export { fetchFeaturedProducts };
 
