@@ -46,6 +46,9 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/sport").permitAll()
                 .antMatchers("/api/technology").permitAll()
                 .antMatchers("/api/gender").permitAll()
+                .antMatchers("/api/product/{\\d+}").permitAll()
+                .antMatchers("/api/product/ratings/*").permitAll()
+                .antMatchers("/api/product/search").permitAll()
                 .anyRequest().authenticated()
                 .and().exceptionHandling().accessDeniedHandler(accessDeniedHandler).authenticationEntryPoint(authenticationEntryPoint);
 
