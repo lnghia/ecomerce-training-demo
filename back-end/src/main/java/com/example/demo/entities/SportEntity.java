@@ -3,6 +3,7 @@ package com.example.demo.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "sports")
@@ -17,4 +18,7 @@ public class SportEntity {
     private Long id;
 
     private String name;
+
+    @OneToMany(mappedBy = "sport")
+    private Set<ProductEntity> products;
 }

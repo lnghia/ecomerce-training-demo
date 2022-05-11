@@ -42,7 +42,7 @@ public class ProductEntity extends Auditable {
 
     private int year;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "sport_id", referencedColumnName = "id")
     private SportEntity sport;
 

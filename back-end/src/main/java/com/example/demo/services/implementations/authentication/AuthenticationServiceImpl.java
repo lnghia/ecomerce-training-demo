@@ -3,6 +3,7 @@ package com.example.demo.services.implementations.authentication;
 import com.example.demo.dto.responses.authentication.LoginResponseDto;
 import com.example.demo.entities.UserEntity;
 import com.example.demo.exceptions.InvalidTokenException;
+import com.example.demo.exceptions.UserBlockedException;
 import com.example.demo.exceptions.UsernamePasswordInvalidException;
 import com.example.demo.repositories.UserRepository;
 import com.example.demo.security.providers.JWTProvider;
@@ -41,8 +42,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         Optional<UserEntity> user = userRepository.findByUsername(username);
 
         if (user.isPresent() && passwordEncoder.matches(password, user.get().getPassword())) {
-            String accessToken = jwtProvider.generateAccessToken(user.get());
-            String refreshToken = jwtProvider.generateRefreshToken(user.get());
+            UserEntity userEntity = user.get();
+
+            if (!userEntity.getIsActive()) {
+                throw new UserBlockedException();
+            }
+
+            String accessToken = jwtProvider.generateAccessToken(userEntity);
+            String refreshToken = jwtProvider.generateRefreshToken(userEntity);
             LoginResponseDto loginResponseDTO = new LoginResponseDto(accessToken, refreshToken);
 
             return loginResponseDTO;

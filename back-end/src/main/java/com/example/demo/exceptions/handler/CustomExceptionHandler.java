@@ -172,4 +172,13 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
         return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(UserBlockedException.class)
+    public ResponseEntity<Object> handleGlobalException(UserBlockedException exception, WebRequest request) {
+        ResponseBodyDto response = new ResponseBodyDto();
+
+        response.getErrors().put("UserId", "User has been blocked");
+
+        return new ResponseEntity(response, HttpStatus.FORBIDDEN);
+    }
 }

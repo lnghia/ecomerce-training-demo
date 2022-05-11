@@ -6,11 +6,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserResponseDto {
-    private long id;
+    protected long id;
 
-    private String firstName;
+    protected String firstName;
 
-    private String lastName;
+    protected String lastName;
 
-    private String email;
+    protected String email;
 }
