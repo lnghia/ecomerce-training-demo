@@ -17,7 +17,7 @@ const FeaturedProducts = (props) => {
     useEffect(() => {
         async function fetchData() {
             let rs = await fetchFeaturedProducts();
-            setProductList(rs);
+            setProductList(rs.content);
         }
 
         fetchData();
@@ -33,7 +33,7 @@ const FeaturedProducts = (props) => {
                     productList.map(product => {
                         return (
                             <div className="col-lg-3 col-md-6 col-sm-12 pb-1">
-                                <ProductCard key={product.id} productId={product.id} name={product.name} price={product.price} img={product.thumbnail} /> // need img={product.img}
+                                <ProductCard key={product.id} productId={product.id} name={product.name} price={product.price} img={product.thumbnail} /> 
                             </div>
                         )
                     })

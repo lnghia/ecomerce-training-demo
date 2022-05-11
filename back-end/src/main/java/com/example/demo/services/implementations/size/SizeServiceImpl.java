@@ -1,5 +1,6 @@
 package com.example.demo.services.implementations.size;
 
+import com.example.demo.dto.responses.size.SizeResponseDto;
 import com.example.demo.entities.SizeEntity;
 import com.example.demo.exceptions.SizeNotFoundException;
 import com.example.demo.repositories.SizeRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @NoArgsConstructor
@@ -46,5 +48,15 @@ public class SizeServiceImpl implements SizeService {
         }
 
         return sizeEntities;
+    }
+
+    @Override
+    public List<SizeResponseDto> getAll() {
+        List<SizeEntity> sizeEntities = sizeRepository.findAll();
+        List<SizeResponseDto> result = sizeEntities.stream().map(sizeEntity -> {
+            return modelMapper.map(sizeEntity, SizeResponseDto.class);
+        }).collect(Collectors.toList());
+
+        return result;
     }
 }

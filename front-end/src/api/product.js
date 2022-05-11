@@ -119,5 +119,18 @@ export const fetchProductList = async (genderFilters, sportFilters, technologyFi
     }
 }
 
+export const fetchProductAll = async () => {
+    try {
+        let response = await AxiosClient.get('/product/all');
+        let data = response.data.data;
+
+        return data;
+    } catch (error) {
+        raiseErrorMessages(error.response.data.errors);
+
+        return null;
+    }
+}
+
 export { fetchFeaturedProducts };
 

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,7 +30,7 @@ public class CategoryCrudServiceImpl implements CategoryCrudService {
     }
 
     @Override
-    public List findByIds(Set<Long> ids) {
+    public List<CategoryEntity> findByIds(List<Long> ids) {
         int countExist = 0;
         List<CategoryEntity> categoryEntities = categoryRepository.findAllById(ids);
 

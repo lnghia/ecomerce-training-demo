@@ -82,13 +82,19 @@ public class ProductServiceImpl implements ProductService {
                 name != null ? name : "",
                 pageable
         );
-//        result = productEntities.stream().map(productEntity -> {
-//            return modelMapper.map(productEntity, ProductResponseDto.class);
-//        }).collect(Collectors.toList());
-//
-//        return result;
 
         return modelMapper.map(productEntities, PageableProductListResponseDto.class);
+    }
+
+    @Override
+    public List<ProductResponseDto> getAll() {
+        List<ProductEntity> productEntities = productRepository.findAll();
+
+        List<ProductResponseDto> result = productEntities.stream().map(product -> {
+            return modelMapper.map(product, ProductResponseDto.class);
+        }).collect(Collectors.toList());
+
+        return result;
     }
 
     @Override

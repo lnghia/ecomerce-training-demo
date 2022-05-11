@@ -35,4 +35,5 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long>, J
 
     @Query(value = "select * from products where is_deleted=false and id=:productId", nativeQuery = true)
     Optional<ProductEntity> findById(@Param("productId") Long productId);
+
 }

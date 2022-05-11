@@ -21,3 +21,5 @@ export const sportFilterValuesSelector = state => state.category.sportFilterValu
 export const categoryFilterValuesSelector = state => state.category.categoryFilterValues;
 
 export const technologyFilterValuesSelector = state => state.category.technologyFilterValues;
+
+export const onRefreshReviewsSelector = state => state.product.onRefreshReviewsSelector;

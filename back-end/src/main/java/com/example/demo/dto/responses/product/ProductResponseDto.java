@@ -47,4 +47,6 @@ public class ProductResponseDto {
     private Set<TechnologyEntity> technologies;
 
     private String thumbnail;
+
+    private Integer countRating;
 }

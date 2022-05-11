@@ -48,7 +48,7 @@ public class ProductController {
         return ResponseEntity.ok(responseBodyDTO);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "/create")
     public ResponseEntity<ResponseBodyDto> createProduct(@Valid @RequestBody CreateProductRequestDto createProductRequestDTO) {
         ProductResponseDto productResponseDTO = productCRUDService.createProduct(createProductRequestDTO);
@@ -65,16 +65,16 @@ public class ProductController {
         return ResponseEntity.ok(ResponseBodyDto.builder().status("200").build());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping
+    //    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping(path = "/update")
     public ResponseEntity<ResponseBodyDto> updateProduct(@Valid @RequestBody UpdateProductRequestDto requestDto) {
         ProductResponseDto productResponseDto = productCRUDService.updateProduct(requestDto);
 
         return ResponseEntity.ok(ResponseBodyDto.builder().status("200").data(productResponseDto).build());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping
+    //    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping(path = "/delete")
     public ResponseEntity<ResponseBodyDto> deleteProduct(@Valid @RequestBody DeleteProductRequestDto requestDto) {
         Boolean deleteSuccess = productCRUDService.deleteProduct(requestDto.getProductId());
 
@@ -107,6 +107,14 @@ public class ProductController {
         ResponseBodyDto responseBodyDto = ResponseBodyDto.builder().status("200").data(products).build();
 
         return ResponseEntity.ok(responseBodyDto);
+    }
+
+    @GetMapping(path = "/all")
+    public ResponseEntity<ResponseBodyDto> findAllProduct() {
+        List<ProductResponseDto> result = productService.getAll();
+        ResponseBodyDto response = ResponseBodyDto.builder().status("200").data(result).build();
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping(path = "/rate_product")

@@ -15,7 +15,7 @@ const ProductInfo = (props) => {
                         <small class="fas fa-star-half-alt"></small>
                         <small class="far fa-star"></small> */}
                 </div>
-                <small class="pt-1">(50 reviews)</small>
+                <small class="pt-1">{props.product.countRating} reviews</small>
             </div>
             <h3 class="font-weight-semi-bold mb-4">${props.product.price}</h3>
             <p class="mb-4">{props.product.gender.name}</p>

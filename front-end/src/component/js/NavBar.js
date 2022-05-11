@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 import { logoutAction } from "../../redux/slices/authenticationSlice";
 import { updateCategoryListAction, updateSportListAction, updateTechnologyListAction, updateGenderListAction } from "../../redux/slices/categorySlice";
+import { updateGenderFilterValueAction, updateCategoryFilterValueAction, updateSportFilterValueAction, updateTechnologyFilterValueAction } from "../../redux/slices/categorySlice";
 import { loginSuccessSelector } from "../../redux/selectors";
 import Login from "./Login";
 
@@ -12,6 +14,7 @@ import { fetchTechnologies } from "../../api/technology";
 
 const NavBar = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const loginSuccess = useSelector(loginSuccessSelector);
     const [sportList, setSportList] = useState([]);
     const [categoryList, setCategoryList] = useState([]);
@@ -36,6 +39,26 @@ const NavBar = () => {
         dispatch(updateGenderListAction(genderList));
         dispatch(updateSportListAction(sportList));
         dispatch(updateTechnologyListAction(technologyList));
+    }
+
+    function handleGenderMenuOnClick(id) {
+        dispatch(updateGenderFilterValueAction(id));
+        navigate("/shop");
+    }
+
+    function handleTechnologyMenuOnClick(id) {
+        dispatch(updateTechnologyFilterValueAction(id));
+        navigate("/shop");
+    }
+
+    function handleSportMenuOnClick(id) {
+        dispatch(updateSportFilterValueAction(id));
+        navigate("/shop");
+    }
+
+    function handleCategoryMenuOnClick(id) {
+        dispatch(updateCategoryFilterValueAction(id));
+        navigate("/shop");
     }
 
     useEffect(() => {
@@ -74,7 +97,7 @@ const NavBar = () => {
                                 <div className="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
                                     {
                                         genderList.map(gender => {
-                                            return <a href="#" key={gender.id} className="dropdown-item">{gender.name}</a>
+                                            return <a href="#" key={gender.id} className="dropdown-item" onClick={() => handleGenderMenuOnClick(gender.id)}>{gender.name}</a>
                                         })
                                     }
                                 </div>
@@ -84,7 +107,7 @@ const NavBar = () => {
                                 <div className="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
                                     {
                                         technologyList.map(technology => {
-                                            return <a href="#" key={technology.id} className="dropdown-item">{technology.name}</a>
+                                            return <a href="#" key={technology.id} className="dropdown-item" onClick={() => handleTechnologyMenuOnClick(technology.id)}>{technology.name}</a>
                                         })
                                     }
                                 </div>
@@ -94,14 +117,14 @@ const NavBar = () => {
                                 <div className="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
                                     {
                                         sportList.map(sport => {
-                                            return <a href="#" key={sport.id} className="dropdown-item">{sport.name}</a>
+                                            return <a href="#" key={sport.id} className="dropdown-item" onClick={() => handleSportMenuOnClick(sport.id)}>{sport.name}</a>
                                         })
                                     }
                                 </div>
                             </div>
                             {
                                 categoryList.map(category => {
-                                    return <a href="#" key={category.id} className="nav-item nav-link">{category.name}</a>
+                                    return <a href="#" key={category.id} className="nav-item nav-link" onClick={() => handleCategoryMenuOnClick(category.id)}>{category.name}</a>
                                 })
                             }
                         </div>

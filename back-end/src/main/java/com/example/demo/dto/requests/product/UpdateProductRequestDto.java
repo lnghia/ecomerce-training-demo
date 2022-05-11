@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,5 +24,9 @@ public class UpdateProductRequestDto {
 
     private Long sportId;
 
-    private Long categoryId;
+    private List<Long> categoryIds;
+
+    private List<Long> technologyIds;
+
+    private List<ProductSizeDto> productSizeDtoList;
 }

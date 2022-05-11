@@ -49,6 +49,10 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/product/{\\d+}").permitAll()
                 .antMatchers("/api/product/ratings/*").permitAll()
                 .antMatchers("/api/product/search").permitAll()
+                .antMatchers("/api/product/delete").permitAll()
+                .antMatchers("/api/product/create").permitAll()
+                .antMatchers("/api/product/update").permitAll()
+                .antMatchers("/api/size").permitAll()
                 .anyRequest().authenticated()
                 .and().exceptionHandling().accessDeniedHandler(accessDeniedHandler).authenticationEntryPoint(authenticationEntryPoint);
 

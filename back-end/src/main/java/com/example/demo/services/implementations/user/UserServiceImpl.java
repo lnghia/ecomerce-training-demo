@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
@@ -125,12 +126,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserRateProductResponseDto rateProduct(UserRateProductRequestDto requestDto, UserEntity userEntity) {
         Long productId = requestDto.getProductId();
         int rating = requestDto.getRating();
         String comment = requestDto.getComment();
 
         ProductEntity product = productCrudService.findById(productId);
+        double averageRating = product.getAverageRating();
+        averageRating = (averageRating * product.getCountRating() + requestDto.getRating()) / (product.getCountRating() + 1);
+        product.setCountRating(product.getCountRating() + 1);
+        product.setAverageRating(averageRating);
 
         UserRateProductEntity userRateProductEntity = UserRateProductEntity.builder()
                 .rating(rating)
@@ -140,6 +146,7 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         userRateProductEntity = userRateProductRepository.save(userRateProductEntity);
+        productCrudService.saveProduct(product);
 
         return modelMapper.map(userRateProductEntity, UserRateProductResponseDto.class);
     }

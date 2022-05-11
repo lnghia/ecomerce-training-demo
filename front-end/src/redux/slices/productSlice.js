@@ -6,7 +6,8 @@ export const productSlice = createSlice({
     name: 'products',
     initialState: {
         productList: [],
-        selectedProduct: null
+        selectedProduct: null,
+        refreshReviews: false
     },
     reducers: {
         fetchProductList: state => {
@@ -16,11 +17,14 @@ export const productSlice = createSlice({
 
         // }
         selectProductAction: (state, action) => {
-            state.selectedProduct = action.payload; 
+            state.selectedProduct = action.payload;
+        },
+        onRefreshReviewsAction: (state, action) => {
+            state.refreshReviews = action.payload;
         }
     }
 })
 
-export const { fetchProductList, selectProductAction } = productSlice.actions;
+export const { fetchProductList, selectProductAction, onRefreshReviewsAction } = productSlice.actions;
 
 export default productSlice.reducer;

@@ -16,6 +16,9 @@ public class PermittedUrlsUtil {
                     "/api/product/rate_product",
                     "/api/auth/test",
                     "/api/product/user_review_on_product"
+//                    "/api/product/update"
+//                    "/api/product/create"
+//                    "/api/product/delete"
             )
     );
 

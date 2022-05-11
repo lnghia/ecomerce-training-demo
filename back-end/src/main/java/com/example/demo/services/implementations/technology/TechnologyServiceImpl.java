@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,7 +28,7 @@ public class TechnologyServiceImpl implements TechnologyService {
     }
 
     @Override
-    public List<TechnologyEntity> findByIds(Set<Long> ids) {
+    public List<TechnologyEntity> findByIds(List<Long> ids) {
         List<TechnologyEntity> technologyEntities = technologyRepository.findAllById(ids);
 
         if (technologyEntities.size() != ids.size()) {
@@ -48,5 +48,16 @@ public class TechnologyServiceImpl implements TechnologyService {
         }).collect(Collectors.toList());
 
         return result;
+    }
+
+    @Override
+    public TechnologyEntity findById(Long id) {
+        Optional<TechnologyEntity> technologyEntity = technologyRepository.findById(id);
+
+        if (technologyEntity.isPresent()) {
+            return technologyEntity.get();
+        }
+
+        throw new TechnologyNotFoundException();
     }
 }

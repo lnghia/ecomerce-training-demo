@@ -6,19 +6,21 @@ import Footer from "./Footer";
 import Features from "./Features";
 import ProductDetailImgs from "./ProductDetailImgs";
 import ProductInfo from "./ProductInfo";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { selectedProductIdSelector } from "../../redux/selectors";
 import ProductSpecifications from "./ProductSpecifications";
 import StarRatingForRating from "./StarRatingForRating";
 import ReviewBoard from "./ReviewBoard";
 
 import { fetchProductDetail, rateProduct, findUserReviewOnProduct } from "../../api/product";
-import { loginSuccessSelector } from "../../redux/selectors";
+import { loginSuccessSelector, onRefreshReviewsSelector } from "../../redux/selectors";
+import { onRefreshReviewsAction } from "../../redux/slices/productSlice";
 import { useForm } from "react-hook-form";
 import toastr from "toastr";
 import FormErrorMsg from "./ErrorMessageInForm";
 
 const ProductDetail = (props) => {
+    const dispatch = useDispatch();
     const { register, formState: { errors }, handleSubmit } = useForm();
     const [product, setProduct] = useState(null);
     const [rating, setRating] = useState(0);
@@ -28,6 +30,7 @@ const ProductDetail = (props) => {
     });
     let id = useSelector(selectedProductIdSelector);
     let loginSuccess = useSelector(loginSuccessSelector);
+    const [reviewed, setReviewed] = useState(false);
 
     useEffect(() => {
         async function fetchProduct() {
@@ -48,13 +51,14 @@ const ProductDetail = (props) => {
         }
 
         console.log(id);
-    }, []);
+    }, [reviewed]);
 
     const handleLeaveReview = async (data) => {
         let result = await rateProduct(product.id, data.comment, rating || currUserReview.rating);
 
         if (result) {
             toastr.success("You have rated product successfully", "Thank you!");
+            setReviewed(true);
         }
     }
 
@@ -104,7 +108,7 @@ const ProductDetail = (props) => {
                                                         {errors.comment?.type === 'required' && <FormErrorMsg message="Please be happy to leave some verbal review" />}
                                                     </div>
                                                     <div class="form-group mb-0">
-                                                        <input type="submit" value={currUserReview.comment === "" ? "Leave Your Review" : "Update Your Review"} class="btn btn-primary px-3" />
+                                                        <input type="submit" value={(currUserReview.comment === "" || !reviewed) ? "Leave Your Review" : "Update Your Review"} class="btn btn-primary px-3" />
                                                     </div>
                                                 </form>
                                             </div>}

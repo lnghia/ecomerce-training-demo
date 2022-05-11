@@ -21,6 +21,8 @@ public interface ProductService {
                                                             String sortType,
                                                             String sortBy);
 
+    List<ProductResponseDto> getAll();
+
     PageableUserRateProductResponseDto getLatestCommentUserProduct(Long productId, int page, int size);
 
     UserRateProductResponseDto findReviewOfUserOnProduct(UserEntity userEntity, Long productId);
