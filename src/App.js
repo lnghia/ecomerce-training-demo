@@ -30,6 +30,7 @@ import BlocksDemo from './components/BlocksDemo';
 import IconsDemo from './components/IconsDemo';
 
 import Crud from './pages/Crud';
+import ManageUser from './pages/ManageUser';
 import ManageProduct from './pages/ManageProduct';
 import EmptyPage from './pages/EmptyPage';
 import TimelineDemo from './pages/TimelineDemo';
@@ -226,6 +227,7 @@ const App = () => {
                     <Route path="/misc" component={MiscDemo} />
                     <Route path="/timeline" component={TimelineDemo} />
                     <Route path="/crud" component={ManageProduct} />
+                    <Route path='/users' component={ManageUser} />
                     <Route path="/empty" component={EmptyPage} />
                     <Route path="/documentation" component={Documentation} />
                 </div>
