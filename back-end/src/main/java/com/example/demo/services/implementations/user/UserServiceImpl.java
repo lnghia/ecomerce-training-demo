@@ -1,6 +1,7 @@
 package com.example.demo.services.implementations.user;
 
 import com.example.demo.dto.requests.user.UserRateProductRequestDto;
+import com.example.demo.dto.responses.user.UserListResponseDto;
 import com.example.demo.dto.responses.user.UserRateProductResponseDto;
 import com.example.demo.dto.responses.user.UserResponseDto;
 import com.example.demo.entities.ProductEntity;
@@ -23,8 +24,10 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @NoArgsConstructor
@@ -44,7 +47,13 @@ public class UserServiceImpl implements UserService {
     private ModelMapper modelMapper;
 
     @Autowired
-    public UserServiceImpl(UserRateProductRepository userRateProductRepository, UserRepository userRepository, ProductCrudService productCrudService, RoleRepository roleRepository, RoleUtilityWrapper roleUtilityWrapper, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
+    public UserServiceImpl(UserRateProductRepository userRateProductRepository,
+                           UserRepository userRepository,
+                           ProductCrudService productCrudService,
+                           RoleRepository roleRepository,
+                           RoleUtilityWrapper roleUtilityWrapper,
+                           PasswordEncoder passwordEncoder,
+                           ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.roleUtilityWrapper = roleUtilityWrapper;
@@ -149,5 +158,51 @@ public class UserServiceImpl implements UserService {
         productCrudService.saveProduct(product);
 
         return modelMapper.map(userRateProductEntity, UserRateProductResponseDto.class);
+    }
+
+    @Override
+    public UserResponseDto activeUser(Long userId) {
+        return this.changeStatusActive(userId, true);
+    }
+
+    @Override
+    public UserResponseDto deActiveUser(Long userId) {
+        return this.changeStatusActive(userId, false);
+    }
+
+    @Override
+    @Transactional
+    public UserResponseDto changeStatusActive(Long userId, boolean status) {
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException());
+        user.setIsActive(status);
+        user = userRepository.save(user);
+        return modelMapper.map(user, UserResponseDto.class);
+    }
+
+    @Override
+    public List<UserListResponseDto> getListUser() {
+        return userRepository.findAll().stream().map(user -> modelMapper.map(user, UserListResponseDto.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserListResponseDto> getListNormalUser() {
+        List<UserEntity> userEntities = userRepository.findAllWithStatus(true);
+
+        List<UserListResponseDto> result = userEntities.stream().map(userEntity -> {
+            return modelMapper.map(userEntity, UserListResponseDto.class);
+        }).collect(Collectors.toList());
+
+        return result;
+    }
+
+    @Override
+    public List<UserListResponseDto> getListBlockedUser() {
+        List<UserEntity> userEntities = userRepository.findAllWithStatus(false);
+
+        List<UserListResponseDto> result = userEntities.stream().map(userEntity -> {
+            return modelMapper.map(userEntity, UserListResponseDto.class);
+        }).collect(Collectors.toList());
+
+        return result;
     }
 }

@@ -10,12 +10,14 @@ import java.util.List;
 public class PermittedUrlsUtil {
     private ArrayList<String> protectedUrlPatterns = new ArrayList<String>(
             List.of(
-                    "/api/admin/",
+//                    "/api/admin/",
                     "/api/auth/refresh_tokens",
-                    "/api/auth/assign_role",
+//                    "/api/auth/assign_role",
                     "/api/product/rate_product",
                     "/api/auth/test",
                     "/api/product/user_review_on_product"
+//                    "/api/admin/users"
+//                    "/api/admin/roles"
 //                    "/api/product/update"
 //                    "/api/product/create"
 //                    "/api/product/delete"

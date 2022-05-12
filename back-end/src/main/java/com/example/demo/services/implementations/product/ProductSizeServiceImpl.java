@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -55,7 +56,7 @@ public class ProductSizeServiceImpl implements ProductSizeService {
     }
 
     @Override
-    public boolean addSizeToProduct(AddSizeToProductRequestDto addSizeToProductRequestDto) {
+    public ProductEntity addSizeToProduct(AddSizeToProductRequestDto addSizeToProductRequestDto) {
         Long productId = addSizeToProductRequestDto.getProductId();
         Optional<ProductEntity> productEntity = productRepository.findById(productId);
 
@@ -71,9 +72,10 @@ public class ProductSizeServiceImpl implements ProductSizeService {
                 .product(product)
                 .inStock(sizes.get(sizeEntity.getId()))
                 .build()).collect(Collectors.toList());
-        productSizeRepository.saveAll(productSizeEntities);
+        productSizeEntities = productSizeRepository.saveAll(productSizeEntities);
+        product.setSizes(new HashSet<>(productSizeEntities));
 
-        return true;
+        return product;
     }
 
 }

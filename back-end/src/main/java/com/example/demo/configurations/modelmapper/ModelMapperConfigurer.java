@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Configuration
 public class ModelMapperConfigurer {
@@ -21,6 +22,13 @@ public class ModelMapperConfigurer {
 
         resolveCircularReferencedBetweenProductAndProductSizeWhenMapping(modelMapper);
 
+        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        Converter<LocalDateTime, String> timeConverter = new AbstractConverter<>() {
+            @Override
+            protected String convert(LocalDateTime localDateTime) {
+                return null == localDateTime ? null : localDateTime.format(pattern).toString();
+            }
+        };
         modelMapper.addConverter(timeConverter);
 
         return modelMapper;
@@ -34,11 +42,4 @@ public class ModelMapperConfigurer {
             }
         });
     }
-
-    public static Converter<LocalDateTime, String> timeConverter = new AbstractConverter<>() {
-        @Override
-        protected String convert(LocalDateTime localDateTime) {
-            return null == localDateTime ? null : String.valueOf(localDateTime);
-        }
-    };
 }

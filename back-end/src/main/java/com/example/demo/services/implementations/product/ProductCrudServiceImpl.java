@@ -81,12 +81,13 @@ public class ProductCrudServiceImpl implements ProductCrudService {
                 .year(createProductRequestDTO.getYear())
                 .name(createProductRequestDTO.getName())
                 .description(createProductRequestDTO.getDescription())
+                .thumbnail(createProductRequestDTO.getThumbnail())
                 .build();
 
         productEntity = productRepository.save(productEntity);
 
         AddSizeToProductRequestDto requestDto = AddSizeToProductRequestDto.builder().productId(productEntity.getId()).productSizeDto(createProductRequestDTO.getProductSizeDtoList()).build();
-        productSizeService.addSizeToProduct(requestDto);
+        productEntity = productSizeService.addSizeToProduct(requestDto);
 
         return modelMapper.map(productEntity, ProductResponseDto.class);
     }
@@ -116,6 +117,11 @@ public class ProductCrudServiceImpl implements ProductCrudService {
         if (updateProductRequestDto.getGenderId() != null) {
             GenderEntity newGender = genderCrudService.findById(updateProductRequestDto.getGenderId());
             productEntity.setGender(newGender);
+        }
+
+        if (updateProductRequestDto.getSportId() != null) {
+            SportEntity newSport = sportCrudService.findById(updateProductRequestDto.getSportId());
+            productEntity.setSport(newSport);
         }
 
         productEntity = productRepository.save(productEntity);

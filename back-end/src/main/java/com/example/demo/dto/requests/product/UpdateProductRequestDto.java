@@ -29,4 +29,6 @@ public class UpdateProductRequestDto {
     private List<Long> technologyIds;
 
     private List<ProductSizeDto> productSizeDtoList;
+
+    private String thumbnail;
 }

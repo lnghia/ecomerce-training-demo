@@ -12,6 +12,8 @@ public class CreateProductRequestDto {
     @NotNull
     private Long genderId;
 
+    private String thumbnail;
+
     @NotNull
     private String name;
 

@@ -1,8 +1,8 @@
 package com.example.demo.dto.responses.product;
 
+import com.example.demo.dto.responses.sport.SportResponseDto;
 import com.example.demo.entities.CategoryEntity;
 import com.example.demo.entities.GenderEntity;
-import com.example.demo.entities.SportEntity;
 import com.example.demo.entities.TechnologyEntity;
 import lombok.*;
 
@@ -38,7 +38,7 @@ public class ProductResponseDto {
 
     private int year;
 
-    private SportEntity sport;
+    private SportResponseDto sport;
 
     private Set<ProductSizeResponseDto> sizes;
 
@@ -49,4 +49,8 @@ public class ProductResponseDto {
     private String thumbnail;
 
     private Integer countRating;
+
+    private String createdDate;
+
+    private String lastModifiedDate;
 }
