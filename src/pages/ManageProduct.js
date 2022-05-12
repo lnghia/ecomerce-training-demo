@@ -13,6 +13,7 @@ import { InputNumber } from 'primereact/inputnumber';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { ProductService } from '../service/ProductService';
+import uploadImage from '../firebase/upload';
 
 import {
     fetchProductAllApi,
@@ -43,6 +44,8 @@ const ManageProduct = () => {
     };
 
     const [products, setProducts] = useState(null);
+    const [imgUrl, setImgUrl] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(null);
     const [categoryList, setCategoryList] = useState([]);
     const [technologyList, setTechnogyList] = useState([]);
     const [genderList, setGenderList] = useState([]);
@@ -55,13 +58,12 @@ const ManageProduct = () => {
     const [selectedProducts, setSelectedProducts] = useState(null);
     const [submitted, setSubmitted] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
+    const [updateProduct, setUpdateProduct] = useState(false);
     const [preState, setPreState] = useState(emptyProduct);
     const toast = useRef(null);
     const dt = useRef(null);
 
     useEffect(() => {
-        // const productService = new ProductService();
-        // productService.getProducts().then(data => setProducts(data));
         async function fetchData() {
             let productList = await fetchProductAllApi();
             let categories = await fetchCategories();
@@ -86,7 +88,17 @@ const ManageProduct = () => {
     }
 
     const openNew = () => {
-        setProduct(emptyProduct);
+        let _product = emptyProduct;
+
+        _product.productSizeDtoList = sizeList.map(size => {
+            return {
+                sizeId: size.id,
+                number: 0
+            }
+        });
+
+        setUpdateProduct(false);
+        setProduct(_product);
         setSubmitted(false);
         setProductDialog(true);
     }
@@ -110,14 +122,21 @@ const ManageProduct = () => {
         if (product.name.trim()) {
             let _products = [...products];
             let _product = { ...product };
+
+            if (selectedFile !== null) {
+                const urlImage = await uploadImage("/products", selectedFile);
+                // console.log(urlImage);
+                product['thumbnail'] = urlImage;
+            }
+
             if (product.id) {
 
                 let result = await updateProductApi(product);
 
-                if (result) {
+                if (result !== null) {
                     const index = findIndexById(product.id);
 
-                    _products[index] = _product;
+                    _products[index] = result;
                     toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
                 } else {
                     toast.current.show({ severity: 'error', summary: 'Error', detail: 'Failed to update product', life: 3000 });
@@ -126,9 +145,11 @@ const ManageProduct = () => {
             else {
                 let result = await createProductApi(product);
 
+                console.log(result);
+
                 if (result !== null) {
-                    _product.id = result;
-                    _products.push(_product);
+                    _product.id = result.id;
+                    _products.push(result);
                     toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product has been created', life: 3000 });
                 } else {
                     toast.current.show({ severity: 'error', summary: 'Error', detail: 'Failed to create product', life: 3000 });
@@ -139,11 +160,10 @@ const ManageProduct = () => {
             setProductDialog(false);
             setProduct(emptyProduct);
         }
-
-        console.log(products);
     }
 
     const editProduct = (product) => {
+        setUpdateProduct(true);
         setProduct({ ...product });
         setProductDialog(true);
     }
@@ -289,33 +309,31 @@ const ManageProduct = () => {
     const onSizeValueChange = (e, _sizeId) => {
         let _product = { ...product };
         let index = -1;
-        let _index = -1;
 
         for (let ind in _product.productSizeDtoList) {
-            if (_product.productSizeDtoList[ind].sizeId === _sizeId) {
+            if (updateProduct && _product.sizes[ind].size.id === _sizeId) {
                 index = ind;
                 break;
-            } else if (_product.sizes[ind].size.id === _sizeId) {
-                console.log("lala");
-                _index = ind;
+            } else if (_product.productSizeDtoList[ind].sizeId === _sizeId) {
+                index = ind;
                 break;
             }
         }
 
-        console.log(_product);
-
-        if (index !== -1) {
-            _product.productSizeDtoList[index].number = e.value;
-        } else if (_index !== -1) {
-            _product.sizes[_index].inStock = e.value;
-        } else {
-            if (_product.sizes !== null) {
+        if (updateProduct) {
+            if (index !== -1) {
+                _product.sizes[index].inStock = e.value;
+            } else {
                 _product.sizes.push({
                     size: {
                         id: _sizeId
                     },
                     inStock: e.value
                 })
+            }
+        } else {
+            if (index !== -1) {
+                _product.productSizeDtoList[index].number = e.value;
             } else {
                 _product.productSizeDtoList.push({
                     sizeId: _sizeId,
@@ -325,6 +343,11 @@ const ManageProduct = () => {
         }
 
         setProduct(_product);
+    }
+
+    const myUploader = (e) => {
+        let imgName = createId();
+        setSelectedFile(e.files[0]);
     }
 
     const getProductSizeInStock = (sizeId) => {
@@ -475,7 +498,7 @@ const ManageProduct = () => {
         return (
             <>
                 <span className="p-column-title">Updated date</span>
-                <span>{rowData.updatedDate}</span>
+                <span>{rowData.lastModifiedDate}</span>
             </>
         )
     }
@@ -542,7 +565,7 @@ const ManageProduct = () => {
                     </DataTable>
 
                     <Dialog visible={productDialog} style={{ width: '450px' }} header="Product Details" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
-                        {product.image && <img src={`assets/demo/images/product/${product.image}`} alt={product.image} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />}
+                        {product.thumbnail && <img src={product.thumbnail} alt={product.thumbnail} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />}
                         <div className="field">
                             <label htmlFor="name">Name</label>
                             <InputText id="name" value={product.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.name })} />
@@ -644,6 +667,13 @@ const ManageProduct = () => {
                             <div className="field col">
                                 <label htmlFor="price">Year</label>
                                 <InputNumber id="price" value={2022} onValueChange={(e) => onInputNumberChange(e, 'year')} integeronly />
+                            </div>
+                        </div>
+
+                        <div className="formgrid grid">
+                            <div className="field col">
+                                <label htmlFor="thumbnail">Thumbnail</label>
+                                <FileUpload name="thumbnail" accept="image/*" maxFileSize="1000000" customUpload onSelect={myUploader} mode="basic" />
                             </div>
                         </div>
                     </Dialog>
