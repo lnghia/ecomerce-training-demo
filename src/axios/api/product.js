@@ -1,14 +1,15 @@
-import AxiosClient from '../AxiosClient';
+import { AxiosUserClient, AxiosAdminClient } from '../AxiosClient';
 import toastr from 'toastr';
 
 export const fetchProductAllApi = async () => {
     try {
-        let response = await AxiosClient.post('/product/search', {
+        let response = await AxiosUserClient.post('/product/search', {
             name: "",
             genderId: [],
             sportId: [],
             categoryIds: [],
-            technologyIds: []
+            technologyIds: [],
+            size: 1000
         });
         let data = response.data.data;
 
@@ -22,7 +23,7 @@ export const fetchProductAllApi = async () => {
 
 export const fetchCategories = async () => {
     try {
-        let response = await AxiosClient.get("/category");
+        let response = await AxiosUserClient.get("/category");
         let data = response.data.data;
 
         return data;
@@ -36,7 +37,7 @@ export const fetchCategories = async () => {
 
 export const fetchGenders = async () => {
     try {
-        let response = await AxiosClient.get("/gender");
+        let response = await AxiosUserClient.get("/gender");
         let data = response.data.data;
 
         return data;
@@ -50,7 +51,7 @@ export const fetchGenders = async () => {
 
 export const fetchSports = async () => {
     try {
-        let response = await AxiosClient.get("/sport");
+        let response = await AxiosUserClient.get("/sport");
         let data = response.data.data;
 
         return data;
@@ -64,7 +65,7 @@ export const fetchSports = async () => {
 
 export const fetchTechnologies = async () => {
     try {
-        let response = await AxiosClient.get("/technology");
+        let response = await AxiosUserClient.get("/technology");
         let data = response.data.data;
 
         return data;
@@ -84,7 +85,7 @@ export const deleteProductApi = async (id) => {
             productId: id
         }
 
-        let response = await AxiosClient.delete('/product/delete', { data });
+        let response = await AxiosAdminClient.delete('/products/delete', { data });
 
         return true;
     } catch (error) {
@@ -96,7 +97,7 @@ export const deleteProductApi = async (id) => {
 
 export const fetchSizesApi = async () => {
     try {
-        let response = await AxiosClient.get('/size');
+        let response = await AxiosUserClient.get('/size');
 
         return response.data.data;
     } catch (error) {
@@ -124,7 +125,7 @@ export const createProductApi = async (product) => {
 
         console.log(data);
 
-        let response = await AxiosClient.post('/product/create', {
+        let response = await AxiosAdminClient.post('/products/create', {
             genderId: product.gender,
             name: product.name,
             description: product.description,
@@ -133,10 +134,11 @@ export const createProductApi = async (product) => {
             sportId: product.sport,
             technologyIds: product.technologies,
             categoryIds: product.categories,
-            productSizeDtoList: product.productSizeDtoList
+            productSizeDtoList: product.productSizeDtoList,
+            thumbnail: product.thumbnail
         });
 
-        return response.data.data.id;
+        return response.data.data;
     } catch (error) {
         if (error.response !== null) {
             toastr.error(error.response.data.errors);
@@ -153,7 +155,7 @@ export const updateProductApi = async (product) => {
         console.log(product);
 
         const data = {
-            genderId: product.gender,
+            genderId: product.gender.id !== undefined ? product.gender.id : product.gender,
             name: product.name,
             description: product.description,
             price: product.price,
@@ -176,17 +178,18 @@ export const updateProductApi = async (product) => {
             productSizeDtoList: product.sizes.map(item => {
                 return {
                     sizeId: item.size.id,
-                    number: item.inStock 
+                    number: item.inStock
                 }
             }),
-            productId: product.id
+            productId: product.id,
+            thumbnail: product.thumbnail
         }
 
         console.log(data);
 
-        let response = await AxiosClient.put('/product/update', data);
+        let response = await AxiosAdminClient.put('/products/update', data);
 
-        return true;
+        return response.data.data;
     } catch (error) {
         console.log(error.data);
 
@@ -196,6 +199,6 @@ export const updateProductApi = async (product) => {
             toastr.error(error.message);
         }
 
-        return false;
+        return null;
     }
 }
