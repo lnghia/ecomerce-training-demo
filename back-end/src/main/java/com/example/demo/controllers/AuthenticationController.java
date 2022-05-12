@@ -1,7 +1,6 @@
 package com.example.demo.controllers;
 
 import com.example.demo.dto.requests.authentication.RegisterRequestDto;
-import com.example.demo.dto.requests.product.AssignRoleToUserRequestDto;
 import com.example.demo.dto.requests.product.LoginRequestDto;
 import com.example.demo.dto.responses.ResponseBodyDto;
 import com.example.demo.dto.responses.authentication.LoginResponseDto;
@@ -91,13 +90,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(ResponseBodyDto.builder().data(tmp).build());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/assign_role")
-    public ResponseEntity<ResponseBodyDto> assignRoleToUser(@Valid @RequestBody AssignRoleToUserRequestDto requestBody) {
-        UserResponseDto userResponseDTO = userRoleService.assignRoleToUser(requestBody.getUserId(), requestBody.getRoleId());
 
-        return ResponseEntity.ok(ResponseBodyDto.builder().data(userResponseDTO).build());
-    }
 
 //    @GetMapping("/iii")
 //    public ResponseEntity<ResponseBodyDTO> iii() {
