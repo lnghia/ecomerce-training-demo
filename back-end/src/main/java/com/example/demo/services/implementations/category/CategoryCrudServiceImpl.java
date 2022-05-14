@@ -64,8 +64,8 @@ public class CategoryCrudServiceImpl implements CategoryCrudService {
     }
 
     @Override
-    public CategoryResponseDto updateCategory(UpdateCategoryRequestDto requestDto) {
-        CategoryEntity categoryEntity = findById(requestDto.getCategoryId());
+    public CategoryResponseDto updateCategory(Long categoryId, UpdateCategoryRequestDto requestDto) {
+        CategoryEntity categoryEntity = findById(categoryId);
 
         modelMapper.map(requestDto, categoryEntity);
         categoryEntity = categoryRepository.save(categoryEntity);

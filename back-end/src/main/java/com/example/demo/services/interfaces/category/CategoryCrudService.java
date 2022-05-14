@@ -14,7 +14,7 @@ public interface CategoryCrudService {
 
     CategoryResponseDto createCategory(CreateCategoryRequestDto requestDto);
 
-    CategoryResponseDto updateCategory(UpdateCategoryRequestDto requestDto);
+    CategoryResponseDto updateCategory(Long categoryId, UpdateCategoryRequestDto requestDto);
 
     CategoryEntity findById(Long id);
 }

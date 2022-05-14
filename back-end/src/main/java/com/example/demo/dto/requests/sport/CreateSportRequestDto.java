@@ -12,4 +12,8 @@ public class CreateSportRequestDto {
     @NotNull
     @NotEmpty
     private String name;
+
+    @NotNull
+    @NotEmpty
+    private String description;
 }
