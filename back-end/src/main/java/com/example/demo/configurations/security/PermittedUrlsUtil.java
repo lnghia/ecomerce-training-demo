@@ -10,7 +10,7 @@ import java.util.List;
 public class PermittedUrlsUtil {
     private ArrayList<String> protectedUrlPatterns = new ArrayList<String>(
             List.of(
-//                    "/api/admin/",
+                    "/api/admin/",
                     "/api/auth/refresh_tokens",
 //                    "/api/auth/assign_role",
                     "/api/product/rate_product",

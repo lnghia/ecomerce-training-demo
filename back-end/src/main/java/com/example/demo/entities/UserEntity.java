@@ -36,7 +36,7 @@ public class UserEntity extends Auditable {
 
     private boolean isDeleted = false;
 
-    private Boolean isActive = false;
+    private Boolean isActive = true;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"), uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role_id"})})

@@ -1,6 +1,6 @@
 package com.example.demo.utilities.wrapper;
 
-import com.example.demo.utilities.RoleUtility;
+import com.example.demo.utilities.authentication.RoleUtility;
 import org.springframework.stereotype.Component;
 
 @Component
