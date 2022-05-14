@@ -1,6 +1,7 @@
 package com.example.demo.services.interfaces.technology;
 
 
+import com.example.demo.dto.requests.technology.TechnologyCreateRequestDto;
 import com.example.demo.dto.responses.technology.TechnologyResponseDto;
 import com.example.demo.entities.TechnologyEntity;
 
@@ -12,4 +13,8 @@ public interface TechnologyService {
     List<TechnologyResponseDto> findAll();
 
     TechnologyEntity findById(Long id);
+
+    TechnologyResponseDto createTechnology(TechnologyCreateRequestDto requestDto);
+
+    TechnologyResponseDto updateTechnology(Long technologyId, TechnologyCreateRequestDto requestDto);
 }
