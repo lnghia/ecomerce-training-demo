@@ -1,5 +1,6 @@
 package com.example.demo.services.interfaces.size;
 
+import com.example.demo.dto.requests.size.SizeRequestDto;
 import com.example.demo.dto.responses.size.SizeResponseDto;
 import com.example.demo.entities.SizeEntity;
 
@@ -12,4 +13,8 @@ public interface SizeService {
     List<SizeEntity> findByIds(Set<Long> ids);
 
     List<SizeResponseDto> getAll();
+
+    SizeResponseDto createSize(SizeRequestDto requestDto);
+
+    SizeResponseDto updateSize(Long sizeId, SizeRequestDto requestDto);
 }

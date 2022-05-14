@@ -1,5 +1,6 @@
 package com.example.demo.services.implementations.size;
 
+import com.example.demo.dto.requests.size.SizeRequestDto;
 import com.example.demo.dto.responses.size.SizeResponseDto;
 import com.example.demo.entities.SizeEntity;
 import com.example.demo.exceptions.SizeNotFoundException;
@@ -58,5 +59,26 @@ public class SizeServiceImpl implements SizeService {
         }).collect(Collectors.toList());
 
         return result;
+    }
+
+    @Override
+    public SizeResponseDto createSize(SizeRequestDto requestDto) {
+        String name = requestDto.getName();
+        String description = requestDto.getDescription();
+
+        SizeEntity sizeEntity = SizeEntity.builder().name(name).description(description).build();
+        sizeEntity = sizeRepository.save(sizeEntity);
+
+        return modelMapper.map(sizeEntity, SizeResponseDto.class);
+    }
+
+    @Override
+    public SizeResponseDto updateSize(Long sizeId, SizeRequestDto requestDto) {
+        SizeEntity sizeEntity = sizeRepository.findById(sizeId).orElseThrow(() -> new SizeNotFoundException());
+
+        modelMapper.map(requestDto, sizeEntity);
+        sizeEntity = sizeRepository.save(sizeEntity);
+
+        return modelMapper.map(sizeEntity, SizeResponseDto.class);
     }
 }
