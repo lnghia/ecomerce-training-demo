@@ -58,7 +58,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseBodyDto> login(@Valid @RequestBody LoginRequestDto request) {
+    public ResponseEntity<ResponseBodyDto<LoginResponseDto>> login(@Valid @RequestBody LoginRequestDto request) {
         String username = request.getUsername();
         String password = request.getPassword();
         LoginResponseDto loginResponseDTO = authService.authenticateUser(username, password);
@@ -67,8 +67,18 @@ public class AuthenticationController {
         return ResponseEntity.ok(responseBodyDTO);
     }
 
+    @PostMapping("/login_admin")
+    public ResponseEntity<ResponseBodyDto> loginAdmin(@Valid @RequestBody LoginRequestDto responseDto) {
+        String username = responseDto.getUsername();
+        String password = responseDto.getPassword();
+        LoginResponseDto loginResponseDTO = authService.authenticateAdmin(username, password);
+        ResponseBodyDto responseBodyDTO = ResponseBodyDto.builder().data(loginResponseDTO).build();
+
+        return ResponseEntity.ok(responseBodyDTO);
+    }
+
     @PostMapping("/register")
-    public ResponseEntity<ResponseBodyDto> register(@Valid @RequestBody RegisterRequestDto request) {
+    public ResponseEntity<ResponseBodyDto<UserResponseDto>> register(@Valid @RequestBody RegisterRequestDto request) {
         UserEntity newUser = modelMapper.map(request, UserEntity.class);
         UserResponseDto userResponseDTO = userService.createNormalUser(newUser);
         ResponseBodyDto response = ResponseBodyDto.builder().data(userResponseDTO).build();
@@ -89,7 +99,6 @@ public class AuthenticationController {
 
         return ResponseEntity.ok(ResponseBodyDto.builder().data(tmp).build());
     }
-
 
 
 //    @GetMapping("/iii")

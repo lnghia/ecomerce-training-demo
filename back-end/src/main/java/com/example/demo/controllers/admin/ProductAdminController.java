@@ -13,6 +13,7 @@ import com.example.demo.services.interfaces.user.UserService;
 import com.example.demo.utilities.authentication.AuthenticationUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,7 +36,7 @@ public class ProductAdminController {
     @Autowired
     private AuthenticationUtility authenticationUtility;
 
-    //    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "/create")
     public ResponseEntity<ResponseBodyDto> createProduct(@Valid @RequestBody CreateProductRequestDto createProductRequestDTO) {
         ProductResponseDto productResponseDTO = productCRUDService.createProduct(createProductRequestDTO);
@@ -44,7 +45,7 @@ public class ProductAdminController {
         return ResponseEntity.ok(responseBodyDTO);
     }
 
-    //    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(path = "/add_size")
     public ResponseEntity<ResponseBodyDto> addSizeToProduct(@Valid @RequestBody AddSizeToProductRequestDto requestDto) {
         productSizeService.addSizeToProduct(requestDto);
@@ -52,7 +53,7 @@ public class ProductAdminController {
         return ResponseEntity.ok(ResponseBodyDto.builder().status("200").build());
     }
 
-    //    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(path = "/update")
     public ResponseEntity<ResponseBodyDto> updateProduct(@Valid @RequestBody UpdateProductRequestDto requestDto) {
         ProductResponseDto productResponseDto = productCRUDService.updateProduct(requestDto);
@@ -60,7 +61,7 @@ public class ProductAdminController {
         return ResponseEntity.ok(ResponseBodyDto.builder().status("200").data(productResponseDto).build());
     }
 
-    //    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(path = "/delete")
     public ResponseEntity<ResponseBodyDto> deleteProduct(@Valid @RequestBody DeleteProductRequestDto requestDto) {
         Boolean deleteSuccess = productCRUDService.deleteProduct(requestDto.getProductId());
