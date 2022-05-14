@@ -6,4 +6,6 @@ public interface AuthenticationService {
     LoginResponseDto authenticateUser(String username, String password);
 
     LoginResponseDto refreshAccessToken(String refreshToken);
+
+    LoginResponseDto authenticateAdmin(String username, String password);
 }
