@@ -160,7 +160,7 @@ export const updateProductApi = async (product) => {
             description: product.description,
             price: product.price,
             year: product.year,
-            sportId: product.sport.id,
+            sportId: product.sport.id || product.sport,
             technologyIds: product.technologies.map(item => {
                 if (item.id !== undefined) {
                     return item.id;

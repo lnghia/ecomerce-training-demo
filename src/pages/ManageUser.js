@@ -89,7 +89,7 @@ const ManageUser = () => {
         fetchData();
     }, [activeFilter]);
 
-    console.log(products);
+    console.log(roleList);
 
     const hideDialog = () => {
         if (updateProduct) {
@@ -121,9 +121,9 @@ const ManageUser = () => {
             const index = findIndexById(product.id);
 
             _products[index] = result;
-            toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
+            toast.current.show({ severity: 'success', summary: 'Successful', detail: 'User Updated', life: 3000 });
         } else {
-            toast.current.show({ severity: 'error', summary: 'Error', detail: 'Failed to update product', life: 3000 });
+            toast.current.show({ severity: 'error', summary: 'Error', detail: 'Failed to update user', life: 3000 });
         }
 
         setProducts(_products);
@@ -151,9 +151,9 @@ const ManageUser = () => {
 
             if (rs !== null) {
                 setProducts(_products);
-                toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
+                toast.current.show({ severity: 'success', summary: 'Successful', detail: activeFilter ? 'User disabled' : 'User activated', life: 3000 });
             } else {
-                toast.current.show({ severity: 'error', summary: 'Error', detail: 'Failed to delete product', life: 3000 });
+                toast.current.show({ severity: 'error', summary: 'Error', detail: activateUser ? 'Failed to disable user' : 'Failed to activate user', life: 3000 });
             }
         }
         _deleteProduct();
@@ -177,7 +177,7 @@ const ManageUser = () => {
         setProducts(_products);
         setDeleteProductsDialog(false);
         setSelectedProducts(null);
-        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
+        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Users disabled', life: 3000 });
     }
 
     const findRoleById = (id) => {
@@ -389,7 +389,7 @@ const ManageUser = () => {
                     <Dialog visible={deleteProductDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
                         <div className="flex align-items-center justify-content-center">
                             <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
-                            {product && <span>Are you sure you want to disable <b>{product.email}</b>?</span>}
+                            {product && <span>Are you sure you want to {activeFilter ? 'disable' : 'activate'} <b>{product.email}</b>?</span>}
                         </div>
                     </Dialog>
 

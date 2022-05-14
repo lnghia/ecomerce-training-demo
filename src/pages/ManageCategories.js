@@ -16,35 +16,22 @@ import { ProductService } from '../service/ProductService';
 import uploadImage from '../firebase/upload';
 
 import {
-    fetchProductAllApi,
-    deleteProductApi,
-    fetchCategories,
-    fetchGenders,
-    fetchTechnologies,
-    fetchSports,
-    fetchSizesApi,
-    createProductApi,
-    updateProductApi
-} from '../axios/api/product';
+    fetchCategoriesByType,
+    updateCategoryApi,
+    createCategoryApi
+} from '../axios/api/category';
+import { Dropdown } from 'primereact/dropdown';
 
-const ManageProduct = () => {
+const ManageCategories = () => {
     let emptyProduct = {
         id: null,
         name: '',
-        thumbnail: null,
-        description: '',
-        categories: [],
-        technologies: [],
-        sport: null,
-        gender: null,
-        price: 0,
-        averageRating: 0,
-        productSizeDtoList: [],
-        year: 2022
+        description: ''
     };
 
     const [products, setProducts] = useState(null);
     const [imgUrl, setImgUrl] = useState(null);
+    const [categoryFilter, setCategoryFilter] = useState('category');
     const [selectedFile, setSelectedFile] = useState(null);
     const [categoryList, setCategoryList] = useState([]);
     const [technologyList, setTechnogyList] = useState([]);
@@ -63,25 +50,24 @@ const ManageProduct = () => {
     const toast = useRef(null);
     const dt = useRef(null);
 
+    const categoriesTypeItems = [
+        { label: 'Category', value: 'category' },
+        { label: 'Technology', value: 'technology' },
+        { label: 'Sport', value: 'sport' },
+        { label: 'Size', value: 'size' }
+    ];
+
     useEffect(() => {
         async function fetchData() {
-            let productList = await fetchProductAllApi();
-            let categories = await fetchCategories();
-            let genders = await fetchGenders();
-            let sports = await fetchSports();
-            let technologies = await fetchTechnologies();
-            let sizes = await fetchSizesApi();
+            let rs = await fetchCategoriesByType(categoryFilter);
 
-            setProducts(productList.content);
-            setCategoryList(categories);
-            setGenderList(genders);
-            setSportList(sports);
-            setTechnogyList(technologies);
-            setSizeList(sizes);
+            setProducts(rs);
         }
 
         fetchData();
-    }, []);
+    }, [categoryFilter]);
+
+    console.log(products);
 
     const formatCurrency = (value) => {
         return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
@@ -89,13 +75,6 @@ const ManageProduct = () => {
 
     const openNew = () => {
         let _product = emptyProduct;
-
-        _product.productSizeDtoList = sizeList.map(size => {
-            return {
-                sizeId: size.id,
-                number: 0
-            }
-        });
 
         setUpdateProduct(false);
         setProduct(_product);
@@ -123,15 +102,11 @@ const ManageProduct = () => {
             let _products = [...products];
             let _product = { ...product };
 
-            if (selectedFile !== null) {
-                const urlImage = await uploadImage("/products", selectedFile);
-                // console.log(urlImage);
-                product['thumbnail'] = urlImage;
-            }
-
             if (product.id) {
 
-                let result = await updateProductApi(product);
+                let result = await updateCategoryApi(categoryFilter, product.id, product.name, product.description);
+
+                console.log('update ' + result);
 
                 if (result !== null) {
                     const index = findIndexById(product.id);
@@ -143,9 +118,9 @@ const ManageProduct = () => {
                 }
             }
             else {
-                let result = await createProductApi(product);
+                let result = await createCategoryApi(categoryFilter, product.name, product.description);
 
-                console.log(result);
+                console.log('create ' + result);
 
                 if (result !== null) {
                     _product.id = result.id;
@@ -157,7 +132,6 @@ const ManageProduct = () => {
             }
 
             setProducts(_products);
-            setSelectedFile(null);
             setProductDialog(false);
             setProduct(emptyProduct);
         }
@@ -178,16 +152,16 @@ const ManageProduct = () => {
         let _products = products.filter(val => val.id !== product.id);
         setProducts(_products);
         setDeleteProductDialog(false);
-        async function _deleteProduct() {
-            let rs = await deleteProductApi(product.id);
+        // async function _deleteProduct() {
+        //     let rs = await deleteProductApi(product.id);
 
-            if (rs) {
-                toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
-            } else {
-                toast.current.show({ severity: 'error', summary: 'Error', detail: 'Failed to delete product', life: 3000 });
-            }
-        }
-        _deleteProduct();
+        //     if (rs) {
+        //         toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
+        //     } else {
+        //         toast.current.show({ severity: 'error', summary: 'Error', detail: 'Failed to delete product', life: 3000 });
+        //     }
+        // }
+        // _deleteProduct();
         setProduct(emptyProduct);
     }
 
@@ -426,6 +400,7 @@ const ManageProduct = () => {
             <React.Fragment>
                 <div className="my-2">
                     <Button label="New" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
+                    <Dropdown value={categoryFilter} options={categoriesTypeItems} onChange={(e) => setCategoryFilter(e.value)} />
                     {/* <Button label="Delete" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedProducts || !selectedProducts.length} /> */}
                 </div>
             </React.Fragment>
@@ -459,47 +434,11 @@ const ManageProduct = () => {
         );
     }
 
-    const imageBodyTemplate = (rowData) => {
+    const descriptionBodyTemplate = (rowData) => {
         return (
             <>
-                <span className="p-column-title">Image</span>
-                <img src={rowData.thumbnail} alt={rowData.thumbnail} className="shadow-2" width="100" />
-            </>
-        )
-    }
-
-    const priceBodyTemplate = (rowData) => {
-        return (
-            <>
-                <span className="p-column-title">Price</span>
-                {formatCurrency(rowData.price)}
-            </>
-        );
-    }
-
-    const createdDateBodyTemplate = (rowData) => {
-        return (
-            <>
-                <span className="p-column-title">Created date</span>
-                {rowData.createdDate}
-            </>
-        );
-    }
-
-    const ratingBodyTemplate = (rowData) => {
-        return (
-            <>
-                <span className="p-column-title">Reviews</span>
-                <Rating value={rowData.averageRating} readonly cancel={false} />
-            </>
-        );
-    }
-
-    const updatedDateBodyTemplate = (rowData) => {
-        return (
-            <>
-                <span className="p-column-title">Updated date</span>
-                <span>{rowData.lastModifiedDate}</span>
+                <span className="p-column-title">Description</span>
+                {rowData.description}
             </>
         )
     }
@@ -508,14 +447,14 @@ const ManageProduct = () => {
         return (
             <div className="actions">
                 <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" onClick={() => editProduct(rowData)} />
-                <Button icon="pi pi-trash" className="p-button-rounded p-button-warning mt-2" onClick={() => confirmDeleteProduct(rowData)} />
+                {/* <Button icon="pi pi-trash" className="p-button-rounded p-button-warning mt-2" onClick={() => confirmDeleteProduct(rowData)} /> */}
             </div>
         );
     }
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 className="m-0">Manage Products</h5>
+            <h5 className="m-0">Manage </h5>
             <span className="block mt-2 md:mt-0 p-input-icon-left">
                 <i className="pi pi-search" />
                 <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
@@ -557,16 +496,12 @@ const ManageProduct = () => {
                         {/* <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column> */}
                         <Column field="code" header="Id" sortable body={codeBodyTemplate} headerStyle={{ width: '14%', minWidth: '10rem' }}></Column>
                         <Column field="name" header="Name" sortable body={nameBodyTemplate} headerStyle={{ width: '14%', minWidth: '10rem' }}></Column>
-                        <Column header="Image" body={imageBodyTemplate} headerStyle={{ width: '14%', minWidth: '10rem' }}></Column>
-                        <Column field="price" header="Price" body={priceBodyTemplate} sortable headerStyle={{ width: '14%', minWidth: '8rem' }}></Column>
-                        <Column field="createdDate" header="Created date" sortable body={createdDateBodyTemplate} headerStyle={{ width: '14%', minWidth: '10rem' }}></Column>
-                        <Column field="updatedDate" header="Updated date" body={updatedDateBodyTemplate} sortable headerStyle={{ width: '14%', minWidth: '10rem' }}></Column>
-                        <Column field="rating" header="Reviews" body={ratingBodyTemplate} sortable headerStyle={{ width: '14%', minWidth: '10rem' }}></Column>
+                        <Column field="description" header="Description" body={descriptionBodyTemplate} headerStyle={{ width: '60%', minWidth: '10rem' }}></Column>
                         <Column body={actionBodyTemplate}></Column>
                     </DataTable>
 
                     <Dialog visible={productDialog} style={{ width: '450px' }} header="Product Details" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
-                        {product.thumbnail && <img src={product.thumbnail} alt={product.thumbnail} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />}
+                        {/* {product.thumbnail && <img src={product.thumbnail} alt={product.thumbnail} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />} */}
                         <div className="field">
                             <label htmlFor="name">Name</label>
                             <InputText id="name" value={product.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.name })} />
@@ -575,107 +510,6 @@ const ManageProduct = () => {
                         <div className="field">
                             <label htmlFor="description">Description</label>
                             <InputTextarea id="description" value={product.description} onChange={(e) => onInputChange(e, 'description')} required rows={3} cols={20} />
-                        </div>
-
-                        <div className="field">
-                            <label className="mb-3">Category</label>
-                            <div className="formgrid grid">
-                                {
-                                    categoryList.map(category => {
-                                        return (
-                                            <div className="field-radiobutton col-6" key={category.name}>
-                                                <RadioButton inputId={category.name} name="category" value={category.id} onChange={onCategoryChange} checked={getProductCategory(category.id) || product.categories.indexOf(category.id) !== -1} />
-                                                <label htmlFor="category1">{category.name}</label>
-                                            </div>
-                                        )
-                                    })
-                                }
-                            </div>
-                        </div>
-
-                        <div className="field">
-                            <label className="mb-3">Technology</label>
-                            <div className="formgrid grid">
-                                {
-                                    technologyList.map(technology => {
-                                        return (
-                                            <div className="field-radiobutton col-6" key={technology.name}>
-                                                <RadioButton inputId={technology.name} name="technology" value={technology.id} onChange={onTechnologyChange} checked={getProductTechnology(technology.id) || product.technologies.indexOf(technology.id) !== -1} />
-                                                <label htmlFor="category1">{technology.name}</label>
-                                            </div>
-                                        )
-                                    })
-                                }
-                            </div>
-                        </div>
-
-                        <div className="field">
-                            <label className="mb-3">Gender</label>
-                            <div className="formgrid grid">
-                                {
-                                    genderList.map(gender => {
-                                        return (
-                                            <div className="field-radiobutton col-6" key={gender.name}>
-                                                <RadioButton inputId={gender.name} name="gender" value={gender.id} onChange={onGenderChange} checked={getProductGender(gender.id) || product.gender === gender.id} />
-                                                <label htmlFor="category1">{gender.name}</label>
-                                            </div>
-                                        )
-                                    })
-                                }
-                            </div>
-                        </div>
-
-                        <div className="field">
-                            <label className="mb-3">Sport</label>
-                            <div className="formgrid grid">
-                                {
-                                    sportList.map(sport => {
-                                        return (
-                                            <div className="field-radiobutton col-6" key={sport.name}>
-                                                <RadioButton inputId={sport.name} name="sport" value={sport.id} onChange={onSportChange} checked={getProductSport(sport.id) || product.sport === sport.id} />
-                                                <label htmlFor="category1">{sport.name}</label>
-                                            </div>
-                                        )
-                                    })
-                                }
-                            </div>
-                        </div>
-
-                        <div className="formgrid grid">
-                            <div className="field col">
-                                <label htmlFor="price">Price</label>
-                                <InputNumber id="price" value={product.price} onValueChange={(e) => onInputNumberChange(e, 'price')} mode="currency" currency="USD" locale="en-US" />
-                            </div>
-                        </div>
-
-                        <div className="field">
-                            <label htmlFor="price">Size quantity</label>
-                            <div className="formgrid grid">
-                                {
-                                    sizeList.map((size) => {
-                                        return (
-                                            <div className="field col" key={size.name}>
-                                                <label htmlFor="size">{size.name}</label>
-                                                <InputNumber id={size.name} value={0 || getProductSizeInStock(size.id)} onValueChange={(e) => onSizeValueChange(e, size.id)} integeronly />
-                                            </div>
-                                        )
-                                    })
-                                }
-                            </div >
-                        </div>
-
-                        <div className="formgrid grid">
-                            <div className="field col">
-                                <label htmlFor="price">Year</label>
-                                <InputNumber id="price" value={2022} onValueChange={(e) => onInputNumberChange(e, 'year')} integeronly />
-                            </div>
-                        </div>
-
-                        <div className="formgrid grid">
-                            <div className="field col">
-                                <label htmlFor="thumbnail">Thumbnail</label>
-                                <FileUpload name="thumbnail" accept="image/*" maxFileSize="1000000" customUpload onSelect={myUploader} mode="basic" />
-                            </div>
                         </div>
                     </Dialog>
 
@@ -702,4 +536,4 @@ const comparisonFn = function (prevProps, nextProps) {
     return prevProps.location.pathname === nextProps.location.pathname;
 };
 
-export default React.memo(ManageProduct, comparisonFn);
+export default React.memo(ManageCategories, comparisonFn);

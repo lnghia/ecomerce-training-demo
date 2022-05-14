@@ -29,7 +29,7 @@ export const fetchInActiveUsers = async () => {
 
 export const fetchRoles = async () => {
     try {
-        let response = await AxiosAdminClient.get('/roles');
+        let response = await AxiosAdminClient.get('/role');
         let data = response.data.data;
 
         return data;

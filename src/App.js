@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import classNames from 'classnames';
-import { Route, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 
 import { AppTopbar } from './AppTopbar';
 import { AppFooter } from './AppFooter';
 import { AppMenu } from './AppMenu';
 import { AppConfig } from './AppConfig';
+
+import { Switch } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import Dashboard from './components/Dashboard';
 import ButtonDemo from './components/ButtonDemo';
@@ -28,6 +31,7 @@ import TreeDemo from './components/TreeDemo';
 import InvalidStateDemo from './components/InvalidStateDemo';
 import BlocksDemo from './components/BlocksDemo';
 import IconsDemo from './components/IconsDemo';
+import ProtectedRoute from './ProtectedRoute';
 
 import Crud from './pages/Crud';
 import ManageUser from './pages/ManageUser';
@@ -46,6 +50,8 @@ import './assets/demo/flags/flags.css';
 import './assets/demo/Demos.scss';
 import './assets/layout/layout.scss';
 import './App.scss';
+import ManageCategories from './pages/ManageCategories';
+import Login from './pages/Login';
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState('static');
@@ -161,11 +167,11 @@ const App = () => {
         {
             label: 'Pages', icon: 'pi pi-fw pi-clone',
             items: [
-                { label: 'Crud', icon: 'pi pi-fw pi-user-edit', to: '/crud' },
-                { label: 'Timeline', icon: 'pi pi-fw pi-calendar', to: '/timeline' },
-                { label: 'Empty', icon: 'pi pi-fw pi-circle-off', to: '/empty' }
+                { label: 'Products', icon: 'pi pi-fw pi-align-justify', to: '/products' },
+                { label: 'Users', icon: 'pi pi-fw pi-user', to: '/users' },
+                { label: 'Categories', icon: 'pi pi-fw pi-list', to: '/categories' }
             ]
-        }  
+        }
     ];
 
     const addClass = (element, className) => {
@@ -193,46 +199,52 @@ const App = () => {
         'layout-theme-light': layoutColorMode === 'light'
     });
 
+    const headerExclusionArray = [
+        'login',
+    ];
+
+
+    let splitPathName = location.pathname.split('/');
+
+    let isLogin = window.localStorage.getItem('isLogin') === 'true';
+
+    console.log(isLogin);
+
     return (
         <div className={wrapperClass} onClick={onWrapperClick}>
             <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
 
-            <AppTopbar onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode}
-                mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
+            {headerExclusionArray.indexOf(splitPathName[1]) < 0 &&
+                (<><AppTopbar onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode}
+                    mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
 
-            <div className="layout-sidebar" onClick={onSidebarClick}>
-                <AppMenu model={menu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
-            </div>
+                    <div className="layout-sidebar" onClick={onSidebarClick}>
+                        <AppMenu model={menu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
+                    </div></>)}
 
             <div className="layout-main-container">
                 <div className="layout-main">
-                    <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} />
-                    <Route path="/formlayout" component={FormLayoutDemo} />
-                    <Route path="/input" component={InputDemo} />
-                    <Route path="/floatlabel" component={FloatLabelDemo} />
-                    <Route path="/invalidstate" component={InvalidStateDemo} />
-                    <Route path="/button" component={ButtonDemo} />
-                    <Route path="/table" component={TableDemo} />
-                    <Route path="/list" component={ListDemo} />
-                    <Route path="/tree" component={TreeDemo} />
-                    <Route path="/panel" component={PanelDemo} />
-                    <Route path="/overlay" component={OverlayDemo} />
-                    <Route path="/media" component={MediaDemo} />
-                    <Route path="/menu" component={MenuDemo} />
-                    <Route path="/messages" component={MessagesDemo} />
-                    <Route path="/blocks" component={BlocksDemo} />
-                    <Route path="/icons" component={IconsDemo} />
-                    <Route path="/file" component={FileDemo} />
-                    <Route path="/chart" render={() => <ChartDemo colorMode={layoutColorMode} location={location} />} />
-                    <Route path="/misc" component={MiscDemo} />
-                    <Route path="/timeline" component={TimelineDemo} />
-                    <Route path="/crud" component={ManageProduct} />
-                    <Route path='/users' component={ManageUser} />
-                    <Route path="/empty" component={EmptyPage} />
-                    <Route path="/documentation" component={Documentation} />
+                    <Switch>
+                        <Route path="/login">
+                            {
+                                isLogin ? <Redirect to="/" /> : <Login />
+                            }
+                        </Route>
+                        <Route path="/" exact>
+                            {
+                                isLogin ? <Dashboard /> : <Redirect to="/login" />
+                            }
+                        </Route>
+                        <ProtectedRoute path="/products" component={ManageProduct} />
+                        <ProtectedRoute path='/users' component={ManageUser} />
+                        <ProtectedRoute path="/categories" component={ManageCategories} />
+                        <ProtectedRoute path="/signin" component={Login} />
+                    </Switch>
+
                 </div>
 
-                <AppFooter layoutColorMode={layoutColorMode} />
+                {headerExclusionArray.indexOf(splitPathName[1]) < 0 &&
+                    <AppFooter layoutColorMode={layoutColorMode} />}
             </div>
 
             <AppConfig rippleEffect={ripple} onRippleEffect={onRipple} inputStyle={inputStyle} onInputStyleChange={onInputStyleChange}
