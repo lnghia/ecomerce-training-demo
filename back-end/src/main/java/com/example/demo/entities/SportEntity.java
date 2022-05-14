@@ -19,6 +19,9 @@ public class SportEntity {
 
     private String name;
 
-    @OneToMany(mappedBy = "sport")
+    private String description;
+
+    @OneToMany
+    @JoinColumn(name = "sport_id", referencedColumnName = "id")
     private Set<ProductEntity> products;
 }

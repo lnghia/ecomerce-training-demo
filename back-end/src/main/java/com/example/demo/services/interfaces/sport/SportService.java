@@ -13,7 +13,7 @@ public interface SportService {
 
     List<SportResponseDto> findAll();
 
-    SportResponseDto updateSport(UpdateSportRequestDto requestDto);
+    SportResponseDto updateSport(Long sportId, UpdateSportRequestDto requestDto);
 
     SportResponseDto createSport(CreateSportRequestDto requestDto);
 }

@@ -45,8 +45,8 @@ public class SportServiceImpl implements SportService {
     }
 
     @Override
-    public SportResponseDto updateSport(UpdateSportRequestDto requestDto) {
-        SportEntity sportEntity = sportRepository.findById(requestDto.getId()).orElseThrow(() -> new SportNotFoundException());
+    public SportResponseDto updateSport(Long sportId, UpdateSportRequestDto requestDto) {
+        SportEntity sportEntity = sportRepository.findById(sportId).orElseThrow(() -> new SportNotFoundException());
 
         modelMapper.map(requestDto, sportEntity);
         sportEntity = sportRepository.save(sportEntity);
