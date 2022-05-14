@@ -100,14 +100,16 @@ export const fetchReviewsOnProduct = async (productId, page, size) => {
     }
 }
 
-export const fetchProductList = async (genderFilters, sportFilters, technologyFilters, typeFilters, keyword) => {
+export const fetchProductList = async (genderFilters, sportFilters, technologyFilters, typeFilters, keyword, currPage) => {
     try {
         let response = await AxiosClient.post('/product/search', {
             name: keyword,
-            genderId: genderFilters,
-            sportId: sportFilters,
+            genderIds: genderFilters,
+            sportIds: sportFilters,
             categoryIds: typeFilters,
-            technologyIds: technologyFilters
+            technologyIds: technologyFilters,
+            page: currPage,
+            size: 9
         });
         let data = response.data.data;
 

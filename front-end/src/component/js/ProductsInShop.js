@@ -31,9 +31,9 @@ const ProductsInShop = (props) => {
     const technologyFilters = useSelector(technologyFilterValuesSelector);
 
     useEffect(() => {
+        console.log(currPage + ' ' + keyword);
         const fetchProducts = async () => {
-            console.log(technologyFilters);
-            let result = await fetchProductList(genderFilters, sportFilters, technologyFilters, typeFilters, keyword);
+            let result = await fetchProductList(genderFilters, sportFilters, technologyFilters, typeFilters, keyword, currPage - 1);
 
             setProductList(result.content);
             setTotalPages(result.totalPages);
@@ -49,8 +49,6 @@ const ProductsInShop = (props) => {
     const travelToPage = (page) => {
         setCurrPage(page);
     }
-
-    console.log(productList);
 
     return (
         <div className="col-lg-9 col-md-12">

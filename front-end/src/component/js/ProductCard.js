@@ -20,7 +20,7 @@ const ProductCard = (props) => {
             <div className="card-body border-left border-right text-center p-0 pt-4 pb-3">
                 <h6 className="text-truncate mb-3">{props.name}</h6>
                 <div className="d-flex justify-content-center">
-                    <h6>{props.price}</h6>
+                    <h6>${props.price}</h6>
                     {/* <h6 className="text-muted ml-2"><del>{props.price}</del></h6> */}
                 </div>
             </div>

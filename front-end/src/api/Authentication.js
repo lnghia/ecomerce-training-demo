@@ -27,5 +27,28 @@ const login = async (email, inputPassword) => {
     return loginSuccess;
 }
 
-export { login };
+const registerApi = async (_email, _password, _firstName, _lastName) => {
+    try {
+        let response = await AxiosClient.post('/auth/register', {
+            email: _email,
+            password: _password,
+            firstName: _firstName,
+            lastName: _lastName
+        });
+
+        toastr.success('Success', 'Register successfully.');
+
+        return response.data.data;
+    } catch (error) {
+        let errors = error.response.data.errors;
+
+        Object.keys(errors).forEach(key => {
+            toastr.error(errors[key], key);
+        });
+
+        return null;
+    }
+}
+
+export { login, registerApi };
 

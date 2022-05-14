@@ -6,6 +6,7 @@ import { updateCategoryListAction, updateSportListAction, updateTechnologyListAc
 import { updateGenderFilterValueAction, updateCategoryFilterValueAction, updateSportFilterValueAction, updateTechnologyFilterValueAction } from "../../redux/slices/categorySlice";
 import { loginSuccessSelector } from "../../redux/selectors";
 import Login from "./Login";
+import Register from "./Register";
 
 import { fetchCategories } from "../../api/category";
 import { fetchGenders } from "../../api/gender";
@@ -21,6 +22,7 @@ const NavBar = () => {
     const [genderList, setGenderList] = useState([]);
     const [technologyList, setTechnologyList] = useState([]);
     const [showLoginModal, setShowLoginModal] = useState(false);
+    const [showRegisterModal, setShowRegisterModal] = useState(false);
 
     function handleLogout(e) {
         dispatch(logoutAction());
@@ -32,6 +34,14 @@ const NavBar = () => {
 
     function handleShowLoginModal() {
         setShowLoginModal(true);
+    }
+
+    function handleCloseRegisterModal() {
+        setShowRegisterModal(false);
+    }
+
+    function handleShowRegisterModal() {
+        setShowRegisterModal(true);
     }
 
     function updateCategoryState() {
@@ -140,8 +150,8 @@ const NavBar = () => {
                         </button> */}
                         <div className="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div className="navbar-nav mr-auto py-0">
-                                <a href="index.html" className="nav-item nav-link active">Home</a>
-                                <a href="shop.html" className="nav-item nav-link">Products</a>
+                                <a href="/" className="nav-item nav-link active">Home</a>
+                                <a href="/shop" className="nav-item nav-link">Products</a>
                                 {/* <a href="detail.html" className="nav-item nav-link">Shop Detail</a>
                                 <div className="nav-item dropdown">
                                     <a href="#" className="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
@@ -154,7 +164,7 @@ const NavBar = () => {
                             </div>
                             <div className="navbar-nav ml-auto py-0">
                                 {loginSuccess != true ? <a href='#' className="nav-item nav-link" onClick={handleShowLoginModal} style={{ cursor: 'pointer' }}>Login</a> : <a href='/login' onClick={handleLogout} className="nav-item nav-link" style={{ cursor: 'pointer' }}>Logout</a>}
-                                {loginSuccess != true && <a href className="nav-item nav-link" style={{ cursor: 'pointer' }}>Register</a>}
+                                {loginSuccess != true && <a href className="nav-item nav-link" onClick={handleShowRegisterModal} style={{ cursor: 'pointer' }}>Register</a>}
                             </div>
                         </div>
                     </nav>
@@ -194,6 +204,7 @@ const NavBar = () => {
                     </div>
                 </div>
                 <Login show={showLoginModal} onCloseLoginModal={handleCloseLoginModal} />
+                <Register show={showRegisterModal} onCloseLoginModal={handleCloseRegisterModal} />
             </div>
         </div>
     )
