@@ -47,12 +47,10 @@ public class ProductEntity extends Auditable {
     private SportEntity sport;
 
     @ManyToMany
-//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     @JoinTable(name = "product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<CategoryEntity> categories;
 
     @ManyToMany(fetch = FetchType.EAGER)
-//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     @JoinTable(name = "product_technology", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "technology_id"))
     private Set<TechnologyEntity> technologies;
 
@@ -81,12 +79,8 @@ public class ProductEntity extends Auditable {
         return this.id == product.getId() &&
                 this.name.equals(product.getName()) &&
                 this.description.equals(product.getDescription()) &&
-//                this.gender.equals(product.getGender()) &&
-//                this.sport.equals(product.getSport()) &&
                 this.price == product.getPrice() &&
                 this.year == product.getYear() &&
-//                this.categories.equals(product.getCategories()) &&
-//                this.technologies.equals(product.getTechnologies()) &&
                 this.thumbnail.equals(product.getThumbnail());
     }
 }

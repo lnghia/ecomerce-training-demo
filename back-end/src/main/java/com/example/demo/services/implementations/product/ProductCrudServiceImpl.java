@@ -6,67 +6,59 @@ import com.example.demo.dto.requests.product.CreateProductRequestDto;
 import com.example.demo.dto.requests.product.ProductSizeDto;
 import com.example.demo.dto.requests.product.UpdateProductRequestDto;
 import com.example.demo.dto.responses.product.ProductResponseDto;
-import com.example.demo.entities.*;
+import com.example.demo.entities.ProductEntity;
 import com.example.demo.entities.factories.addsizetoproduct.AddSizeToProductRequestDtoFactory;
 import com.example.demo.exceptions.ProductNotFoundException;
 import com.example.demo.repositories.ProductRepository;
-import com.example.demo.services.interfaces.category.CategoryCrudService;
-import com.example.demo.services.interfaces.gender.GenderCrudService;
 import com.example.demo.services.interfaces.product.ProductCrudService;
-import com.example.demo.services.interfaces.product.ProductSizeService;
-import com.example.demo.services.interfaces.sport.SportCrudService;
-import com.example.demo.services.interfaces.technology.TechnologyService;
-import com.example.demo.utilities.converter.ConverterUtil;
+import com.example.demo.services.interfaces.productcategory.ProductCategoryService;
+import com.example.demo.services.interfaces.productgender.ProductGenderService;
+import com.example.demo.services.interfaces.productsize.ProductSizeService;
+import com.example.demo.services.interfaces.productsport.ProductSportService;
+import com.example.demo.services.interfaces.producttechnology.ProductTechnologyService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @NoArgsConstructor
 public class ProductCrudServiceImpl implements ProductCrudService {
     private CommonConverter modelMapper;
 
-    private GenderCrudService genderCrudService;
+    private ProductGenderService productGenderService;
 
-    private SportCrudService sportCrudService;
+    private ProductSportService productSportService;
 
-    private CategoryCrudService categoryCrudService;
+    private ProductCategoryService productCategoryService;
 
     private ProductRepository productRepository;
 
-    private TechnologyService technologyService;
+    private ProductTechnologyService productTechnologyService;
 
     private ProductSizeService productSizeService;
 
     private AddSizeToProductRequestDtoFactory addSizeToProductRequestDtoFactory;
 
-    private ConverterUtil converterUtil;
-
     @Autowired
     public ProductCrudServiceImpl(CommonConverter modelMapper,
-                                  GenderCrudService genderCrudService,
-                                  SportCrudService sportCrudService,
-                                  CategoryCrudService categoryCrudService,
+                                  ProductGenderService productGenderService,
+                                  ProductSportService productSportService,
+                                  ProductCategoryService productCategoryService,
                                   ProductRepository productRepository,
-                                  TechnologyService technologyService,
+                                  ProductTechnologyService productTechnologyService,
                                   ProductSizeService productSizeService,
-                                  AddSizeToProductRequestDtoFactory addSizeToProductRequestDtoFactory,
-                                  ConverterUtil converterUtil) {
+                                  AddSizeToProductRequestDtoFactory addSizeToProductRequestDtoFactory) {
         this.modelMapper = modelMapper;
-        this.genderCrudService = genderCrudService;
-        this.sportCrudService = sportCrudService;
-        this.categoryCrudService = categoryCrudService;
+        this.productGenderService = productGenderService;
+        this.productSportService = productSportService;
+        this.productCategoryService = productCategoryService;
         this.productRepository = productRepository;
-        this.technologyService = technologyService;
+        this.productTechnologyService = productTechnologyService;
         this.productSizeService = productSizeService;
         this.addSizeToProductRequestDtoFactory = addSizeToProductRequestDtoFactory;
-        this.converterUtil = converterUtil;
     }
 
     @Override
@@ -76,18 +68,15 @@ public class ProductCrudServiceImpl implements ProductCrudService {
         List<Long> categoryIds = createProductRequestDTO.getCategoryIds();
         List<Long> technologyIds = createProductRequestDTO.getTechnologyIds();
 
-        GenderEntity genderEntity = genderCrudService.findById(genderId);
-        SportEntity sportEntity = sportCrudService.findById(sportId);
-        List<CategoryEntity> categoryEntities = categoryCrudService.findByIds(categoryIds);
-        List<TechnologyEntity> technologyEntities = technologyService.findByIds(technologyIds);
-        Set<TechnologyEntity> technologyEntitySet = technologyEntities.stream().collect(Collectors.toSet());
-        Set<CategoryEntity> categoryEntitySet = categoryEntities.stream().collect(Collectors.toSet());
-
         ProductEntity productEntity = modelMapper.convertToEntity(createProductRequestDTO, ProductEntity.class);
-        productEntity.setTechnologies(technologyEntitySet);
-        productEntity.setCategories(categoryEntitySet);
-        productEntity.setGender(genderEntity);
-        productEntity.setSport(sportEntity);
+
+        productTechnologyService.updateProductTechnologies(productEntity, technologyIds);
+
+        productCategoryService.updateProductCategories(productEntity, categoryIds);
+
+        productGenderService.updateProductGender(productEntity, genderId);
+
+        productSportService.updateProductSport(productEntity, sportId);
 
         productEntity = productRepository.save(productEntity);
 
@@ -111,27 +100,27 @@ public class ProductCrudServiceImpl implements ProductCrudService {
 
         List<Long> categoryIds = updateProductRequestDto.getCategoryIds();
         if (categoryIds != null && !categoryIds.isEmpty()) {
-            updateProductCategory(productEntity, categoryIds);
+            productCategoryService.updateProductCategories(productEntity, categoryIds);
         }
 
         List<Long> technologyIds = updateProductRequestDto.getTechnologyIds();
         if (technologyIds != null && !technologyIds.isEmpty()) {
-            updateProductTechnology(productEntity, technologyIds);
+            productTechnologyService.updateProductTechnologies(productEntity, technologyIds);
         }
 
         List<ProductSizeDto> productSizeDtoList = updateProductRequestDto.getProductSizeDtoList();
         if (productSizeDtoList != null && !productSizeDtoList.isEmpty()) {
-            updateProductSize(productEntity, productSizeDtoList);
+            productSizeService.updateProductSizes(productEntity, productSizeDtoList);
         }
 
+        Long genderId = updateProductRequestDto.getGenderId();
         if (updateProductRequestDto.getGenderId() != null) {
-            GenderEntity newGender = genderCrudService.findById(updateProductRequestDto.getGenderId());
-            productEntity.setGender(newGender);
+            productGenderService.updateProductGender(productEntity, genderId);
         }
 
+        Long sportId = updateProductRequestDto.getSportId();
         if (updateProductRequestDto.getSportId() != null) {
-            SportEntity newSport = sportCrudService.findById(updateProductRequestDto.getSportId());
-            productEntity.setSport(newSport);
+            productSportService.updateProductSport(productEntity, sportId);
         }
 
         productEntity = productRepository.save(productEntity);
@@ -139,8 +128,7 @@ public class ProductCrudServiceImpl implements ProductCrudService {
         return modelMapper.convertToResponse(productEntity, ProductResponseDto.class);
     }
 
-    @Override
-    public ProductEntity findById(Long id) {
+    private ProductEntity findById(Long id) {
         Optional<ProductEntity> productEntity = productRepository.findById(id);
 
         if (!productEntity.isPresent()) {
@@ -163,43 +151,7 @@ public class ProductCrudServiceImpl implements ProductCrudService {
         return true;
     }
 
-    @Override
-    public ProductEntity saveProduct(ProductEntity product) {
+    private ProductEntity saveProduct(ProductEntity product) {
         return productRepository.save(product);
-    }
-
-    @Override
-    public void updateProductCategory(ProductEntity product, List<Long> categoryIds) {
-        List<CategoryEntity> categoryEntities = categoryCrudService.findByIds(categoryIds);
-
-        product.getCategories().clear();
-        product.setCategories(categoryEntities.stream().collect(Collectors.toSet()));
-    }
-
-    @Override
-    public void updateProductTechnology(ProductEntity product, List<Long> technologyIds) {
-        List<TechnologyEntity> technologyEntities = technologyService.findByIds(technologyIds);
-
-        product.getTechnologies().clear();
-        product.setTechnologies(technologyEntities.stream().collect(Collectors.toSet()));
-    }
-
-    @Override
-    public void updateProductSize(ProductEntity product, List<ProductSizeDto> productSizeDtoList) {
-        HashMap<Long, Integer> sizeNumber = new HashMap<>();
-
-        for (var item : productSizeDtoList) {
-            sizeNumber.put(item.getSizeId(), item.getNumber());
-        }
-        Set<ProductSizeEntity> productSizeEntities = product.getSizes().stream().map(productSizeEntity -> {
-            Long id = productSizeEntity.getSize().getId();
-            if (sizeNumber.containsKey(id)) {
-                productSizeEntity.setInStock(sizeNumber.get(id));
-            }
-
-            return productSizeEntity;
-        }).collect(Collectors.toSet());
-
-        product.setSizes(productSizeEntities);
     }
 }

@@ -8,17 +8,14 @@ import com.example.demo.entities.SizeEntity;
 import com.example.demo.exceptions.ProductNotFoundException;
 import com.example.demo.repositories.ProductRepository;
 import com.example.demo.repositories.ProductSizeRepository;
-import com.example.demo.services.interfaces.product.ProductSizeService;
+import com.example.demo.services.interfaces.productsize.ProductSizeService;
 import com.example.demo.services.interfaces.size.SizeService;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -78,4 +75,22 @@ public class ProductSizeServiceImpl implements ProductSizeService {
         return product;
     }
 
+    @Override
+    public void updateProductSizes(ProductEntity productEntity, List<ProductSizeDto> productSizeDtoList) {
+        HashMap<Long, Integer> sizeNumber = new HashMap<>();
+
+        for (var item : productSizeDtoList) {
+            sizeNumber.put(item.getSizeId(), item.getNumber());
+        }
+        Set<ProductSizeEntity> productSizeEntities = productEntity.getSizes().stream().map(productSizeEntity -> {
+            Long id = productSizeEntity.getSize().getId();
+            if (sizeNumber.containsKey(id)) {
+                productSizeEntity.setInStock(sizeNumber.get(id));
+            }
+
+            return productSizeEntity;
+        }).collect(Collectors.toSet());
+
+        productEntity.setSizes(productSizeEntities);
+    }
 }
