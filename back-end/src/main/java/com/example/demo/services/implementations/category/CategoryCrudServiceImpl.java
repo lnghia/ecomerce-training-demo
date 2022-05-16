@@ -9,6 +9,7 @@ import com.example.demo.exceptions.CategoryNotFoundException;
 import com.example.demo.repositories.CategoryRepository;
 import com.example.demo.services.interfaces.category.CategoryCrudService;
 import com.example.demo.utilities.converter.ConverterUtil;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 @Service
 @NoArgsConstructor
+@Getter
 public class CategoryCrudServiceImpl implements CategoryCrudService {
     private CategoryRepository categoryRepository;
 

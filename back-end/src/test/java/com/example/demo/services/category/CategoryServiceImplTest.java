@@ -2,6 +2,7 @@ package com.example.demo.services.category;
 
 import com.example.demo.configurations.modelmapper.converters.CommonConverter;
 import com.example.demo.dto.requests.category.CreateCategoryRequestDto;
+import com.example.demo.dto.requests.category.UpdateCategoryRequestDto;
 import com.example.demo.dto.responses.category.CategoryResponseDto;
 import com.example.demo.entities.CategoryEntity;
 import com.example.demo.exceptions.CategoryNotFoundException;
@@ -10,16 +11,15 @@ import com.example.demo.services.implementations.category.CategoryCrudServiceImp
 import com.example.demo.utilities.converter.ConverterUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class CategoryServiceImplTest {
     private CategoryRepository categoryRepository;
@@ -97,21 +97,21 @@ public class CategoryServiceImplTest {
     }
 
 
-//    @Test
-//    public void updateCategory_ShouldReturnCategoryResponseDto_WhenDataValid() {
-//        CategoryEntity categoryEntity = mock(CategoryEntity.class);
-//        UpdateCategoryRequestDto requestDto = mock(UpdateCategoryRequestDto.class);
-//        CategoryCrudServiceImpl spy = Mockito.spy(categoryCrudService);
-//        CategoryResponseDto expectedResult = mock(CategoryResponseDto.class);
-//
-//        doReturn(categoryEntity).when(spy).findById(anyLong());
-//        when(categoryRepository.save(categoryEntity)).thenReturn(categoryEntity);
-//        when(modelMapper.convertToResponse(categoryEntity, CategoryResponseDto.class)).thenReturn(expectedResult);
-//
-//        CategoryResponseDto result = categoryCrudService.updateCategory(1L, requestDto);
-//
-//        assertThat(result, is(expectedResult));
-//    }
+    @Test
+    public void updateCategory_ShouldReturnCategoryResponseDto_WhenDataValid() {
+        CategoryEntity categoryEntity = mock(CategoryEntity.class);
+        UpdateCategoryRequestDto requestDto = mock(UpdateCategoryRequestDto.class);
+        CategoryCrudServiceImpl spy = Mockito.spy(categoryCrudService);
+        CategoryResponseDto expectedResult = mock(CategoryResponseDto.class);
+
+        doReturn(categoryEntity).when(spy).findById(anyLong());
+        when(categoryRepository.save(categoryEntity)).thenReturn(categoryEntity);
+        when(modelMapper.convertToResponse(categoryEntity, CategoryResponseDto.class)).thenReturn(expectedResult);
+
+        CategoryResponseDto result = spy.updateCategory(1L, requestDto);
+
+        assertThat(result, is(expectedResult));
+    }
 
     @Test
     public void findById_ShouldReturnCategoryEntity_WhenDataValid() {
@@ -131,5 +131,14 @@ public class CategoryServiceImplTest {
         assertThrows(CategoryNotFoundException.class, () -> {
             categoryCrudService.findById(1L);
         });
+    }
+
+    @Test
+    void shouldCreateCategoryCrudServiceImpl() {
+        CategoryCrudServiceImpl categoryCrudService = new CategoryCrudServiceImpl();
+
+        assertNull(categoryCrudService.getCategoryRepository());
+        assertNull(categoryCrudService.getModelMapper());
+        assertNull(categoryCrudService.getConverterUtil());
     }
 }
