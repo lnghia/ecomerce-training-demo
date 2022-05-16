@@ -13,7 +13,7 @@ import com.example.demo.exceptions.UserNotFoundException;
 import com.example.demo.repositories.RoleRepository;
 import com.example.demo.repositories.UserRateProductRepository;
 import com.example.demo.repositories.UserRepository;
-import com.example.demo.services.interfaces.product.ProductCrudService;
+import com.example.demo.services.interfaces.product.ProductDatabaseService;
 import com.example.demo.services.interfaces.user.UserService;
 import com.example.demo.utilities.wrapper.RoleUtilityWrapper;
 import lombok.NoArgsConstructor;
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
     private PasswordEncoder passwordEncoder;
 
-    private ProductCrudService productCrudService;
+    private ProductDatabaseService productDatabaseService;
 
     private UserRateProductRepository userRateProductRepository;
 
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     public UserServiceImpl(UserRateProductRepository userRateProductRepository,
                            UserRepository userRepository,
-                           ProductCrudService productCrudService,
+                           ProductDatabaseService productDatabaseService,
                            RoleRepository roleRepository,
                            RoleUtilityWrapper roleUtilityWrapper,
                            PasswordEncoder passwordEncoder,
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
         this.roleUtilityWrapper = roleUtilityWrapper;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
-        this.productCrudService = productCrudService;
+        this.productDatabaseService = productDatabaseService;
         this.userRateProductRepository = userRateProductRepository;
     }
 
@@ -141,7 +141,7 @@ public class UserServiceImpl implements UserService {
         int rating = requestDto.getRating();
         String comment = requestDto.getComment();
 
-        ProductEntity product = productCrudService.findById(productId);
+        ProductEntity product = productDatabaseService.findById(productId);
         double averageRating = product.getAverageRating();
         averageRating = (averageRating * product.getCountRating() + requestDto.getRating()) / (product.getCountRating() + 1);
         product.setCountRating(product.getCountRating() + 1);
@@ -155,7 +155,7 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         userRateProductEntity = userRateProductRepository.save(userRateProductEntity);
-        productCrudService.saveProduct(product);
+        productDatabaseService.saveProduct(product);
 
         return modelMapper.map(userRateProductEntity, UserRateProductResponseDto.class);
     }

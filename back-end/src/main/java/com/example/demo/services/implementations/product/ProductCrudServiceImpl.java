@@ -8,9 +8,8 @@ import com.example.demo.dto.requests.product.UpdateProductRequestDto;
 import com.example.demo.dto.responses.product.ProductResponseDto;
 import com.example.demo.entities.ProductEntity;
 import com.example.demo.entities.factories.addsizetoproduct.AddSizeToProductRequestDtoFactory;
-import com.example.demo.exceptions.ProductNotFoundException;
-import com.example.demo.repositories.ProductRepository;
 import com.example.demo.services.interfaces.product.ProductCrudService;
+import com.example.demo.services.interfaces.product.ProductDatabaseService;
 import com.example.demo.services.interfaces.productcategory.ProductCategoryService;
 import com.example.demo.services.interfaces.productgender.ProductGenderService;
 import com.example.demo.services.interfaces.productsize.ProductSizeService;
@@ -21,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @NoArgsConstructor
@@ -34,7 +32,7 @@ public class ProductCrudServiceImpl implements ProductCrudService {
 
     private ProductCategoryService productCategoryService;
 
-    private ProductRepository productRepository;
+    private ProductDatabaseService productDatabaseService;
 
     private ProductTechnologyService productTechnologyService;
 
@@ -47,7 +45,7 @@ public class ProductCrudServiceImpl implements ProductCrudService {
                                   ProductGenderService productGenderService,
                                   ProductSportService productSportService,
                                   ProductCategoryService productCategoryService,
-                                  ProductRepository productRepository,
+                                  ProductDatabaseService productDatabaseService,
                                   ProductTechnologyService productTechnologyService,
                                   ProductSizeService productSizeService,
                                   AddSizeToProductRequestDtoFactory addSizeToProductRequestDtoFactory) {
@@ -55,7 +53,7 @@ public class ProductCrudServiceImpl implements ProductCrudService {
         this.productGenderService = productGenderService;
         this.productSportService = productSportService;
         this.productCategoryService = productCategoryService;
-        this.productRepository = productRepository;
+        this.productDatabaseService = productDatabaseService;
         this.productTechnologyService = productTechnologyService;
         this.productSizeService = productSizeService;
         this.addSizeToProductRequestDtoFactory = addSizeToProductRequestDtoFactory;
@@ -78,7 +76,7 @@ public class ProductCrudServiceImpl implements ProductCrudService {
 
         productSportService.updateProductSport(productEntity, sportId);
 
-        productEntity = productRepository.save(productEntity);
+        productEntity = productDatabaseService.saveProduct(productEntity);
 
         List<ProductSizeDto> productSizeDtoList = createProductRequestDTO.getProductSizeDtoList();
         Long productId = productEntity.getId();
@@ -94,7 +92,7 @@ public class ProductCrudServiceImpl implements ProductCrudService {
     @Override
     public ProductResponseDto updateProduct(UpdateProductRequestDto updateProductRequestDto) {
         Long productId = updateProductRequestDto.getProductId();
-        ProductEntity productEntity = findById(productId);
+        ProductEntity productEntity = productDatabaseService.findById(productId);
 
         modelMapper.convertToEntity(updateProductRequestDto, productEntity);
 
@@ -123,35 +121,13 @@ public class ProductCrudServiceImpl implements ProductCrudService {
             productSportService.updateProductSport(productEntity, sportId);
         }
 
-        productEntity = productRepository.save(productEntity);
+        productEntity = productDatabaseService.saveProduct(productEntity);
 
         return modelMapper.convertToResponse(productEntity, ProductResponseDto.class);
     }
 
-    private ProductEntity findById(Long id) {
-        Optional<ProductEntity> productEntity = productRepository.findById(id);
-
-        if (!productEntity.isPresent()) {
-            throw new ProductNotFoundException();
-        }
-
-        return productEntity.get();
-    }
-
     @Override
     public Boolean deleteProduct(Long id) {
-        Optional<ProductEntity> productEntity = productRepository.findById(id);
-
-        if (!productEntity.isPresent()) {
-            throw new ProductNotFoundException();
-        }
-
-        productRepository.deleteById(productEntity.get().getId());
-
-        return true;
-    }
-
-    private ProductEntity saveProduct(ProductEntity product) {
-        return productRepository.save(product);
+        return productDatabaseService.deleteProduct(id);
     }
 }

@@ -9,17 +9,5 @@ public interface ProductCrudService {
 
     ProductResponseDto updateProduct(UpdateProductRequestDto updateProductRequestDto);
 
-//    ProductEntity findById(Long id);
-
     Boolean deleteProduct(Long id);
-
-//    ProductEntity saveProduct(ProductEntity product);
-
-//    void updateProductCategory(ProductEntity product, List<Long> categoryIds);
-
-//    void updateProductTechnology(ProductEntity product, List<Long> technologyIds);
-
-//    void updateProductSize(ProductEntity product, List<ProductSizeDto> productSizeDtoList);
-
-//    ProductResponseDTO addSizeToProduct(AddSizeToProductRequestDto addSizeToProductRequestDto);
 }
