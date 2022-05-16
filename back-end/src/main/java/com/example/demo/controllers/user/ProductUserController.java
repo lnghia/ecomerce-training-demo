@@ -11,7 +11,7 @@ import com.example.demo.entities.CustomUserDetails;
 import com.example.demo.entities.UserEntity;
 import com.example.demo.services.interfaces.product.ProductCrudService;
 import com.example.demo.services.interfaces.product.ProductService;
-import com.example.demo.services.interfaces.product.ProductSizeService;
+import com.example.demo.services.interfaces.productsize.ProductSizeService;
 import com.example.demo.services.interfaces.user.UserService;
 import com.example.demo.utilities.authentication.AuthenticationUtility;
 import org.springframework.beans.factory.annotation.Autowired;
