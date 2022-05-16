@@ -1,4 +1,4 @@
-package com.example.demo.services.interfaces.UserDetail;
+package com.example.demo.services.implementations.UserDetail;
 
 import com.example.demo.entities.CustomUserDetails;
 import com.example.demo.entities.UserEntity;
