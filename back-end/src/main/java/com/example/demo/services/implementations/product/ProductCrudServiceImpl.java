@@ -1,11 +1,13 @@
 package com.example.demo.services.implementations.product;
 
+import com.example.demo.configurations.modelmapper.converters.CommonConverter;
 import com.example.demo.dto.requests.product.AddSizeToProductRequestDto;
 import com.example.demo.dto.requests.product.CreateProductRequestDto;
 import com.example.demo.dto.requests.product.ProductSizeDto;
 import com.example.demo.dto.requests.product.UpdateProductRequestDto;
 import com.example.demo.dto.responses.product.ProductResponseDto;
 import com.example.demo.entities.*;
+import com.example.demo.entities.factories.addsizetoproduct.AddSizeToProductRequestDtoFactory;
 import com.example.demo.exceptions.ProductNotFoundException;
 import com.example.demo.repositories.ProductRepository;
 import com.example.demo.services.interfaces.category.CategoryCrudService;
@@ -14,8 +16,8 @@ import com.example.demo.services.interfaces.product.ProductCrudService;
 import com.example.demo.services.interfaces.product.ProductSizeService;
 import com.example.demo.services.interfaces.sport.SportCrudService;
 import com.example.demo.services.interfaces.technology.TechnologyService;
+import com.example.demo.utilities.converter.ConverterUtil;
 import lombok.NoArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +30,7 @@ import java.util.stream.Collectors;
 @Service
 @NoArgsConstructor
 public class ProductCrudServiceImpl implements ProductCrudService {
-    private ModelMapper modelMapper;
+    private CommonConverter modelMapper;
 
     private GenderCrudService genderCrudService;
 
@@ -42,14 +44,20 @@ public class ProductCrudServiceImpl implements ProductCrudService {
 
     private ProductSizeService productSizeService;
 
+    private AddSizeToProductRequestDtoFactory addSizeToProductRequestDtoFactory;
+
+    private ConverterUtil converterUtil;
+
     @Autowired
-    public ProductCrudServiceImpl(ModelMapper modelMapper,
+    public ProductCrudServiceImpl(CommonConverter modelMapper,
                                   GenderCrudService genderCrudService,
                                   SportCrudService sportCrudService,
                                   CategoryCrudService categoryCrudService,
                                   ProductRepository productRepository,
                                   TechnologyService technologyService,
-                                  ProductSizeService productSizeService) {
+                                  ProductSizeService productSizeService,
+                                  AddSizeToProductRequestDtoFactory addSizeToProductRequestDtoFactory,
+                                  ConverterUtil converterUtil) {
         this.modelMapper = modelMapper;
         this.genderCrudService = genderCrudService;
         this.sportCrudService = sportCrudService;
@@ -57,6 +65,8 @@ public class ProductCrudServiceImpl implements ProductCrudService {
         this.productRepository = productRepository;
         this.technologyService = technologyService;
         this.productSizeService = productSizeService;
+        this.addSizeToProductRequestDtoFactory = addSizeToProductRequestDtoFactory;
+        this.converterUtil = converterUtil;
     }
 
     @Override
@@ -70,48 +80,48 @@ public class ProductCrudServiceImpl implements ProductCrudService {
         SportEntity sportEntity = sportCrudService.findById(sportId);
         List<CategoryEntity> categoryEntities = categoryCrudService.findByIds(categoryIds);
         List<TechnologyEntity> technologyEntities = technologyService.findByIds(technologyIds);
+        Set<TechnologyEntity> technologyEntitySet = technologyEntities.stream().collect(Collectors.toSet());
+        Set<CategoryEntity> categoryEntitySet = categoryEntities.stream().collect(Collectors.toSet());
 
-
-        ProductEntity productEntity = ProductEntity.builder()
-                .categories(categoryEntities.stream().collect(Collectors.toSet()))
-                .technologies(technologyEntities.stream().collect(Collectors.toSet()))
-                .gender(genderEntity)
-                .sport(sportEntity)
-                .price(createProductRequestDTO.getPrice())
-                .year(createProductRequestDTO.getYear())
-                .name(createProductRequestDTO.getName())
-                .description(createProductRequestDTO.getDescription())
-                .thumbnail(createProductRequestDTO.getThumbnail())
-                .build();
+        ProductEntity productEntity = modelMapper.convertToEntity(createProductRequestDTO, ProductEntity.class);
+        productEntity.setTechnologies(technologyEntitySet);
+        productEntity.setCategories(categoryEntitySet);
+        productEntity.setGender(genderEntity);
+        productEntity.setSport(sportEntity);
 
         productEntity = productRepository.save(productEntity);
 
-        AddSizeToProductRequestDto requestDto = AddSizeToProductRequestDto.builder().productId(productEntity.getId()).productSizeDto(createProductRequestDTO.getProductSizeDtoList()).build();
-        productEntity = productSizeService.addSizeToProduct(requestDto);
+        List<ProductSizeDto> productSizeDtoList = createProductRequestDTO.getProductSizeDtoList();
+        Long productId = productEntity.getId();
 
-        return modelMapper.map(productEntity, ProductResponseDto.class);
+        AddSizeToProductRequestDto requestDto = addSizeToProductRequestDtoFactory.createAddSizeToRequestDto(productId, productSizeDtoList);
+        productEntity = productSizeService.addSizeToProduct(requestDto);
+        ProductResponseDto responseDto = modelMapper.convertToResponse(productEntity, ProductResponseDto.class);
+
+        return responseDto;
     }
 
 
     @Override
     public ProductResponseDto updateProduct(UpdateProductRequestDto updateProductRequestDto) {
-        ProductEntity productEntity = findById(updateProductRequestDto.getProductId());
+        Long productId = updateProductRequestDto.getProductId();
+        ProductEntity productEntity = findById(productId);
 
-        modelMapper.map(updateProductRequestDto, productEntity);
+        modelMapper.convertToEntity(updateProductRequestDto, productEntity);
 
         List<Long> categoryIds = updateProductRequestDto.getCategoryIds();
         if (categoryIds != null && !categoryIds.isEmpty()) {
-            updateProductCategory(productEntity, updateProductRequestDto.getCategoryIds());
+            updateProductCategory(productEntity, categoryIds);
         }
 
         List<Long> technologyIds = updateProductRequestDto.getTechnologyIds();
         if (technologyIds != null && !technologyIds.isEmpty()) {
-            updateProductTechnology(productEntity, updateProductRequestDto.getTechnologyIds());
+            updateProductTechnology(productEntity, technologyIds);
         }
 
         List<ProductSizeDto> productSizeDtoList = updateProductRequestDto.getProductSizeDtoList();
         if (productSizeDtoList != null && !productSizeDtoList.isEmpty()) {
-            updateProductSize(productEntity, updateProductRequestDto.getProductSizeDtoList());
+            updateProductSize(productEntity, productSizeDtoList);
         }
 
         if (updateProductRequestDto.getGenderId() != null) {
@@ -126,7 +136,7 @@ public class ProductCrudServiceImpl implements ProductCrudService {
 
         productEntity = productRepository.save(productEntity);
 
-        return modelMapper.map(productEntity, ProductResponseDto.class);
+        return modelMapper.convertToResponse(productEntity, ProductResponseDto.class);
     }
 
     @Override

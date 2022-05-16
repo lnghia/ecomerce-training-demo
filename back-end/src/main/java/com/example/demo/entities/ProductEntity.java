@@ -73,4 +73,20 @@ public class ProductEntity extends Auditable {
     public Integer getCountRating() {
         return countRating == null ? 0 : countRating;
     }
+
+    @Override
+    public boolean equals(Object object) {
+        ProductEntity product = (ProductEntity) object;
+
+        return this.id == product.getId() &&
+                this.name.equals(product.getName()) &&
+                this.description.equals(product.getDescription()) &&
+//                this.gender.equals(product.getGender()) &&
+//                this.sport.equals(product.getSport()) &&
+                this.price == product.getPrice() &&
+                this.year == product.getYear() &&
+//                this.categories.equals(product.getCategories()) &&
+//                this.technologies.equals(product.getTechnologies()) &&
+                this.thumbnail.equals(product.getThumbnail());
+    }
 }
