@@ -1,4 +1,4 @@
-package com.example.demo.services.implementations.product;
+package com.example.demo.services.implementations.productsize;
 
 import com.example.demo.dto.requests.product.AddSizeToProductRequestDto;
 import com.example.demo.dto.requests.product.ProductSizeDto;

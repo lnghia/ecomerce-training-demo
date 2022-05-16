@@ -1,4 +1,4 @@
-package com.example.demo.services.implementations.productsize;
+package com.example.demo.services.implementations.product;
 
 import com.example.demo.dto.requests.product.PageableProductListResponseDto;
 import com.example.demo.dto.responses.product.ProductResponseDto;
