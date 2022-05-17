@@ -2,7 +2,7 @@ package com.example.demo.controllers.user;
 
 import com.example.demo.dto.responses.ResponseBodyDto;
 import com.example.demo.dto.responses.gender.GenderResponseDto;
-import com.example.demo.services.interfaces.gender.GenderService;
+import com.example.demo.services.interfaces.gender.GenderDatabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +15,11 @@ import java.util.List;
 @RequestMapping(path = "/api/gender")
 public class GenderUserController {
     @Autowired
-    private GenderService genderService;
+    private GenderDatabaseService genderDatabaseService;
 
     @GetMapping
     public ResponseEntity<ResponseBodyDto> getAll() {
-        List<GenderResponseDto> genderResponseDtoList = genderService.findAll();
+        List<GenderResponseDto> genderResponseDtoList = genderDatabaseService.findAll();
         ResponseBodyDto responseData = ResponseBodyDto.builder().data(genderResponseDtoList).build();
 
         return ResponseEntity.ok(responseData);
