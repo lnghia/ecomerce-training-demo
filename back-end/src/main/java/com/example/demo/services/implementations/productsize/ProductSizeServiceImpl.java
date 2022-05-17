@@ -9,7 +9,7 @@ import com.example.demo.exceptions.ProductNotFoundException;
 import com.example.demo.repositories.ProductRepository;
 import com.example.demo.repositories.ProductSizeRepository;
 import com.example.demo.services.interfaces.productsize.ProductSizeService;
-import com.example.demo.services.interfaces.size.SizeService;
+import com.example.demo.services.interfaces.size.SizeDatabaseService;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @NoArgsConstructor
 public class ProductSizeServiceImpl implements ProductSizeService {
-    private SizeService sizeService;
+    private SizeDatabaseService sizeDatabaseService;
 
     private ModelMapper modelMapper;
 
@@ -30,11 +30,11 @@ public class ProductSizeServiceImpl implements ProductSizeService {
     private ProductRepository productRepository;
 
     @Autowired
-    public ProductSizeServiceImpl(SizeService sizeService,
+    public ProductSizeServiceImpl(SizeDatabaseService sizeDatabaseService,
                                   ModelMapper modelMapper,
                                   ProductSizeRepository productSizeRepository,
                                   ProductRepository productRepository) {
-        this.sizeService = sizeService;
+        this.sizeDatabaseService = sizeDatabaseService;
         this.modelMapper = modelMapper;
         this.productSizeRepository = productSizeRepository;
         this.productRepository = productRepository;
@@ -42,7 +42,7 @@ public class ProductSizeServiceImpl implements ProductSizeService {
 
     @Override
     public void createProductSize(ProductEntity productEntity, Long sizeId, int inStock) {
-        SizeEntity sizeEntity = sizeService.findById(sizeId);
+        SizeEntity sizeEntity = sizeDatabaseService.findById(sizeId);
 
         ProductSizeEntity productSizeEntity = ProductSizeEntity.builder()
                 .size(sizeEntity)
@@ -63,7 +63,7 @@ public class ProductSizeServiceImpl implements ProductSizeService {
 
         ProductEntity product = productEntity.get();
         Map<Long, Integer> sizes = addSizeToProductRequestDto.getProductSizeDto().stream().collect(Collectors.toMap(ProductSizeDto::getSizeId, ProductSizeDto::getNumber));
-        List<SizeEntity> sizeEntities = sizeService.findByIds(sizes.keySet());
+        List<SizeEntity> sizeEntities = sizeDatabaseService.findByIds(sizes.keySet());
         List<ProductSizeEntity> productSizeEntities = sizeEntities.stream().map(sizeEntity -> ProductSizeEntity.builder()
                 .size(sizeEntity)
                 .product(product)

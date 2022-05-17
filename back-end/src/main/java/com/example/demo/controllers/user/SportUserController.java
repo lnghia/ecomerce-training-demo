@@ -2,7 +2,7 @@ package com.example.demo.controllers.user;
 
 import com.example.demo.dto.responses.ResponseBodyDto;
 import com.example.demo.dto.responses.sport.SportResponseDto;
-import com.example.demo.services.interfaces.sport.SportService;
+import com.example.demo.services.interfaces.sport.SportDatabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +15,11 @@ import java.util.List;
 @RequestMapping(path = "/api/sport")
 public class SportUserController {
     @Autowired
-    private SportService sportService;
+    private SportDatabaseService sportDatabaseService;
 
     @GetMapping
     public ResponseEntity<ResponseBodyDto> getAll() {
-        List<SportResponseDto> sportResponseDtoList = sportService.findAll();
+        List<SportResponseDto> sportResponseDtoList = sportDatabaseService.findAll();
         ResponseBodyDto responseBody = ResponseBodyDto.builder().data(sportResponseDtoList).build();
 
         return ResponseEntity.ok(responseBody);

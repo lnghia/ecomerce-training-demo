@@ -2,7 +2,7 @@ package com.example.demo.controllers.user;
 
 import com.example.demo.dto.responses.ResponseBodyDto;
 import com.example.demo.dto.responses.technology.TechnologyResponseDto;
-import com.example.demo.services.interfaces.technology.TechnologyService;
+import com.example.demo.services.interfaces.technology.TechnologyDatabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +15,11 @@ import java.util.List;
 @RequestMapping(path = "/api/technology")
 public class TechnologyUserController {
     @Autowired
-    private TechnologyService technologyService;
+    private TechnologyDatabaseService technologyDatabaseService;
 
     @GetMapping
     public ResponseEntity<ResponseBodyDto> getAll() {
-        List<TechnologyResponseDto> technologyResponseDtoList = technologyService.findAll();
+        List<TechnologyResponseDto> technologyResponseDtoList = technologyDatabaseService.findAll();
         ResponseBodyDto responseBody = ResponseBodyDto.builder().data(technologyResponseDtoList).build();
 
         return ResponseEntity.ok(responseBody);

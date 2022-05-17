@@ -1,14 +1,12 @@
 package com.example.demo.services.implementations.size;
 
-import com.example.demo.dto.requests.size.SizeRequestDto;
+import com.example.demo.configurations.modelmapper.converters.CommonConverter;
 import com.example.demo.dto.responses.size.SizeResponseDto;
 import com.example.demo.entities.SizeEntity;
 import com.example.demo.exceptions.SizeNotFoundException;
 import com.example.demo.repositories.SizeRepository;
-import com.example.demo.services.interfaces.size.SizeService;
+import com.example.demo.services.interfaces.size.SizeDatabaseService;
 import lombok.NoArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,15 +16,15 @@ import java.util.stream.Collectors;
 
 @Service
 @NoArgsConstructor
-public class SizeServiceImpl implements SizeService {
-    private ModelMapper modelMapper;
-
+public class SizeDatabaseServiceImpl implements SizeDatabaseService {
     private SizeRepository sizeRepository;
 
-    @Autowired
-    public SizeServiceImpl(ModelMapper modelMapper, SizeRepository sizeRepository) {
-        this.modelMapper = modelMapper;
+    private CommonConverter converter;
+
+    public SizeDatabaseServiceImpl(SizeRepository sizeRepository,
+                                   CommonConverter converter) {
         this.sizeRepository = sizeRepository;
+        this.converter = converter;
     }
 
     @Override
@@ -55,30 +53,9 @@ public class SizeServiceImpl implements SizeService {
     public List<SizeResponseDto> getAll() {
         List<SizeEntity> sizeEntities = sizeRepository.findAll();
         List<SizeResponseDto> result = sizeEntities.stream().map(sizeEntity -> {
-            return modelMapper.map(sizeEntity, SizeResponseDto.class);
+            return converter.convertToResponse(sizeEntity, SizeResponseDto.class);
         }).collect(Collectors.toList());
 
         return result;
-    }
-
-    @Override
-    public SizeResponseDto createSize(SizeRequestDto requestDto) {
-        String name = requestDto.getName();
-        String description = requestDto.getDescription();
-
-        SizeEntity sizeEntity = SizeEntity.builder().name(name).description(description).build();
-        sizeEntity = sizeRepository.save(sizeEntity);
-
-        return modelMapper.map(sizeEntity, SizeResponseDto.class);
-    }
-
-    @Override
-    public SizeResponseDto updateSize(Long sizeId, SizeRequestDto requestDto) {
-        SizeEntity sizeEntity = sizeRepository.findById(sizeId).orElseThrow(() -> new SizeNotFoundException());
-
-        modelMapper.map(requestDto, sizeEntity);
-        sizeEntity = sizeRepository.save(sizeEntity);
-
-        return modelMapper.map(sizeEntity, SizeResponseDto.class);
     }
 }

@@ -3,7 +3,7 @@ package com.example.demo.controllers.admin;
 import com.example.demo.dto.requests.technology.TechnologyCreateRequestDto;
 import com.example.demo.dto.responses.ResponseBodyDto;
 import com.example.demo.dto.responses.technology.TechnologyResponseDto;
-import com.example.demo.services.interfaces.technology.TechnologyService;
+import com.example.demo.services.interfaces.technology.TechnologyCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,12 +15,12 @@ import javax.validation.Valid;
 @RequestMapping(path = "/api/admin/technology")
 public class TechnologyAdminController {
     @Autowired
-    private TechnologyService technologyService;
+    private TechnologyCrudService technologyCrudService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ResponseBodyDto> createTechnology(@Valid @RequestBody TechnologyCreateRequestDto createRequestDto) {
-        TechnologyResponseDto createdTechnology = technologyService.createTechnology(createRequestDto);
+        TechnologyResponseDto createdTechnology = technologyCrudService.createTechnology(createRequestDto);
         ResponseBodyDto responseBodyDto = ResponseBodyDto.builder().status("200").data(createdTechnology).build();
 
         return ResponseEntity.ok(responseBodyDto);
@@ -30,7 +30,7 @@ public class TechnologyAdminController {
     @PutMapping
     public ResponseEntity<ResponseBodyDto> updateTechnology(@RequestParam(name = "id") Long technologyId,
                                                             @Valid @RequestBody TechnologyCreateRequestDto requestDto) {
-        TechnologyResponseDto updatedTechnology = technologyService.updateTechnology(technologyId, requestDto);
+        TechnologyResponseDto updatedTechnology = technologyCrudService.updateTechnology(technologyId, requestDto);
         ResponseBodyDto responseBodyDto = ResponseBodyDto.builder().status("200").data(updatedTechnology).build();
 
         return ResponseEntity.ok(responseBodyDto);
