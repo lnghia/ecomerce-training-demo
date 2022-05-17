@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @NoArgsConstructor
 @Getter
@@ -48,5 +50,12 @@ public class CategoryCrudServiceImpl implements CategoryCrudService {
         categoryEntity = categoryDatabaseService.save(categoryEntity);
 
         return modelMapper.convertToResponse(categoryEntity, CategoryResponseDto.class);
+    }
+
+    @Override
+    public List<CategoryResponseDto> getAll() {
+        List<CategoryEntity> categoryEntities = categoryDatabaseService.findAll();
+
+        return modelMapper.convertToResponseList(categoryEntities, CategoryResponseDto.class);
     }
 }

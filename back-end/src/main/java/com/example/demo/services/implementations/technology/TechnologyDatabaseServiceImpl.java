@@ -6,11 +6,15 @@ import com.example.demo.entities.TechnologyEntity;
 import com.example.demo.exceptions.TechnologyNotFoundException;
 import com.example.demo.repositories.TechnologyRepository;
 import com.example.demo.services.interfaces.technology.TechnologyDatabaseService;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Service
+@NoArgsConstructor
 public class TechnologyDatabaseServiceImpl implements TechnologyDatabaseService {
     private TechnologyRepository technologyRepository;
 
