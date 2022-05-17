@@ -33,11 +33,6 @@ public class CategoryDatabaseServiceImpl implements CategoryDatabaseService {
     }
 
     @Override
-    public CategoryEntity save(CategoryEntity categoryEntity) {
-        return categoryRepository.save(categoryEntity);
-    }
-
-    @Override
     public List<CategoryEntity> findAllById(List<Long> ids) {
         return categoryRepository.findAllById(ids);
     }

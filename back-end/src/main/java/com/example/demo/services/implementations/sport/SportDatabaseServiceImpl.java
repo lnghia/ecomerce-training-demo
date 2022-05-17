@@ -25,11 +25,6 @@ public class SportDatabaseServiceImpl implements SportDatabaseService {
         this.sportRepository = sportRepository;
     }
 
-//    @Override
-//    public Optional<SportEntity> findById(Long id) {
-//        return sportRepository.findById(id);
-//    }
-
     @Override
     public List<SportResponseDto> findAll() {
         List<SportEntity> sportEntities = sportRepository.findAll();

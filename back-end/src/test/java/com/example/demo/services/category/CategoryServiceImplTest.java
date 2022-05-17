@@ -5,6 +5,7 @@ import com.example.demo.dto.requests.category.CreateCategoryRequestDto;
 import com.example.demo.dto.requests.category.UpdateCategoryRequestDto;
 import com.example.demo.dto.responses.category.CategoryResponseDto;
 import com.example.demo.entities.CategoryEntity;
+import com.example.demo.repositories.CategoryRepository;
 import com.example.demo.services.implementations.category.CategoryCrudServiceImpl;
 import com.example.demo.services.interfaces.category.CategoryDatabaseService;
 import com.example.demo.utilities.converter.ConverterUtil;
@@ -26,6 +27,8 @@ public class CategoryServiceImplTest {
 
     private CategoryCrudServiceImpl categoryCrudService;
 
+    private CategoryRepository categoryRepository;
+
     private ConverterUtil converterUtil;
 
     private List<CategoryEntity> categoryEntities;
@@ -35,7 +38,8 @@ public class CategoryServiceImplTest {
         categoryDatabaseService = mock(CategoryDatabaseService.class);
         modelMapper = mock(CommonConverter.class);
         converterUtil = mock(ConverterUtil.class);
-        categoryCrudService = new CategoryCrudServiceImpl(categoryDatabaseService, modelMapper, converterUtil);
+        categoryRepository = mock(CategoryRepository.class);
+        categoryCrudService = new CategoryCrudServiceImpl(categoryDatabaseService, categoryRepository, modelMapper, converterUtil);
 
         categoryEntities = mock(List.class);
     }
@@ -47,7 +51,7 @@ public class CategoryServiceImplTest {
         CategoryResponseDto expectedResult = mock(CategoryResponseDto.class);
 
         when(modelMapper.convertToEntity(requestDto, CategoryEntity.class)).thenReturn(categoryEntity);
-        when(categoryDatabaseService.save(categoryEntity)).thenReturn(categoryEntity);
+        when(categoryRepository.save(categoryEntity)).thenReturn(categoryEntity);
         when(modelMapper.convertToResponse(categoryEntity, CategoryResponseDto.class)).thenReturn(expectedResult);
 
         CategoryResponseDto result = categoryCrudService.createCategory(requestDto);
@@ -63,7 +67,7 @@ public class CategoryServiceImplTest {
         CategoryResponseDto expectedResult = mock(CategoryResponseDto.class);
 
         when(categoryDatabaseService.findById(1L)).thenReturn(categoryEntity);
-        when(categoryDatabaseService.save(categoryEntity)).thenReturn(categoryEntity);
+        when(categoryRepository.save(categoryEntity)).thenReturn(categoryEntity);
         when(modelMapper.convertToResponse(categoryEntity, CategoryResponseDto.class)).thenReturn(expectedResult);
 
         CategoryResponseDto result = categoryCrudService.updateCategory(1L, requestDto);

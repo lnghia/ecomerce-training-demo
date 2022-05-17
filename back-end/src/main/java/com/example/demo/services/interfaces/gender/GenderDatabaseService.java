@@ -8,7 +8,7 @@ import java.util.List;
 public interface GenderDatabaseService {
     GenderEntity findById(Long id);
 
-    GenderResponseDto save(GenderEntity genderEntity);
+//    GenderResponseDto save(GenderEntity genderEntity);
 
     List<GenderResponseDto> findAll();
 }

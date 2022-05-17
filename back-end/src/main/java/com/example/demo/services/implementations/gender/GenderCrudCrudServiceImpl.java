@@ -6,6 +6,7 @@ import com.example.demo.dto.requests.gender.DeleteGenderRequestDto;
 import com.example.demo.dto.requests.gender.UpdateGenderRequestDto;
 import com.example.demo.dto.responses.gender.GenderResponseDto;
 import com.example.demo.entities.GenderEntity;
+import com.example.demo.repositories.GenderRepository;
 import com.example.demo.services.interfaces.gender.GenderCrudService;
 import com.example.demo.services.interfaces.gender.GenderDatabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,15 @@ public class GenderCrudCrudServiceImpl implements GenderCrudService {
 
     private GenderDatabaseService genderDatabaseService;
 
+    private GenderRepository genderRepository;
+
     @Autowired
-    public GenderCrudCrudServiceImpl(CommonConverter converter, GenderDatabaseService genderDatabaseService) {
+    public GenderCrudCrudServiceImpl(CommonConverter converter,
+                                     GenderDatabaseService genderDatabaseService,
+                                     GenderRepository genderRepository) {
         this.genderDatabaseService = genderDatabaseService;
         this.converter = converter;
+        this.genderRepository = genderRepository;
     }
 
     @Override
@@ -28,7 +34,7 @@ public class GenderCrudCrudServiceImpl implements GenderCrudService {
         GenderEntity genderEntity = new GenderEntity();
 
         converter.convertToEntity(requestDto, genderEntity);
-        return genderDatabaseService.save(genderEntity);
+        return save(genderEntity);
     }
 
     @Override
@@ -36,11 +42,17 @@ public class GenderCrudCrudServiceImpl implements GenderCrudService {
         GenderEntity genderEntity = genderDatabaseService.findById(requestDto.getGenderId());
 
         converter.convertToEntity(requestDto, genderEntity);
-        return genderDatabaseService.save(genderEntity);
+        return save(genderEntity);
     }
 
     @Override
     public GenderResponseDto deleteGender(DeleteGenderRequestDto requestDto) {
         return null;
+    }
+
+    GenderResponseDto save(GenderEntity genderEntity) {
+        genderEntity = genderRepository.save(genderEntity);
+
+        return converter.convertToResponse(genderEntity, GenderResponseDto.class);
     }
 }

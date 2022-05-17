@@ -5,6 +5,7 @@ import com.example.demo.dto.requests.category.CreateCategoryRequestDto;
 import com.example.demo.dto.requests.category.UpdateCategoryRequestDto;
 import com.example.demo.dto.responses.category.CategoryResponseDto;
 import com.example.demo.entities.CategoryEntity;
+import com.example.demo.repositories.CategoryRepository;
 import com.example.demo.services.interfaces.category.CategoryCrudService;
 import com.example.demo.services.interfaces.category.CategoryDatabaseService;
 import com.example.demo.utilities.converter.ConverterUtil;
@@ -21,15 +22,19 @@ import java.util.List;
 public class CategoryCrudServiceImpl implements CategoryCrudService {
     private CategoryDatabaseService categoryDatabaseService;
 
+    private CategoryRepository categoryRepository;
+
     private CommonConverter modelMapper;
 
     private ConverterUtil converterUtil;
 
     @Autowired
     public CategoryCrudServiceImpl(CategoryDatabaseService categoryDatabaseService,
+                                   CategoryRepository categoryRepository,
                                    CommonConverter modelMapper,
                                    ConverterUtil converterUtil) {
         this.categoryDatabaseService = categoryDatabaseService;
+        this.categoryRepository = categoryRepository;
         this.modelMapper = modelMapper;
         this.converterUtil = converterUtil;
     }
@@ -37,7 +42,7 @@ public class CategoryCrudServiceImpl implements CategoryCrudService {
     @Override
     public CategoryResponseDto createCategory(CreateCategoryRequestDto requestDto) {
         CategoryEntity categoryEntity = modelMapper.convertToEntity(requestDto, CategoryEntity.class);
-        categoryEntity = categoryDatabaseService.save(categoryEntity);
+        categoryEntity = categoryRepository.save(categoryEntity);
 
         return modelMapper.convertToResponse(categoryEntity, CategoryResponseDto.class);
     }
@@ -47,7 +52,7 @@ public class CategoryCrudServiceImpl implements CategoryCrudService {
         CategoryEntity categoryEntity = categoryDatabaseService.findById(categoryId);
 
         modelMapper.convertToEntity(requestDto, categoryEntity);
-        categoryEntity = categoryDatabaseService.save(categoryEntity);
+        categoryEntity = categoryRepository.save(categoryEntity);
 
         return modelMapper.convertToResponse(categoryEntity, CategoryResponseDto.class);
     }

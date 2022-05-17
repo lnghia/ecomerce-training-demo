@@ -39,12 +39,12 @@ public class GenderDatabaseServiceImpl implements GenderDatabaseService {
         throw new GenderNotFoundException();
     }
 
-    @Override
-    public GenderResponseDto save(GenderEntity genderEntity) {
-        genderEntity = genderRepository.save(genderEntity);
-
-        return converter.convertToResponse(genderEntity, GenderResponseDto.class);
-    }
+//    @Override
+//    public GenderResponseDto save(GenderEntity genderEntity) {
+//        genderEntity = genderRepository.save(genderEntity);
+//
+//        return converter.convertToResponse(genderEntity, GenderResponseDto.class);
+//    }
 
     @Override
     public List<GenderResponseDto> findAll() {
