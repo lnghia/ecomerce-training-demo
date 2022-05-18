@@ -22,7 +22,6 @@ import com.example.demo.utilities.converter.ConverterUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -145,8 +144,8 @@ public class ProductCrudServiceImplTest {
         verify(productCategoryService).updateProductCategories(initProduct, categoryIds);
         verify(productTechnologyService).updateProductTechnologies(initProduct, technologyIds);
         verify(productSizeService).updateProductSizes(initProduct, productSizeDtoList);
-        verify(initProduct).setGender(genderEntity);
-        verify(initProduct).setSport(sportEntity);
+        verify(productGenderService).updateProductGender(initProduct, 1L);
+        verify(productSportService).updateProductSport(initProduct, 2L);
 
         assertThat(result, is(resultProductDto));
     }
@@ -161,15 +160,15 @@ public class ProductCrudServiceImplTest {
         verify(productCategoryService, times(0)).updateProductCategories(initProduct, categoryIds);
         verify(productTechnologyService).updateProductTechnologies(initProduct, technologyIds);
         verify(productSizeService).updateProductSizes(initProduct, productSizeDtoList);
-        verify(initProduct).setGender(genderEntity);
-        verify(initProduct).setSport(sportEntity);
+        verify(productGenderService).updateProductGender(initProduct, 1L);
+        verify(productSportService).updateProductSport(initProduct, 2L);
 
         assertThat(result, is(resultProductDto));
     }
 
     @Test
     public void updateProduct_ShouldShouldNotUpdateCategory_WhenCategoryIdsEmpty() {
-        when(updateProductRequestDto.getCategoryIds()).thenReturn(Arrays.asList());
+        when(updateProductRequestDto.getCategoryIds()).thenReturn(List.of());
 
         ProductResponseDto result = productCrudServiceImpl.updateProduct(updateProductRequestDto);
 
@@ -177,8 +176,8 @@ public class ProductCrudServiceImplTest {
         verify(productCategoryService, times(0)).updateProductCategories(initProduct, categoryIds);
         verify(productTechnologyService).updateProductTechnologies(initProduct, technologyIds);
         verify(productSizeService).updateProductSizes(initProduct, productSizeDtoList);
-        verify(initProduct).setGender(genderEntity);
-        verify(initProduct).setSport(sportEntity);
+        verify(productGenderService).updateProductGender(initProduct, 1L);
+        verify(productSportService).updateProductSport(initProduct, 2L);
 
         assertThat(result, is(resultProductDto));
     }
@@ -193,15 +192,15 @@ public class ProductCrudServiceImplTest {
         verify(productCategoryService).updateProductCategories(initProduct, categoryIds);
         verify(productTechnologyService, times(0)).updateProductTechnologies(initProduct, technologyIds);
         verify(productSizeService).updateProductSizes(initProduct, productSizeDtoList);
-        verify(initProduct).setGender(genderEntity);
-        verify(initProduct).setSport(sportEntity);
+        verify(productGenderService).updateProductGender(initProduct, 1L);
+        verify(productSportService).updateProductSport(initProduct, 2L);
 
         assertThat(result, is(resultProductDto));
     }
 
     @Test
     public void updateProduct_ShouldShouldNotUpdateTechnology_WhenTechnologyIdsEmpty() {
-        when(updateProductRequestDto.getTechnologyIds()).thenReturn(Arrays.asList());
+        when(updateProductRequestDto.getTechnologyIds()).thenReturn(List.of());
 
         ProductResponseDto result = productCrudServiceImpl.updateProduct(updateProductRequestDto);
 
@@ -209,8 +208,8 @@ public class ProductCrudServiceImplTest {
         verify(productCategoryService).updateProductCategories(initProduct, categoryIds);
         verify(productTechnologyService, times(0)).updateProductTechnologies(initProduct, technologyIds);
         verify(productSizeService).updateProductSizes(initProduct, productSizeDtoList);
-        verify(initProduct).setGender(genderEntity);
-        verify(initProduct).setSport(sportEntity);
+        verify(productGenderService).updateProductGender(initProduct, 1L);
+        verify(productSportService).updateProductSport(initProduct, 2L);
 
         assertThat(result, is(resultProductDto));
     }
@@ -225,15 +224,15 @@ public class ProductCrudServiceImplTest {
         verify(productCategoryService).updateProductCategories(initProduct, categoryIds);
         verify(productTechnologyService).updateProductTechnologies(initProduct, technologyIds);
         verify(productSizeService, times(0)).updateProductSizes(initProduct, productSizeDtoList);
-        verify(initProduct).setGender(genderEntity);
-        verify(initProduct).setSport(sportEntity);
+        verify(productGenderService).updateProductGender(initProduct, 1L);
+        verify(productSportService).updateProductSport(initProduct, 2L);
 
         assertThat(result, is(resultProductDto));
     }
 
     @Test
     public void updateProduct_ShouldShouldNotUpdateSizes_WhenProductSizeDtoListEmpty() {
-        when(updateProductRequestDto.getProductSizeDtoList()).thenReturn(Arrays.asList());
+        when(updateProductRequestDto.getProductSizeDtoList()).thenReturn(List.of());
 
         ProductResponseDto result = productCrudServiceImpl.updateProduct(updateProductRequestDto);
 
@@ -241,8 +240,8 @@ public class ProductCrudServiceImplTest {
         verify(productCategoryService).updateProductCategories(initProduct, categoryIds);
         verify(productTechnologyService).updateProductTechnologies(initProduct, technologyIds);
         verify(productSizeService, times(0)).updateProductSizes(initProduct, productSizeDtoList);
-        verify(initProduct).setGender(genderEntity);
-        verify(initProduct).setSport(sportEntity);
+        verify(productGenderService).updateProductGender(initProduct, 1L);
+        verify(productSportService).updateProductSport(initProduct, 2L);
 
         assertThat(result, is(resultProductDto));
     }
@@ -257,8 +256,8 @@ public class ProductCrudServiceImplTest {
         verify(productCategoryService).updateProductCategories(initProduct, categoryIds);
         verify(productTechnologyService).updateProductTechnologies(initProduct, technologyIds);
         verify(productSizeService).updateProductSizes(initProduct, productSizeDtoList);
-        verify(initProduct, times(0)).setGender(genderEntity);
-        verify(initProduct).setSport(sportEntity);
+        verify(productGenderService, times(0)).updateProductGender(initProduct, 1L);
+        verify(productSportService).updateProductSport(initProduct, 2L);
 
         assertThat(result, is(resultProductDto));
     }
@@ -273,8 +272,8 @@ public class ProductCrudServiceImplTest {
         verify(productCategoryService).updateProductCategories(initProduct, categoryIds);
         verify(productTechnologyService).updateProductTechnologies(initProduct, technologyIds);
         verify(productSizeService).updateProductSizes(initProduct, productSizeDtoList);
-        verify(initProduct).setGender(genderEntity);
-        verify(initProduct, times(0)).setSport(sportEntity);
+        verify(productGenderService).updateProductGender(initProduct, 1L);
+        verify(productSportService, times(0)).updateProductSport(initProduct, 2L);
 
         assertThat(result, is(resultProductDto));
     }
