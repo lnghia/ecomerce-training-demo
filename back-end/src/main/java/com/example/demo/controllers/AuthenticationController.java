@@ -58,7 +58,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login_admin")
-    public ResponseEntity<ResponseBodyDto> loginAdmin(@Valid @RequestBody LoginRequestDto responseDto) {
+    public ResponseEntity<ResponseBodyDto<LoginResponseDto>> loginAdmin(@Valid @RequestBody LoginRequestDto responseDto) {
         String username = responseDto.getUsername();
         String password = responseDto.getPassword();
         LoginResponseDto loginResponseDTO = authService.authenticateAdmin(username, password);
@@ -77,7 +77,7 @@ public class AuthenticationController {
     }
 
     @PutMapping("/refresh_tokens")
-    public ResponseEntity<ResponseBodyDto> refreshTokens(@RequestHeader(value = "Refresh-Token", required = true) String refreshToken) {
+    public ResponseEntity<ResponseBodyDto<LoginResponseDto>> refreshTokens(@RequestHeader(value = "Refresh-Token") String refreshToken) {
         LoginResponseDto responseDTO = authService.refreshAccessToken(refreshToken);
         ResponseBodyDto<LoginResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(responseDTO, "200");
 

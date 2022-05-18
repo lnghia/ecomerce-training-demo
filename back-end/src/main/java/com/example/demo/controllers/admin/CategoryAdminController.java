@@ -24,8 +24,8 @@ public class CategoryAdminController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping
-    public ResponseEntity<ResponseBodyDto> updateCategory(@RequestParam(name = "id") Long categoryId,
-                                                          @Valid @RequestBody UpdateCategoryRequestDto requestDto) {
+    public ResponseEntity<ResponseBodyDto<CategoryResponseDto>> updateCategory(@RequestParam(name = "id") Long categoryId,
+                                                                               @Valid @RequestBody UpdateCategoryRequestDto requestDto) {
         CategoryResponseDto updatedCategory = categoryCrudService.updateCategory(categoryId, requestDto);
         ResponseBodyDto<CategoryResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(updatedCategory, "200");
 
@@ -34,7 +34,7 @@ public class CategoryAdminController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<ResponseBodyDto> createCategory(@Valid @RequestBody CreateCategoryRequestDto requestDto) {
+    public ResponseEntity<ResponseBodyDto<CategoryResponseDto>> createCategory(@Valid @RequestBody CreateCategoryRequestDto requestDto) {
         CategoryResponseDto createdCategory = categoryCrudService.createCategory(requestDto);
         ResponseBodyDto<CategoryResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(createdCategory, "200");
 
