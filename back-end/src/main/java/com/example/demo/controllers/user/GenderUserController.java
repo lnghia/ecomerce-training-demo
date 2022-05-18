@@ -2,6 +2,7 @@ package com.example.demo.controllers.user;
 
 import com.example.demo.dto.responses.ResponseBodyDto;
 import com.example.demo.dto.responses.gender.GenderResponseDto;
+import com.example.demo.entities.factories.responsebodydto.ResponseBodyDtoFactory;
 import com.example.demo.services.interfaces.gender.GenderDatabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,13 @@ public class GenderUserController {
     @Autowired
     private GenderDatabaseService genderDatabaseService;
 
+    @Autowired
+    private ResponseBodyDtoFactory responseBodyDtoFactory;
+
     @GetMapping
     public ResponseEntity<ResponseBodyDto> getAll() {
         List<GenderResponseDto> genderResponseDtoList = genderDatabaseService.findAll();
-        ResponseBodyDto responseData = ResponseBodyDto.builder().data(genderResponseDtoList).build();
+        ResponseBodyDto<List<GenderResponseDto>> responseData = responseBodyDtoFactory.buildResponseBody(genderResponseDtoList, "200");
 
         return ResponseEntity.ok(responseData);
     }

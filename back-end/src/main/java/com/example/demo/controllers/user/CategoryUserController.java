@@ -24,7 +24,7 @@ public class CategoryUserController {
     @GetMapping
     public ResponseEntity<ResponseBodyDto> getAll() {
         List<CategoryResponseDto> categoryResponseDtoList = categoryCrudService.getAll();
-        ResponseBodyDto responseBody = responseBodyDtoFactory.buildResponseBody(categoryResponseDtoList);
+        ResponseBodyDto<List<CategoryResponseDto>> responseBody = responseBodyDtoFactory.buildResponseBody(categoryResponseDtoList);
 
         return ResponseEntity.ok(responseBody);
     }

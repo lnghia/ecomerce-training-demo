@@ -2,6 +2,7 @@ package com.example.demo.controllers.admin;
 
 import com.example.demo.dto.responses.ResponseBodyDto;
 import com.example.demo.dto.responses.role.RoleResponseDto;
+import com.example.demo.entities.factories.responsebodydto.ResponseBodyDtoFactory;
 import com.example.demo.services.interfaces.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +19,14 @@ public class RoleAdminController {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private ResponseBodyDtoFactory responseBodyDtoFactory;
+
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<ResponseBodyDto> getRoles() {
         List<RoleResponseDto> roleResponseDtoList = roleService.findAll();
-        ResponseBodyDto responseBodyDto = ResponseBodyDto.builder().status("200").data(roleResponseDtoList).build();
+        ResponseBodyDto<List<RoleResponseDto>> responseBodyDto = responseBodyDtoFactory.buildResponseBody(roleResponseDtoList, "200");
 
         return ResponseEntity.ok(responseBodyDto);
     }

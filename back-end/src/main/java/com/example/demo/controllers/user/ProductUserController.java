@@ -9,6 +9,7 @@ import com.example.demo.dto.responses.user.PageableUserRateProductResponseDto;
 import com.example.demo.dto.responses.user.UserRateProductResponseDto;
 import com.example.demo.entities.CustomUserDetails;
 import com.example.demo.entities.UserEntity;
+import com.example.demo.entities.factories.responsebodydto.ResponseBodyDtoFactory;
 import com.example.demo.services.interfaces.product.ProductCrudService;
 import com.example.demo.services.interfaces.product.ProductService;
 import com.example.demo.services.interfaces.productsize.ProductSizeService;
@@ -40,10 +41,13 @@ public class ProductUserController {
     @Autowired
     private AuthenticationUtility authenticationUtility;
 
+    @Autowired
+    private ResponseBodyDtoFactory responseBodyDtoFactory;
+
     @GetMapping(path = "/{id}")
     public ResponseEntity<ResponseBodyDto> getProduct(@PathVariable Long id) {
         ProductResponseDto productResponseDTO = productService.findById(id);
-        ResponseBodyDto responseBodyDTO = ResponseBodyDto.builder().data(productResponseDTO).build();
+        ResponseBodyDto<ProductResponseDto> responseBodyDTO = responseBodyDtoFactory.buildResponseBody(productResponseDTO, "200");
 
         return ResponseEntity.ok(responseBodyDTO);
     }
@@ -71,7 +75,7 @@ public class ProductUserController {
                 sortType,
                 sortBy
         );
-        ResponseBodyDto responseBodyDto = ResponseBodyDto.builder().status("200").data(products).build();
+        ResponseBodyDto<PageableProductListResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(products, "200");
 
         return ResponseEntity.ok(responseBodyDto);
     }
@@ -79,7 +83,7 @@ public class ProductUserController {
     @GetMapping(path = "/all")
     public ResponseEntity<ResponseBodyDto> findAllProduct() {
         List<ProductResponseDto> result = productService.getAll();
-        ResponseBodyDto response = ResponseBodyDto.builder().status("200").data(result).build();
+        ResponseBodyDto<List<ProductResponseDto>> response = responseBodyDtoFactory.buildResponseBody(result, "200");
 
         return ResponseEntity.ok(response);
     }
@@ -90,7 +94,7 @@ public class ProductUserController {
         UserEntity userEntity = authenticationUtility.getUserDetailFromSecurityContext();
         requestDto.setProductId(productId);
         UserRateProductResponseDto responseDto = userService.rateProduct(requestDto, userEntity);
-        ResponseBodyDto responseBody = ResponseBodyDto.builder().data(responseDto).build();
+        ResponseBodyDto<UserRateProductResponseDto> responseBody = responseBodyDtoFactory.buildResponseBody(responseDto, "200");
 
         return ResponseEntity.ok(responseBody);
     }
@@ -100,7 +104,7 @@ public class ProductUserController {
                                                              @RequestParam(value = "page", defaultValue = "0") int page,
                                                              @RequestParam(value = "size", defaultValue = "3") int size) {
         PageableUserRateProductResponseDto result = productService.getLatestCommentUserProduct(productId, page, size);
-        ResponseBodyDto responseBodyDto = ResponseBodyDto.builder().status("200").data(result).build();
+        ResponseBodyDto<PageableUserRateProductResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(result, "200");
 
         return ResponseEntity.ok(responseBodyDto);
     }
@@ -109,7 +113,7 @@ public class ProductUserController {
     public ResponseEntity<ResponseBodyDto> getUserReviewOnProduct(@RequestParam(value = "productId") Long productId) {
         UserEntity userEntity = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
         UserRateProductResponseDto result = productService.findReviewOfUserOnProduct(userEntity, productId);
-        ResponseBodyDto responseBody = ResponseBodyDto.builder().data(result).status("200").build();
+        ResponseBodyDto<UserRateProductResponseDto> responseBody = responseBodyDtoFactory.buildResponseBody(result, "200");
 
         return ResponseEntity.ok(responseBody);
     }

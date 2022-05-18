@@ -5,9 +5,8 @@ import com.example.demo.dto.requests.product.LoginRequestDto;
 import com.example.demo.dto.responses.ResponseBodyDto;
 import com.example.demo.dto.responses.authentication.LoginResponseDto;
 import com.example.demo.dto.responses.user.UserResponseDto;
-import com.example.demo.entities.CustomUserDetails;
-import com.example.demo.entities.RoleEntity;
 import com.example.demo.entities.UserEntity;
+import com.example.demo.entities.factories.responsebodydto.ResponseBodyDtoFactory;
 import com.example.demo.security.providers.JWTProvider;
 import com.example.demo.services.interfaces.authentication.AuthenticationService;
 import com.example.demo.services.interfaces.permission.PermissionService;
@@ -17,12 +16,9 @@ import com.example.demo.services.interfaces.user.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 
 @RestController
 @RequestMapping(path = "/api/auth")
@@ -48,21 +44,15 @@ public class AuthenticationController {
     @Autowired
     private UserRoleService userRoleService;
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/test")
-    public String test() {
-        UserEntity user = ((CustomUserDetails) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getUser();
-
-
-        return "test.";
-    }
+    @Autowired
+    private ResponseBodyDtoFactory responseBodyDtoFactory;
 
     @PostMapping("/login")
     public ResponseEntity<ResponseBodyDto<LoginResponseDto>> login(@Valid @RequestBody LoginRequestDto request) {
         String username = request.getUsername();
         String password = request.getPassword();
         LoginResponseDto loginResponseDTO = authService.authenticateUser(username, password);
-        ResponseBodyDto responseBodyDTO = ResponseBodyDto.builder().data(loginResponseDTO).build();
+        ResponseBodyDto<LoginResponseDto> responseBodyDTO = responseBodyDtoFactory.buildResponseBody(loginResponseDTO, "200");
 
         return ResponseEntity.ok(responseBodyDTO);
     }
@@ -72,7 +62,7 @@ public class AuthenticationController {
         String username = responseDto.getUsername();
         String password = responseDto.getPassword();
         LoginResponseDto loginResponseDTO = authService.authenticateAdmin(username, password);
-        ResponseBodyDto responseBodyDTO = ResponseBodyDto.builder().data(loginResponseDTO).build();
+        ResponseBodyDto<LoginResponseDto> responseBodyDTO = responseBodyDtoFactory.buildResponseBody(loginResponseDTO, "200");
 
         return ResponseEntity.ok(responseBodyDTO);
     }
@@ -81,7 +71,7 @@ public class AuthenticationController {
     public ResponseEntity<ResponseBodyDto<UserResponseDto>> register(@Valid @RequestBody RegisterRequestDto request) {
         UserEntity newUser = modelMapper.map(request, UserEntity.class);
         UserResponseDto userResponseDTO = userService.createNormalUser(newUser);
-        ResponseBodyDto response = ResponseBodyDto.builder().data(userResponseDTO).build();
+        ResponseBodyDto<UserResponseDto> response = responseBodyDtoFactory.buildResponseBody(userResponseDTO, "200");
 
         return ResponseEntity.ok(response);
     }
@@ -89,36 +79,8 @@ public class AuthenticationController {
     @PutMapping("/refresh_tokens")
     public ResponseEntity<ResponseBodyDto> refreshTokens(@RequestHeader(value = "Refresh-Token", required = true) String refreshToken) {
         LoginResponseDto responseDTO = authService.refreshAccessToken(refreshToken);
+        ResponseBodyDto<LoginResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(responseDTO, "200");
 
-        return ResponseEntity.ok(ResponseBodyDto.builder().data(responseDTO).build());
+        return ResponseEntity.ok(responseBodyDto);
     }
-
-    @GetMapping("/ttt")
-    public ResponseEntity<ResponseBodyDto> ttt() {
-        ArrayList<RoleEntity> tmp = new ArrayList<>(userService.getUserGrantedPermissions(1L));
-
-        return ResponseEntity.ok(ResponseBodyDto.builder().data(tmp).build());
-    }
-
-
-//    @GetMapping("/iii")
-//    public ResponseEntity<ResponseBodyDTO> iii() {
-//        PermissionEntity permissionEntity = PermissionEntity.builder().value(2).name("write").build();
-//        PermissionEntity newPermission = permissionService.save(permissionEntity);
-//        List<PermissionEntity> tmp = new ArrayList<>(Arrays.asList(newPermission));
-//        RoleEntity roleEntity = RoleEntity.builder().name("user").value(2).permissions(tmp).build();
-//        RoleEntity newRoleEntity = roleService.save(roleEntity);
-//
-//        return ResponseEntity.ok(new ResponseBodyDTO());
-//    }
-
-//    @GetMapping("/ooo")
-//    public ResponseEntity<ResponseBodyDTO> ooo() {
-//        RoleEntity roleEntity = roleService.findByName("user");
-//        UserEntity user = userService.getUserById(1L);
-//        user.getRoles().add(roleEntity);
-//        user = userService.save(user);
-//
-//        return ResponseEntity.ok(ResponseBodyDTO.builder().data(user.getRoles()).build());
-//    }
 }

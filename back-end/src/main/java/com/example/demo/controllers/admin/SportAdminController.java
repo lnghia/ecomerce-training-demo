@@ -4,6 +4,7 @@ import com.example.demo.dto.requests.sport.CreateSportRequestDto;
 import com.example.demo.dto.requests.sport.UpdateSportRequestDto;
 import com.example.demo.dto.responses.ResponseBodyDto;
 import com.example.demo.dto.responses.sport.SportResponseDto;
+import com.example.demo.entities.factories.responsebodydto.ResponseBodyDtoFactory;
 import com.example.demo.services.interfaces.sport.SportCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +19,15 @@ public class SportAdminController {
     @Autowired
     private SportCrudService sportCrudService;
 
+    @Autowired
+    private ResponseBodyDtoFactory responseBodyDtoFactory;
+
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping
     public ResponseEntity<ResponseBodyDto> updateSport(@RequestParam(name = "id") Long sportId,
                                                        @Valid @RequestBody UpdateSportRequestDto requestDto) {
         SportResponseDto updatedSport = sportCrudService.updateSport(sportId, requestDto);
-        ResponseBodyDto responseBodyDto = ResponseBodyDto.builder().status("200").data(updatedSport).build();
+        ResponseBodyDto<SportResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(updatedSport, "200");
 
         return ResponseEntity.ok(responseBodyDto);
     }
@@ -32,7 +36,7 @@ public class SportAdminController {
     @PostMapping
     public ResponseEntity<ResponseBodyDto> createSport(@Valid @RequestBody CreateSportRequestDto requestDto) {
         SportResponseDto createdSport = sportCrudService.createSport(requestDto);
-        ResponseBodyDto responseBodyDto = ResponseBodyDto.builder().status("200").data(createdSport).build();
+        ResponseBodyDto<SportResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(createdSport, "200");
 
         return ResponseEntity.ok(responseBodyDto);
     }

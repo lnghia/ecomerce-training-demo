@@ -3,6 +3,7 @@ package com.example.demo.controllers.admin;
 import com.example.demo.dto.requests.technology.TechnologyCreateRequestDto;
 import com.example.demo.dto.responses.ResponseBodyDto;
 import com.example.demo.dto.responses.technology.TechnologyResponseDto;
+import com.example.demo.entities.factories.responsebodydto.ResponseBodyDtoFactory;
 import com.example.demo.services.interfaces.technology.TechnologyCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +18,14 @@ public class TechnologyAdminController {
     @Autowired
     private TechnologyCrudService technologyCrudService;
 
+    @Autowired
+    private ResponseBodyDtoFactory responseBodyDtoFactory;
+
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ResponseBodyDto> createTechnology(@Valid @RequestBody TechnologyCreateRequestDto createRequestDto) {
         TechnologyResponseDto createdTechnology = technologyCrudService.createTechnology(createRequestDto);
-        ResponseBodyDto responseBodyDto = ResponseBodyDto.builder().status("200").data(createdTechnology).build();
+        ResponseBodyDto<TechnologyResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(createdTechnology, "200");
 
         return ResponseEntity.ok(responseBodyDto);
     }
@@ -31,7 +35,7 @@ public class TechnologyAdminController {
     public ResponseEntity<ResponseBodyDto> updateTechnology(@RequestParam(name = "id") Long technologyId,
                                                             @Valid @RequestBody TechnologyCreateRequestDto requestDto) {
         TechnologyResponseDto updatedTechnology = technologyCrudService.updateTechnology(technologyId, requestDto);
-        ResponseBodyDto responseBodyDto = ResponseBodyDto.builder().status("200").data(updatedTechnology).build();
+        ResponseBodyDto<TechnologyResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(updatedTechnology, "200");
 
         return ResponseEntity.ok(responseBodyDto);
     }
