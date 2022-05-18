@@ -27,7 +27,7 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/active")
-    public ResponseEntity<ResponseBodyDto> activeUser(@RequestParam(name = "id") Long userId) {
+    public ResponseEntity<ResponseBodyDto<UserResponseDto>> activeUser(@RequestParam(name = "id") Long userId) {
         UserResponseDto userResponseDto = userService.activeUser(userId);
         ResponseBodyDto<UserResponseDto> responseBody = responseBodyDtoFactory.buildResponseBody(userResponseDto, "200");
 
@@ -36,7 +36,7 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/de_active")
-    public ResponseEntity<ResponseBodyDto> deactiveUser(@RequestParam(name = "id") Long userId) {
+    public ResponseEntity<ResponseBodyDto<UserResponseDto>> deactiveUser(@RequestParam(name = "id") Long userId) {
         UserResponseDto userResponseDto = userService.deActiveUser(userId);
         ResponseBodyDto<UserResponseDto> responseBody = responseBodyDtoFactory.buildResponseBody(userResponseDto, "200");
 
@@ -45,7 +45,7 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/active")
-    public ResponseEntity<ResponseBodyDto> getListNormalUser() {
+    public ResponseEntity<ResponseBodyDto<List<UserListResponseDto>>> getListNormalUser() {
         List<UserListResponseDto> users = userService.getListNormalUser();
         ResponseBodyDto<List<UserListResponseDto>> responseBody = responseBodyDtoFactory.buildResponseBody(users, "200");
 
@@ -54,7 +54,7 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/de_active")
-    public ResponseEntity<ResponseBodyDto> getListBlockedUser() {
+    public ResponseEntity<ResponseBodyDto<List<UserListResponseDto>>> getListBlockedUser() {
         List<UserListResponseDto> users = userService.getListBlockedUser();
         ResponseBodyDto<List<UserListResponseDto>> responseBody = responseBodyDtoFactory.buildResponseBody(users, "200");
 
@@ -63,7 +63,7 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/assign_role")
-    public ResponseEntity<ResponseBodyDto> assignRoleToUser(@Valid @RequestBody AssignRoleToUserRequestDto requestBody) {
+    public ResponseEntity<ResponseBodyDto<UserResponseDto>> assignRoleToUser(@Valid @RequestBody AssignRoleToUserRequestDto requestBody) {
         UserResponseDto userResponseDTO = userRoleService.assignRoleToUser(requestBody.getUserId(), requestBody.getRoleId());
         ResponseBodyDto<UserResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(userResponseDTO, "200");
 

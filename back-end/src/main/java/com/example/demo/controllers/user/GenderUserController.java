@@ -22,7 +22,7 @@ public class GenderUserController {
     private ResponseBodyDtoFactory responseBodyDtoFactory;
 
     @GetMapping
-    public ResponseEntity<ResponseBodyDto> getAll() {
+    public ResponseEntity<ResponseBodyDto<List<GenderResponseDto>>> getAll() {
         List<GenderResponseDto> genderResponseDtoList = genderDatabaseService.findAll();
         ResponseBodyDto<List<GenderResponseDto>> responseData = responseBodyDtoFactory.buildResponseBody(genderResponseDtoList, "200");
 

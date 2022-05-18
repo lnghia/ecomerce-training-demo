@@ -22,7 +22,7 @@ public class TechnologyUserController {
     private ResponseBodyDtoFactory responseBodyDtoFactory;
 
     @GetMapping
-    public ResponseEntity<ResponseBodyDto> getAll() {
+    public ResponseEntity<ResponseBodyDto<List<TechnologyResponseDto>>> getAll() {
         List<TechnologyResponseDto> technologyResponseDtoList = technologyDatabaseService.findAll();
         ResponseBodyDto<List<TechnologyResponseDto>> responseBody = responseBodyDtoFactory.buildResponseBody(technologyResponseDtoList, "200");
 

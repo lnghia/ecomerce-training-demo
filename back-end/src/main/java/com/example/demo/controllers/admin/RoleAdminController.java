@@ -24,7 +24,7 @@ public class RoleAdminController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public ResponseEntity<ResponseBodyDto> getRoles() {
+    public ResponseEntity<ResponseBodyDto<List<RoleResponseDto>>> getRoles() {
         List<RoleResponseDto> roleResponseDtoList = roleService.findAll();
         ResponseBodyDto<List<RoleResponseDto>> responseBodyDto = responseBodyDtoFactory.buildResponseBody(roleResponseDtoList, "200");
 

@@ -22,7 +22,7 @@ public class SizeUserController {
     private ResponseBodyDtoFactory responseBodyDtoFactory;
 
     @GetMapping
-    public ResponseEntity<ResponseBodyDto> getAll() {
+    public ResponseEntity<ResponseBodyDto<List<SizeResponseDto>>> getAll() {
         List<SizeResponseDto> data = sizeDatabaseService.getAll();
         ResponseBodyDto<List<SizeResponseDto>> response = responseBodyDtoFactory.buildResponseBody(data, "200");
 

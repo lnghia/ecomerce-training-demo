@@ -22,7 +22,7 @@ public class SportUserController {
     private ResponseBodyDtoFactory responseBodyDtoFactory;
 
     @GetMapping
-    public ResponseEntity<ResponseBodyDto> getAll() {
+    public ResponseEntity<ResponseBodyDto<List<SportResponseDto>>> getAll() {
         List<SportResponseDto> sportResponseDtoList = sportDatabaseService.findAll();
         ResponseBodyDto<List<SportResponseDto>> responseBody = responseBodyDtoFactory.buildResponseBody(sportResponseDtoList, "200");
 

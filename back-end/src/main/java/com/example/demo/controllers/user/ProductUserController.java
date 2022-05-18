@@ -45,7 +45,7 @@ public class ProductUserController {
     private ResponseBodyDtoFactory responseBodyDtoFactory;
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<ResponseBodyDto> getProduct(@PathVariable Long id) {
+    public ResponseEntity<ResponseBodyDto<ProductResponseDto>> getProduct(@PathVariable Long id) {
         ProductResponseDto productResponseDTO = productService.findById(id);
         ResponseBodyDto<ProductResponseDto> responseBodyDTO = responseBodyDtoFactory.buildResponseBody(productResponseDTO, "200");
 
@@ -53,7 +53,7 @@ public class ProductUserController {
     }
 
     @PostMapping(path = "/search")
-    public ResponseEntity<ResponseBodyDto> getProducts(@Valid @RequestBody FilterProductsRequestDto requestDto) {
+    public ResponseEntity<ResponseBodyDto<PageableProductListResponseDto>> getProducts(@Valid @RequestBody FilterProductsRequestDto requestDto) {
         int size = requestDto.getSize();
         int page = requestDto.getPage();
         String name = requestDto.getName();
@@ -81,7 +81,7 @@ public class ProductUserController {
     }
 
     @GetMapping(path = "/all")
-    public ResponseEntity<ResponseBodyDto> findAllProduct() {
+    public ResponseEntity<ResponseBodyDto<List<ProductResponseDto>>> findAllProduct() {
         List<ProductResponseDto> result = productService.getAll();
         ResponseBodyDto<List<ProductResponseDto>> response = responseBodyDtoFactory.buildResponseBody(result, "200");
 
@@ -89,8 +89,8 @@ public class ProductUserController {
     }
 
     @PostMapping(path = "/rate_product")
-    public ResponseEntity<ResponseBodyDto> rateProduct(@Valid @RequestBody UserRateProductRequestDto requestDto,
-                                                       @RequestParam Long productId) {
+    public ResponseEntity<ResponseBodyDto<UserRateProductResponseDto>> rateProduct(@Valid @RequestBody UserRateProductRequestDto requestDto,
+                                                                                   @RequestParam Long productId) {
         UserEntity userEntity = authenticationUtility.getUserDetailFromSecurityContext();
         requestDto.setProductId(productId);
         UserRateProductResponseDto responseDto = userService.rateProduct(requestDto, userEntity);
@@ -100,9 +100,9 @@ public class ProductUserController {
     }
 
     @GetMapping(path = "/ratings")
-    public ResponseEntity<ResponseBodyDto> getProductRatings(@RequestParam(value = "productId") Long productId,
-                                                             @RequestParam(value = "page", defaultValue = "0") int page,
-                                                             @RequestParam(value = "size", defaultValue = "3") int size) {
+    public ResponseEntity<ResponseBodyDto<PageableUserRateProductResponseDto>> getProductRatings(@RequestParam(value = "productId") Long productId,
+                                                                                                 @RequestParam(value = "page", defaultValue = "0") int page,
+                                                                                                 @RequestParam(value = "size", defaultValue = "3") int size) {
         PageableUserRateProductResponseDto result = productService.getLatestCommentUserProduct(productId, page, size);
         ResponseBodyDto<PageableUserRateProductResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(result, "200");
 
@@ -110,7 +110,7 @@ public class ProductUserController {
     }
 
     @GetMapping(path = "/user_review_on_product")
-    public ResponseEntity<ResponseBodyDto> getUserReviewOnProduct(@RequestParam(value = "productId") Long productId) {
+    public ResponseEntity<ResponseBodyDto<UserRateProductResponseDto>> getUserReviewOnProduct(@RequestParam(value = "productId") Long productId) {
         UserEntity userEntity = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
         UserRateProductResponseDto result = productService.findReviewOfUserOnProduct(userEntity, productId);
         ResponseBodyDto<UserRateProductResponseDto> responseBody = responseBodyDtoFactory.buildResponseBody(result, "200");

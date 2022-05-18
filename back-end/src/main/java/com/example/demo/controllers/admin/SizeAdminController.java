@@ -23,7 +23,7 @@ public class SizeAdminController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<ResponseBodyDto> createSize(@Valid @RequestBody SizeRequestDto requestDto) {
+    public ResponseEntity<ResponseBodyDto<SizeResponseDto>> createSize(@Valid @RequestBody SizeRequestDto requestDto) {
         SizeResponseDto responseDto = sizeCrudService.createSize(requestDto);
         ResponseBodyDto<SizeResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(responseDto, "200");
 
@@ -32,8 +32,8 @@ public class SizeAdminController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping
-    public ResponseEntity<ResponseBodyDto> updateSize(@RequestParam(name = "id") Long sizeId,
-                                                      @Valid @RequestBody SizeRequestDto requestDto) {
+    public ResponseEntity<ResponseBodyDto<SizeResponseDto>> updateSize(@RequestParam(name = "id") Long sizeId,
+                                                                       @Valid @RequestBody SizeRequestDto requestDto) {
         SizeResponseDto responseDto = sizeCrudService.updateSize(sizeId, requestDto);
         ResponseBodyDto<SizeResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(responseDto, "200");
 

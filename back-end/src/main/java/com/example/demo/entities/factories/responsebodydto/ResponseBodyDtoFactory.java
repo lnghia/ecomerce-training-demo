@@ -7,15 +7,15 @@ import java.util.HashMap;
 
 @Component
 public class ResponseBodyDtoFactory {
-    public <T> ResponseBodyDto buildResponseBody(T source) {
-        return ResponseBodyDto.builder().data(source).build();
+    public <T> ResponseBodyDto<T> buildResponseBody(T source) {
+        return new ResponseBodyDto<>("200", source);
     }
 
-    public <T> ResponseBodyDto buildResponseBody(T source, String status) {
-        return ResponseBodyDto.builder().status(status).data(source).build();
+    public <T> ResponseBodyDto<T> buildResponseBody(T source, String status) {
+        return new ResponseBodyDto<>(status, source);
     }
 
-    public <T> ResponseBodyDto buildResponseBody(T source, String status, HashMap<String, String> errors) {
-        return ResponseBodyDto.builder().status(status).data(source).errors(errors).build();
+    public <T> ResponseBodyDto<T> buildResponseBody(T source, String status, HashMap<String, String> errors) {
+        return new ResponseBodyDto<>(status, source, errors);
     }
 }

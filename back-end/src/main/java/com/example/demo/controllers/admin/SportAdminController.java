@@ -24,8 +24,8 @@ public class SportAdminController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping
-    public ResponseEntity<ResponseBodyDto> updateSport(@RequestParam(name = "id") Long sportId,
-                                                       @Valid @RequestBody UpdateSportRequestDto requestDto) {
+    public ResponseEntity<ResponseBodyDto<SportResponseDto>> updateSport(@RequestParam(name = "id") Long sportId,
+                                                                         @Valid @RequestBody UpdateSportRequestDto requestDto) {
         SportResponseDto updatedSport = sportCrudService.updateSport(sportId, requestDto);
         ResponseBodyDto<SportResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(updatedSport, "200");
 
@@ -34,7 +34,7 @@ public class SportAdminController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<ResponseBodyDto> createSport(@Valid @RequestBody CreateSportRequestDto requestDto) {
+    public ResponseEntity<ResponseBodyDto<SportResponseDto>> createSport(@Valid @RequestBody CreateSportRequestDto requestDto) {
         SportResponseDto createdSport = sportCrudService.createSport(requestDto);
         ResponseBodyDto<SportResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(createdSport, "200");
 
