@@ -11,7 +11,6 @@ import com.example.demo.repositories.ProductSizeRepository;
 import com.example.demo.services.interfaces.productsize.ProductSizeService;
 import com.example.demo.services.interfaces.size.SizeDatabaseService;
 import lombok.NoArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,19 +22,15 @@ import java.util.stream.Collectors;
 public class ProductSizeServiceImpl implements ProductSizeService {
     private SizeDatabaseService sizeDatabaseService;
 
-    private ModelMapper modelMapper;
-
     private ProductSizeRepository productSizeRepository;
 
     private ProductRepository productRepository;
 
     @Autowired
     public ProductSizeServiceImpl(SizeDatabaseService sizeDatabaseService,
-                                  ModelMapper modelMapper,
                                   ProductSizeRepository productSizeRepository,
                                   ProductRepository productRepository) {
         this.sizeDatabaseService = sizeDatabaseService;
-        this.modelMapper = modelMapper;
         this.productSizeRepository = productSizeRepository;
         this.productRepository = productRepository;
     }
@@ -57,7 +52,7 @@ public class ProductSizeServiceImpl implements ProductSizeService {
         Long productId = addSizeToProductRequestDto.getProductId();
         Optional<ProductEntity> productEntity = productRepository.findById(productId);
 
-        if (!productEntity.isPresent()) {
+        if (productEntity.isEmpty()) {
             throw new ProductNotFoundException();
         }
 
@@ -82,13 +77,12 @@ public class ProductSizeServiceImpl implements ProductSizeService {
         for (var item : productSizeDtoList) {
             sizeNumber.put(item.getSizeId(), item.getNumber());
         }
-        Set<ProductSizeEntity> productSizeEntities = productEntity.getSizes().stream().map(productSizeEntity -> {
+        Set<ProductSizeEntity> productSizeEntities = productEntity.getSizes().stream().peek(productSizeEntity -> {
             Long id = productSizeEntity.getSize().getId();
             if (sizeNumber.containsKey(id)) {
                 productSizeEntity.setInStock(sizeNumber.get(id));
             }
 
-            return productSizeEntity;
         }).collect(Collectors.toSet());
 
         productEntity.setSizes(productSizeEntities);

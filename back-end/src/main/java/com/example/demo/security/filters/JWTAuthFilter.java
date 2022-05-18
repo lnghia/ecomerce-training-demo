@@ -37,17 +37,17 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        Long userId = null;
-        CustomUserDetails customUserDetails = null;
+        Long userId;
+        CustomUserDetails customUserDetails;
         String jwt = extractJWTFromHeader(httpServletRequest);
 
         if (!permittedUrlsUtil.isPermitted(httpServletRequest.getRequestURI())) {
             try {
                 if (jwtProvider.validateToken(jwt)) {
 
-                    userId = Long.valueOf(jwtProvider.getUserIdFromJWT(jwt));
+                    userId = (long) jwtProvider.getUserIdFromJWT(jwt);
 
-                    if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    if (SecurityContextHolder.getContext().getAuthentication() == null) {
                         UserEntity user = userService.getUserById(userId);
 
                         if (user != null) {

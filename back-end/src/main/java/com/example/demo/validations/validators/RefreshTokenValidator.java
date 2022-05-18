@@ -15,10 +15,6 @@ public class RefreshTokenValidator implements ConstraintValidator<ValidRefreshTo
 
     @Override
     public boolean isValid(String refreshToken, ConstraintValidatorContext constraintValidatorContext) {
-        if(refreshToken != null && !refreshToken.isEmpty() && jwtProvider.validateToken(refreshToken)){
-            return true;
-        }
-
-        return false;
+        return refreshToken != null && !refreshToken.isEmpty() && jwtProvider.validateToken(refreshToken);
     }
 }

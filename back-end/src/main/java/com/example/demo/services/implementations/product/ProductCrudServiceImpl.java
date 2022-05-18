@@ -83,9 +83,8 @@ public class ProductCrudServiceImpl implements ProductCrudService {
 
         AddSizeToProductRequestDto requestDto = addSizeToProductRequestDtoFactory.createAddSizeToRequestDto(productId, productSizeDtoList);
         productEntity = productSizeService.addSizeToProduct(requestDto);
-        ProductResponseDto responseDto = modelMapper.convertToResponse(productEntity, ProductResponseDto.class);
 
-        return responseDto;
+        return modelMapper.convertToResponse(productEntity, ProductResponseDto.class);
     }
 
 

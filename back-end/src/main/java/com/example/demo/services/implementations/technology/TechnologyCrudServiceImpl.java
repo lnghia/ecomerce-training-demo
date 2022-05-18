@@ -37,7 +37,7 @@ public class TechnologyCrudServiceImpl implements TechnologyCrudService {
 
     @Override
     public TechnologyResponseDto updateTechnology(Long technologyId, TechnologyCreateRequestDto requestDto) {
-        TechnologyEntity technologyEntity = technologyRepository.findById(technologyId).orElseThrow(() -> new TechnologyNotFoundException());
+        TechnologyEntity technologyEntity = technologyRepository.findById(technologyId).orElseThrow(TechnologyNotFoundException::new);
 
         modelMapper.map(requestDto, technologyEntity);
         technologyEntity = technologyRepository.save(technologyEntity);

@@ -33,7 +33,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Override
     public UserResponseDto assignRoleToUser(long userId, long roleId) {
         Optional<UserEntity> userEntity = userRepository.findById(userId);
-        UserEntity user = userEntity.orElseThrow(() -> new UserNotFoundException());
+        UserEntity user = userEntity.orElseThrow(UserNotFoundException::new);
         RoleEntity roleEntity = roleRepository.getById(roleId);
 
         user.getRoles().clear();

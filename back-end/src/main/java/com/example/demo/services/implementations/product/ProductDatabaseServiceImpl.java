@@ -24,7 +24,7 @@ public class ProductDatabaseServiceImpl implements ProductDatabaseService {
     public ProductEntity findById(Long id) {
         Optional<ProductEntity> productEntity = productRepository.findById(id);
 
-        if (!productEntity.isPresent()) {
+        if (productEntity.isEmpty()) {
             throw new ProductNotFoundException();
         }
 
@@ -38,13 +38,11 @@ public class ProductDatabaseServiceImpl implements ProductDatabaseService {
 
     @Override
     public boolean deleteProduct(Long id) {
-        Optional<ProductEntity> productEntity = productRepository.findById(id);
-
-        if (!productEntity.isPresent()) {
+        ProductEntity productEntity = productRepository.findById(id).orElseThrow(() -> {
             throw new ProductNotFoundException();
-        }
+        });
 
-        productRepository.delete(productEntity.get());
+        productRepository.delete(productEntity);
 
         return true;
     }

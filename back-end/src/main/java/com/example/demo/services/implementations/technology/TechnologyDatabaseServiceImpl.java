@@ -40,11 +40,9 @@ public class TechnologyDatabaseServiceImpl implements TechnologyDatabaseService 
     @Override
     public List<TechnologyResponseDto> findAll() {
         List<TechnologyEntity> technologyEntityList = technologyRepository.findAll();
-        List<TechnologyResponseDto> result = null;
+        List<TechnologyResponseDto> result;
 
-        result = technologyEntityList.stream().map(technologyEntity -> {
-            return converter.convertToResponse(technologyEntity, TechnologyResponseDto.class);
-        }).collect(Collectors.toList());
+        result = technologyEntityList.stream().map(technologyEntity -> converter.convertToResponse(technologyEntity, TechnologyResponseDto.class)).collect(Collectors.toList());
 
         return result;
     }

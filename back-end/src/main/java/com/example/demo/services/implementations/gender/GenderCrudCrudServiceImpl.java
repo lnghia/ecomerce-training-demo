@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GenderCrudCrudServiceImpl implements GenderCrudService {
-    private CommonConverter converter;
+    private final CommonConverter converter;
 
-    private GenderDatabaseService genderDatabaseService;
+    private final GenderDatabaseService genderDatabaseService;
 
-    private GenderRepository genderRepository;
+    private final GenderRepository genderRepository;
 
     @Autowired
     public GenderCrudCrudServiceImpl(CommonConverter converter,

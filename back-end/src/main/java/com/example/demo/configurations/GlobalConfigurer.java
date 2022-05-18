@@ -15,7 +15,7 @@ import java.util.Optional;
 public class GlobalConfigurer {
     @Bean
     AuditorAware<String> auditorProvider() {
-        return new AuditorAware<String>() {
+        return new AuditorAware<>() {
             @Override
             public Optional<String> getCurrentAuditor() {
                 Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

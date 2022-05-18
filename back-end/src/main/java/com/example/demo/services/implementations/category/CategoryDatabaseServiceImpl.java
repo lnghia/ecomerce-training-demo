@@ -25,7 +25,7 @@ public class CategoryDatabaseServiceImpl implements CategoryDatabaseService {
     public CategoryEntity findById(Long id) {
         Optional<CategoryEntity> categoryEntity = categoryRepository.findById(id);
 
-        if (!categoryEntity.isPresent()) {
+        if (categoryEntity.isEmpty()) {
             throw new CategoryNotFoundException();
         }
 

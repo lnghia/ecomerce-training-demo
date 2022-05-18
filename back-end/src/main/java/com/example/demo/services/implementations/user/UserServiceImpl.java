@@ -173,7 +173,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponseDto changeStatusActive(Long userId, boolean status) {
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException());
+        UserEntity user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         user.setIsActive(status);
         user = userRepository.save(user);
         return modelMapper.map(user, UserResponseDto.class);
@@ -188,21 +188,15 @@ public class UserServiceImpl implements UserService {
     public List<UserListResponseDto> getListNormalUser() {
         List<UserEntity> userEntities = userRepository.findAllWithStatus(true);
 
-        List<UserListResponseDto> result = userEntities.stream().map(userEntity -> {
-            return modelMapper.map(userEntity, UserListResponseDto.class);
-        }).collect(Collectors.toList());
-
-        return result;
+        return userEntities.stream().map(userEntity -> modelMapper.map(userEntity, UserListResponseDto.class)).collect(Collectors.toList());
     }
 
     @Override
     public List<UserListResponseDto> getListBlockedUser() {
         List<UserEntity> userEntities = userRepository.findAllWithStatus(false);
 
-        List<UserListResponseDto> result = userEntities.stream().map(userEntity -> {
+        return userEntities.stream().map(userEntity -> {
             return modelMapper.map(userEntity, UserListResponseDto.class);
         }).collect(Collectors.toList());
-
-        return result;
     }
 }

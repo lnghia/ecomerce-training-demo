@@ -37,7 +37,7 @@ public class JWTProvider {
 
     public String generateTokenValidWithin(UserEntity userEntity, int min) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + min * 60 * 1000);
+        Date expiryDate = new Date(now.getTime() + (long) min * 60 * 1000);
 
         return Jwts.builder()
                 .setSubject(Long.toString(userEntity.getId()))

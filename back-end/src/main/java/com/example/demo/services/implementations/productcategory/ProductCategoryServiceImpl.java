@@ -7,12 +7,12 @@ import com.example.demo.services.interfaces.productcategory.ProductCategoryServi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductCategoryServiceImpl implements ProductCategoryService {
-    private CategoryDatabaseService categoryDatabaseService;
+    private final CategoryDatabaseService categoryDatabaseService;
 
     @Autowired
     public ProductCategoryServiceImpl(CategoryDatabaseService categoryDatabaseService) {
@@ -24,6 +24,6 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         List<CategoryEntity> categoryEntities = categoryDatabaseService.findAllById(categoryIds);
 
         productEntity.getCategories().clear();
-        productEntity.setCategories(categoryEntities.stream().collect(Collectors.toSet()));
+        productEntity.setCategories(new HashSet<>(categoryEntities));
     }
 }

@@ -7,7 +7,6 @@ import com.example.demo.exceptions.GenderNotFoundException;
 import com.example.demo.repositories.GenderRepository;
 import com.example.demo.services.interfaces.gender.GenderDatabaseService;
 import lombok.NoArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +22,7 @@ public class GenderDatabaseServiceImpl implements GenderDatabaseService {
     private GenderRepository genderRepository;
 
     @Autowired
-    public GenderDatabaseServiceImpl(ModelMapper modelMapper, CommonConverter converter) {
+    public GenderDatabaseServiceImpl(GenderRepository genderRepository, CommonConverter converter) {
         this.converter = converter;
         this.genderRepository = genderRepository;
     }
@@ -39,21 +38,12 @@ public class GenderDatabaseServiceImpl implements GenderDatabaseService {
         throw new GenderNotFoundException();
     }
 
-//    @Override
-//    public GenderResponseDto save(GenderEntity genderEntity) {
-//        genderEntity = genderRepository.save(genderEntity);
-//
-//        return converter.convertToResponse(genderEntity, GenderResponseDto.class);
-//    }
-
     @Override
     public List<GenderResponseDto> findAll() {
         List<GenderEntity> genders = genderRepository.findAll();
-        List<GenderResponseDto> result = null;
+        List<GenderResponseDto> result;
 
-        result = genders.stream().map(genderEntity -> {
-            return converter.convertToResponse(genderEntity, GenderResponseDto.class);
-        }).collect(Collectors.toList());
+        result = genders.stream().map(genderEntity -> converter.convertToResponse(genderEntity, GenderResponseDto.class)).collect(Collectors.toList());
 
         return result;
     }

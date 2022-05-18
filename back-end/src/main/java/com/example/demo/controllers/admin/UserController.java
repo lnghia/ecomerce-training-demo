@@ -4,6 +4,7 @@ import com.example.demo.dto.requests.product.AssignRoleToUserRequestDto;
 import com.example.demo.dto.responses.ResponseBodyDto;
 import com.example.demo.dto.responses.user.UserListResponseDto;
 import com.example.demo.dto.responses.user.UserResponseDto;
+import com.example.demo.entities.factories.responsebodydto.ResponseBodyDtoFactory;
 import com.example.demo.services.interfaces.user.UserRoleService;
 import com.example.demo.services.interfaces.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +23,14 @@ public class UserController {
 
     private final UserRoleService userRoleService;
 
+    private final ResponseBodyDtoFactory responseBodyDtoFactory;
+
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/active")
     public ResponseEntity<ResponseBodyDto> activeUser(@RequestParam(name = "id") Long userId) {
         UserResponseDto userResponseDto = userService.activeUser(userId);
-        ResponseBodyDto responseBody = ResponseBodyDto.builder().data(userResponseDto).build();
+        ResponseBodyDto<UserResponseDto> responseBody = responseBodyDtoFactory.buildResponseBody(userResponseDto, "200");
+
         return ResponseEntity.ok(responseBody);
     }
 
@@ -34,7 +38,8 @@ public class UserController {
     @PutMapping("/de_active")
     public ResponseEntity<ResponseBodyDto> deactiveUser(@RequestParam(name = "id") Long userId) {
         UserResponseDto userResponseDto = userService.deActiveUser(userId);
-        ResponseBodyDto responseBody = ResponseBodyDto.builder().data(userResponseDto).build();
+        ResponseBodyDto<UserResponseDto> responseBody = responseBodyDtoFactory.buildResponseBody(userResponseDto, "200");
+
         return ResponseEntity.ok(responseBody);
     }
 
@@ -42,7 +47,8 @@ public class UserController {
     @GetMapping("/active")
     public ResponseEntity<ResponseBodyDto> getListNormalUser() {
         List<UserListResponseDto> users = userService.getListNormalUser();
-        ResponseBodyDto responseBody = ResponseBodyDto.builder().data(users).build();
+        ResponseBodyDto<List<UserListResponseDto>> responseBody = responseBodyDtoFactory.buildResponseBody(users, "200");
+
         return ResponseEntity.ok(responseBody);
     }
 
@@ -50,7 +56,8 @@ public class UserController {
     @GetMapping("/de_active")
     public ResponseEntity<ResponseBodyDto> getListBlockedUser() {
         List<UserListResponseDto> users = userService.getListBlockedUser();
-        ResponseBodyDto responseBody = ResponseBodyDto.builder().data(users).build();
+        ResponseBodyDto<List<UserListResponseDto>> responseBody = responseBodyDtoFactory.buildResponseBody(users, "200");
+
         return ResponseEntity.ok(responseBody);
     }
 
@@ -58,7 +65,8 @@ public class UserController {
     @PostMapping("/assign_role")
     public ResponseEntity<ResponseBodyDto> assignRoleToUser(@Valid @RequestBody AssignRoleToUserRequestDto requestBody) {
         UserResponseDto userResponseDTO = userRoleService.assignRoleToUser(requestBody.getUserId(), requestBody.getRoleId());
+        ResponseBodyDto<UserResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(userResponseDTO, "200");
 
-        return ResponseEntity.ok(ResponseBodyDto.builder().data(userResponseDTO).build());
+        return ResponseEntity.ok(responseBodyDto);
     }
 }

@@ -18,14 +18,10 @@ public class ConverterUtil {
     }
 
     public <T, S> Set<S> convertListToSet(List<T> source, Class<S> destination) {
-        return source.stream().map(item -> {
-            return modelMapper.map(item, destination);
-        }).collect(Collectors.toSet());
+        return source.stream().map(item -> modelMapper.map(item, destination)).collect(Collectors.toSet());
     }
 
     public <T, S> List<S> buildListOfType(List<T> source, Class<S> destination) {
-        return source.stream().map(item -> {
-            return modelMapper.map(item, destination);
-        }).collect(Collectors.toList());
+        return source.stream().map(item -> modelMapper.map(item, destination)).collect(Collectors.toList());
     }
 }

@@ -37,7 +37,7 @@ public class SizeCrudServiceImpl implements SizeCrudService {
 
     @Override
     public SizeResponseDto updateSize(Long sizeId, SizeRequestDto requestDto) {
-        SizeEntity sizeEntity = sizeRepository.findById(sizeId).orElseThrow(() -> new SizeNotFoundException());
+        SizeEntity sizeEntity = sizeRepository.findById(sizeId).orElseThrow(SizeNotFoundException::new);
 
         modelMapper.map(requestDto, sizeEntity);
         sizeEntity = sizeRepository.save(sizeEntity);

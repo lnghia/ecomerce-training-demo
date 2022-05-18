@@ -7,12 +7,12 @@ import com.example.demo.services.interfaces.technology.TechnologyDatabaseService
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductTechnologyServiceImpl implements ProductTechnologyService {
-    private TechnologyDatabaseService technologyDatabaseService;
+    private final TechnologyDatabaseService technologyDatabaseService;
 
     @Autowired
     public ProductTechnologyServiceImpl(TechnologyDatabaseService technologyDatabaseService) {
@@ -24,6 +24,6 @@ public class ProductTechnologyServiceImpl implements ProductTechnologyService {
         List<TechnologyEntity> technologyEntities = technologyDatabaseService.findByIds(technologyIds);
 
         productEntity.getTechnologies().clear();
-        productEntity.setTechnologies(technologyEntities.stream().collect(Collectors.toSet()));
+        productEntity.setTechnologies(new HashSet<>(technologyEntities));
     }
 }

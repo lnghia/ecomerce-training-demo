@@ -52,10 +52,7 @@ public class SizeDatabaseServiceImpl implements SizeDatabaseService {
     @Override
     public List<SizeResponseDto> getAll() {
         List<SizeEntity> sizeEntities = sizeRepository.findAll();
-        List<SizeResponseDto> result = sizeEntities.stream().map(sizeEntity -> {
-            return converter.convertToResponse(sizeEntity, SizeResponseDto.class);
-        }).collect(Collectors.toList());
 
-        return result;
+        return sizeEntities.stream().map(sizeEntity -> converter.convertToResponse(sizeEntity, SizeResponseDto.class)).collect(Collectors.toList());
     }
 }

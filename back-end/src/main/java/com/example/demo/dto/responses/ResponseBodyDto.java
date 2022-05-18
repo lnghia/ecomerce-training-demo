@@ -17,9 +17,16 @@ public class ResponseBodyDto<T> {
     }
 
     public ResponseBodyDto(String status, T data, HashMap<String, String> errors) {
+        this.status = status;
         this.data = data;
         this.errors = errors;
     }
+
+    public ResponseBodyDto(String status, T data) {
+        this.status = status;
+        this.data = data;
+    }
+
 
     public Object getData() {
         return data;

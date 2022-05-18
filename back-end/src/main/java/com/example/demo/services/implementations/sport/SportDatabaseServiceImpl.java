@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class SportDatabaseServiceImpl implements SportDatabaseService {
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    private SportRepository sportRepository;
+    private final SportRepository sportRepository;
 
     @Autowired
     public SportDatabaseServiceImpl(ModelMapper modelMapper, SportRepository sportRepository) {
@@ -28,11 +28,9 @@ public class SportDatabaseServiceImpl implements SportDatabaseService {
     @Override
     public List<SportResponseDto> findAll() {
         List<SportEntity> sportEntities = sportRepository.findAll();
-        List<SportResponseDto> result = null;
+        List<SportResponseDto> result;
 
-        result = sportEntities.stream().map(sportEntity -> {
-            return modelMapper.map(sportEntity, SportResponseDto.class);
-        }).collect(Collectors.toList());
+        result = sportEntities.stream().map(sportEntity -> modelMapper.map(sportEntity, SportResponseDto.class)).collect(Collectors.toList());
 
         return result;
     }

@@ -17,6 +17,6 @@ public class UsernameValidator implements ConstraintValidator<ValidUsername, Str
     public boolean isValid(String username, ConstraintValidatorContext constraintValidatorContext) {
         Optional<UserEntity> user = userRepository.findByUsername(username);
 
-        return !user.isPresent();
+        return user.isEmpty();
     }
 }

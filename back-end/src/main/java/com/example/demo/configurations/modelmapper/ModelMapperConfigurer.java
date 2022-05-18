@@ -26,7 +26,7 @@ public class ModelMapperConfigurer {
         Converter<LocalDateTime, String> timeConverter = new AbstractConverter<>() {
             @Override
             protected String convert(LocalDateTime localDateTime) {
-                return null == localDateTime ? null : localDateTime.format(pattern).toString();
+                return null == localDateTime ? null : localDateTime.format(pattern);
             }
         };
         modelMapper.addConverter(timeConverter);

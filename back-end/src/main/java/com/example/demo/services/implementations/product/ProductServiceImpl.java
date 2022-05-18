@@ -8,9 +8,7 @@ import com.example.demo.entities.ProductEntity;
 import com.example.demo.entities.UserEntity;
 import com.example.demo.entities.UserRateProductEntity;
 import com.example.demo.exceptions.ProductNotFoundException;
-import com.example.demo.repositories.GenderRepository;
 import com.example.demo.repositories.ProductRepository;
-import com.example.demo.repositories.SportRepository;
 import com.example.demo.repositories.UserRateProductRepository;
 import com.example.demo.services.interfaces.product.ProductService;
 import lombok.NoArgsConstructor;
@@ -34,17 +32,12 @@ public class ProductServiceImpl implements ProductService {
 
     private ProductRepository productRepository;
 
-    private GenderRepository genderRepository;
-
-    private SportRepository sportRepository;
-
     private UserRateProductRepository userRateProductRepository;
 
     @Autowired
-    public ProductServiceImpl(ModelMapper modelMapper, SportRepository sportRepository, ProductRepository productRepository, UserRateProductRepository userRateProductRepository) {
+    public ProductServiceImpl(ModelMapper modelMapper, ProductRepository productRepository, UserRateProductRepository userRateProductRepository) {
         this.modelMapper = modelMapper;
         this.productRepository = productRepository;
-        this.sportRepository = sportRepository;
         this.userRateProductRepository = userRateProductRepository;
     }
 
@@ -52,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponseDto findById(long id) {
         Optional<ProductEntity> productEntity = productRepository.findById(id);
 
-        if (!productEntity.isPresent()) {
+        if (productEntity.isEmpty()) {
             throw new ProductNotFoundException();
         }
 
@@ -61,18 +54,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public PageableProductListResponseDto findAllWithFilterAndSort(List<Long> categoryIds, List<Long> genderIds, List<Long> sportIds, List<Long> technologyIds, String name, int page, int size, String sortType, String sortBy) {
-        Pageable pageable = null;
+        Pageable pageable;
         if (sortType != null && sortBy != null && !sortType.isEmpty() && !sortBy.isEmpty()) {
             pageable = PageRequest.of(page, size, Sort.by(sortType.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy));
         } else {
             pageable = PageRequest.of(page, size);
         }
 
-        List<ProductResponseDto> result = null;
-        List<String> categoryIdsInString = categoryIds != null ? categoryIds.stream().map(id -> id.toString()).collect(Collectors.toList()) : new ArrayList<>();
-        List<String> technologyIdsInString = technologyIds != null ? technologyIds.stream().map(id -> id.toString()).collect(Collectors.toList()) : new ArrayList<>();
-        List<String> genderIdsInString = genderIds != null ? genderIds.stream().map(id -> id.toString()).collect(Collectors.toList()) : new ArrayList<>();
-        List<String> sportIdsInString = sportIds != null ? sportIds.stream().map(id -> id.toString()).collect(Collectors.toList()) : new ArrayList<>();
+        List<String> categoryIdsInString = categoryIds != null ? categoryIds.stream().map(Object::toString).collect(Collectors.toList()) : new ArrayList<>();
+        List<String> technologyIdsInString = technologyIds != null ? technologyIds.stream().map(Object::toString).collect(Collectors.toList()) : new ArrayList<>();
+        List<String> genderIdsInString = genderIds != null ? genderIds.stream().map(Object::toString).collect(Collectors.toList()) : new ArrayList<>();
+        List<String> sportIdsInString = sportIds != null ? sportIds.stream().map(Object::toString).collect(Collectors.toList()) : new ArrayList<>();
 
         Page<ProductEntity> productEntities = productRepository.findAllFilter(
                 categoryIdsInString,
@@ -90,11 +82,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductResponseDto> getAll() {
         List<ProductEntity> productEntities = productRepository.findAll();
 
-        List<ProductResponseDto> result = productEntities.stream().map(product -> {
-            return modelMapper.map(product, ProductResponseDto.class);
-        }).collect(Collectors.toList());
-
-        return result;
+        return productEntities.stream().map(product -> modelMapper.map(product, ProductResponseDto.class)).collect(Collectors.toList());
     }
 
     @Override

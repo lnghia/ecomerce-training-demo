@@ -64,9 +64,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
             String accessToken = jwtProvider.generateAccessToken(userEntity);
             String refreshToken = jwtProvider.generateRefreshToken(userEntity);
-            LoginResponseDto loginResponseDTO = new LoginResponseDto(accessToken, refreshToken);
 
-            return loginResponseDTO;
+            return new LoginResponseDto(accessToken, refreshToken);
         }
 
         throw new UsernamePasswordInvalidException();
@@ -103,9 +102,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
             String accessToken = jwtProvider.generateAccessToken(userEntity);
             String refreshToken = jwtProvider.generateRefreshToken(userEntity);
-            LoginResponseDto loginResponseDTO = new LoginResponseDto(accessToken, refreshToken);
 
-            return loginResponseDTO;
+            return new LoginResponseDto(accessToken, refreshToken);
         }
 
         throw new UsernamePasswordInvalidException();

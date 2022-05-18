@@ -3,20 +3,16 @@ package com.example.demo.services.implementations.permission;
 import com.example.demo.entities.PermissionEntity;
 import com.example.demo.repositories.PermissionRepository;
 import com.example.demo.services.interfaces.permission.PermissionService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PermissionServiceImpl implements PermissionService {
-    private PermissionRepository permissionRepository;
-
-    private ModelMapper modelMapper;
+    private final PermissionRepository permissionRepository;
 
     @Autowired
-    public PermissionServiceImpl(PermissionRepository permissionRepository, ModelMapper modelMapper) {
+    public PermissionServiceImpl(PermissionRepository permissionRepository) {
         this.permissionRepository = permissionRepository;
-        this.modelMapper = modelMapper;
     }
 
     @Override

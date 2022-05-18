@@ -27,7 +27,7 @@ public class SportCrudServiceImpl implements SportCrudService {
 
     @Override
     public SportResponseDto updateSport(Long sportId, UpdateSportRequestDto requestDto) {
-        SportEntity sportEntity = sportRepository.findById(sportId).orElseThrow(() -> new SportNotFoundException());
+        SportEntity sportEntity = sportRepository.findById(sportId).orElseThrow(SportNotFoundException::new);
 
         modelMapper.map(requestDto, sportEntity);
         sportEntity = sportRepository.save(sportEntity);
