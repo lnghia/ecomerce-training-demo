@@ -8,7 +8,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
@@ -20,16 +19,11 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<RoleEntity> roles = user.getRoles();
-        List<SimpleGrantedAuthority> authorities = roles.stream().filter(
-                roleEntity -> {
-                    return !roleEntity.isDeleted();
-                }).map(
-                roleEntity -> {
-                    return new SimpleGrantedAuthority(roleEntity.getName());
-                }
-        ).collect(Collectors.toList());
 
-        return authorities;
+        return roles.stream().filter(
+                roleEntity -> !roleEntity.isDeleted()).map(
+                roleEntity -> new SimpleGrantedAuthority(roleEntity.getName())
+        ).collect(Collectors.toList());
     }
 
     @Override

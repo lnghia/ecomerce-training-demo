@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -74,9 +75,13 @@ public class ProductEntity extends Auditable {
 
     @Override
     public boolean equals(Object object) {
+        if (!(object instanceof ProductEntity)) {
+            return false;
+        }
+
         ProductEntity product = (ProductEntity) object;
 
-        return this.id == product.getId() &&
+        return Objects.equals(this.id, product.getId()) &&
                 this.name.equals(product.getName()) &&
                 this.description.equals(product.getDescription()) &&
                 this.price == product.getPrice() &&
