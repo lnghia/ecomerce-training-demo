@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,12 +42,6 @@ public class TechnologyDatabaseServiceImpl implements TechnologyDatabaseService 
 
     @Override
     public TechnologyEntity findById(Long id) {
-        Optional<TechnologyEntity> technologyEntity = technologyRepository.findById(id);
-
-        if (technologyEntity.isPresent()) {
-            return technologyEntity.get();
-        }
-
-        throw new TechnologyNotFoundException();
+        return technologyRepository.findById(id).orElseThrow(TechnologyNotFoundException::new);
     }
 }
