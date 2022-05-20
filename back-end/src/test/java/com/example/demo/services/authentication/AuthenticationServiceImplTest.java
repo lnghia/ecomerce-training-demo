@@ -25,7 +25,6 @@ import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -202,17 +201,5 @@ public class AuthenticationServiceImplTest {
         assertThrows(UsernamePasswordInvalidException.class, () -> {
             authService.authenticateAdmin("user", "user_password");
         });
-    }
-
-    @Test
-    void shouldCreateAuthenticationServiceImpl() {
-        AuthenticationServiceImpl authenticationService = new AuthenticationServiceImpl();
-
-        assertNull(authenticationService.getJwtProvider());
-        assertNull(authenticationService.getModelMapper());
-        assertNull(authenticationService.getPasswordEncoder());
-        assertNull(authenticationService.getUserRepository());
-        assertNull(authenticationService.getRoleService());
-        assertNull(authenticationService.getRoleUtilityWrapper());
     }
 }

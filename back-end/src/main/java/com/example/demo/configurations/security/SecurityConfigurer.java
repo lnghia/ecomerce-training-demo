@@ -51,7 +51,14 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/product/search").permitAll()
                 .antMatchers("/api/category").permitAll()
                 .antMatchers("/api/size").permitAll()
-                .antMatchers("/v2/api-docs", "/swagger-resources/**", "/webjars/**", "/swagger-ui.html", "/swagger-ui/index.html", "/api-docs", "/swagger-ui/**").permitAll()
+                .antMatchers("/v2/api-docs",
+                        "/swagger-resources/**",
+                        "/webjars/**",
+                        "/swagger-ui.html",
+                        "/swagger-ui/index.html",
+                        "/api-docs",
+                        "/swagger-ui/**",
+                        "/v3/**").permitAll()
                 .anyRequest().authenticated()
                 .and().exceptionHandling().accessDeniedHandler(accessDeniedHandler).authenticationEntryPoint(authenticationEntryPoint);
 

@@ -16,7 +16,6 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -73,14 +72,5 @@ public class CategoryServiceImplTest {
         CategoryResponseDto result = categoryCrudService.updateCategory(1L, requestDto);
 
         assertThat(result, is(expectedResult));
-    }
-
-    @Test
-    void shouldCreateCategoryCrudServiceImpl() {
-        CategoryCrudServiceImpl categoryCrudService = new CategoryCrudServiceImpl();
-
-        assertNull(categoryCrudService.getCategoryDatabaseService());
-        assertNull(categoryCrudService.getModelMapper());
-        assertNull(categoryCrudService.getConverterUtil());
     }
 }

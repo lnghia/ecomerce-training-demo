@@ -23,12 +23,15 @@ public class CategoryAdminController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UpdateCategoryResponseDto.class)))
+//    })
     public ResponseEntity<ResponseBodyDto<CategoryResponseDto>> updateCategory(@RequestParam(name = "id") Long categoryId,
                                                                                @Valid @RequestBody UpdateCategoryRequestDto requestDto) {
         CategoryResponseDto updatedCategory = categoryCrudService.updateCategory(categoryId, requestDto);
-        ResponseBodyDto<CategoryResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(updatedCategory, "200");
+        ResponseBodyDto<CategoryResponseDto> responseDto = responseBodyDtoFactory.buildResponseBody(updatedCategory, "200");
 
-        return ResponseEntity.ok(responseBodyDto);
+        return ResponseEntity.ok(responseDto);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
