@@ -7,6 +7,7 @@ jobs:
   postgres-job:
     runs-on: ubuntu-latest
 
+    #Test if postgres service is initiated successfully
     services:
       postgres:
         image: postgres:latest
