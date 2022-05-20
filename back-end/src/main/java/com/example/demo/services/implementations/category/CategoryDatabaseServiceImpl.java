@@ -4,22 +4,16 @@ import com.example.demo.entities.CategoryEntity;
 import com.example.demo.exceptions.CategoryNotFoundException;
 import com.example.demo.repositories.CategoryRepository;
 import com.example.demo.services.interfaces.category.CategoryDatabaseService;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class CategoryDatabaseServiceImpl implements CategoryDatabaseService {
-    private CategoryRepository categoryRepository;
-
-    @Autowired
-    public CategoryDatabaseServiceImpl(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
+    private final CategoryRepository categoryRepository;
 
     @Override
     public CategoryEntity findById(Long id) {

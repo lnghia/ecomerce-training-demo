@@ -6,8 +6,7 @@ import com.example.demo.entities.GenderEntity;
 import com.example.demo.exceptions.GenderNotFoundException;
 import com.example.demo.repositories.GenderRepository;
 import com.example.demo.services.interfaces.gender.GenderDatabaseService;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,17 +14,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class GenderDatabaseServiceImpl implements GenderDatabaseService {
-    private CommonConverter converter;
+    private final CommonConverter converter;
 
-    private GenderRepository genderRepository;
-
-    @Autowired
-    public GenderDatabaseServiceImpl(GenderRepository genderRepository, CommonConverter converter) {
-        this.converter = converter;
-        this.genderRepository = genderRepository;
-    }
+    private final GenderRepository genderRepository;
 
     @Override
     public GenderEntity findById(Long id) {

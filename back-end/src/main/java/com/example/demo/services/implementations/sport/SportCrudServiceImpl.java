@@ -7,23 +7,16 @@ import com.example.demo.entities.SportEntity;
 import com.example.demo.exceptions.SportNotFoundException;
 import com.example.demo.repositories.SportRepository;
 import com.example.demo.services.interfaces.sport.SportCrudService;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class SportCrudServiceImpl implements SportCrudService {
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    private SportRepository sportRepository;
-
-    @Autowired
-    public SportCrudServiceImpl(ModelMapper modelMapper, SportRepository sportRepository) {
-        this.modelMapper = modelMapper;
-        this.sportRepository = sportRepository;
-    }
+    private final SportRepository sportRepository;
 
     @Override
     public SportResponseDto updateSport(Long sportId, UpdateSportRequestDto requestDto) {

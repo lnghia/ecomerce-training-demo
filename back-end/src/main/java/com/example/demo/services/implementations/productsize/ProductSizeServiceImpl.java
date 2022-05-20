@@ -10,30 +10,20 @@ import com.example.demo.repositories.ProductRepository;
 import com.example.demo.repositories.ProductSizeRepository;
 import com.example.demo.services.interfaces.productsize.ProductSizeService;
 import com.example.demo.services.interfaces.size.SizeDatabaseService;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class ProductSizeServiceImpl implements ProductSizeService {
-    private SizeDatabaseService sizeDatabaseService;
+    private final SizeDatabaseService sizeDatabaseService;
 
-    private ProductSizeRepository productSizeRepository;
+    private final ProductSizeRepository productSizeRepository;
 
-    private ProductRepository productRepository;
-
-    @Autowired
-    public ProductSizeServiceImpl(SizeDatabaseService sizeDatabaseService,
-                                  ProductSizeRepository productSizeRepository,
-                                  ProductRepository productRepository) {
-        this.sizeDatabaseService = sizeDatabaseService;
-        this.productSizeRepository = productSizeRepository;
-        this.productRepository = productRepository;
-    }
+    private final ProductRepository productRepository;
 
     @Override
     public void createProductSize(ProductEntity productEntity, Long sizeId, int inStock) {

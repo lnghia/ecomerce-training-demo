@@ -4,9 +4,8 @@ import com.example.demo.dto.responses.role.RoleResponseDto;
 import com.example.demo.entities.RoleEntity;
 import com.example.demo.repositories.RoleRepository;
 import com.example.demo.services.interfaces.role.RoleService;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,17 +13,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class RoleServiceImpl implements RoleService {
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-    private ModelMapper modelMapper;
-
-    @Autowired
-    public RoleServiceImpl(RoleRepository roleRepository, ModelMapper modelMapper) {
-        this.roleRepository = roleRepository;
-        this.modelMapper = modelMapper;
-    }
+    private final ModelMapper modelMapper;
 
     @Override
     public RoleEntity save(RoleEntity roleEntity) {

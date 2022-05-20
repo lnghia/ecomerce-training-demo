@@ -12,44 +12,28 @@ import com.example.demo.services.interfaces.authentication.AuthenticationService
 import com.example.demo.services.interfaces.role.RoleService;
 import com.example.demo.utilities.wrapper.RoleUtilityWrapper;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Getter
 public class AuthenticationServiceImpl implements AuthenticationService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    private JWTProvider jwtProvider;
+    private final JWTProvider jwtProvider;
 
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    private RoleService roleService;
+    private final RoleService roleService;
 
-    private RoleUtilityWrapper roleUtilityWrapper;
-
-    @Autowired
-    public AuthenticationServiceImpl(UserRepository userRepository,
-                                     PasswordEncoder passwordEncoder,
-                                     JWTProvider jwtProvider,
-                                     ModelMapper modelMapper,
-                                     RoleService roleService,
-                                     RoleUtilityWrapper roleUtilityWrapper) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtProvider = jwtProvider;
-        this.modelMapper = modelMapper;
-        this.roleService = roleService;
-        this.roleUtilityWrapper = roleUtilityWrapper;
-    }
+    private final RoleUtilityWrapper roleUtilityWrapper;
 
     @Override
     public LoginResponseDto authenticateUser(String username, String password) {

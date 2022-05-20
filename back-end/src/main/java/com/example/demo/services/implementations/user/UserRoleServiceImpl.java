@@ -7,28 +7,20 @@ import com.example.demo.exceptions.UserNotFoundException;
 import com.example.demo.repositories.RoleRepository;
 import com.example.demo.repositories.UserRepository;
 import com.example.demo.services.interfaces.user.UserRoleService;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class UserRoleServiceImpl implements UserRoleService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-    private ModelMapper modelMapper;
-
-    @Autowired
-    public UserRoleServiceImpl(UserRepository userRepository, RoleRepository roleRepository, ModelMapper modelMapper) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.modelMapper = modelMapper;
-    }
+    private final ModelMapper modelMapper;
 
     @Override
     public UserResponseDto assignRoleToUser(long userId, long roleId) {

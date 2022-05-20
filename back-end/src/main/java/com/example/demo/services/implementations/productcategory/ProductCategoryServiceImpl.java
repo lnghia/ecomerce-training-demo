@@ -4,20 +4,16 @@ import com.example.demo.entities.CategoryEntity;
 import com.example.demo.entities.ProductEntity;
 import com.example.demo.services.interfaces.category.CategoryDatabaseService;
 import com.example.demo.services.interfaces.productcategory.ProductCategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ProductCategoryServiceImpl implements ProductCategoryService {
     private final CategoryDatabaseService categoryDatabaseService;
-
-    @Autowired
-    public ProductCategoryServiceImpl(CategoryDatabaseService categoryDatabaseService) {
-        this.categoryDatabaseService = categoryDatabaseService;
-    }
 
     @Override
     public void updateProductCategories(ProductEntity productEntity, List<Long> categoryIds) {

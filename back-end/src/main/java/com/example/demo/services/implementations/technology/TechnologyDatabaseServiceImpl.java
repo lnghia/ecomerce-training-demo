@@ -6,7 +6,7 @@ import com.example.demo.entities.TechnologyEntity;
 import com.example.demo.exceptions.TechnologyNotFoundException;
 import com.example.demo.repositories.TechnologyRepository;
 import com.example.demo.services.interfaces.technology.TechnologyDatabaseService;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,17 +14,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class TechnologyDatabaseServiceImpl implements TechnologyDatabaseService {
-    private TechnologyRepository technologyRepository;
+    private final TechnologyRepository technologyRepository;
 
-    private CommonConverter converter;
-
-    public TechnologyDatabaseServiceImpl(TechnologyRepository technologyRepository,
-                                         CommonConverter converter) {
-        this.technologyRepository = technologyRepository;
-        this.converter = converter;
-    }
+    private final CommonConverter converter;
 
     @Override
     public List<TechnologyEntity> findByIds(List<Long> ids) {

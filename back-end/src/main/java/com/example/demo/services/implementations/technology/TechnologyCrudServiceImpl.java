@@ -6,23 +6,16 @@ import com.example.demo.entities.TechnologyEntity;
 import com.example.demo.exceptions.TechnologyNotFoundException;
 import com.example.demo.repositories.TechnologyRepository;
 import com.example.demo.services.interfaces.technology.TechnologyCrudService;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class TechnologyCrudServiceImpl implements TechnologyCrudService {
-    private TechnologyRepository technologyRepository;
+    private final TechnologyRepository technologyRepository;
 
-    private ModelMapper modelMapper;
-
-    @Autowired
-    public TechnologyCrudServiceImpl(TechnologyRepository technologyRepository, ModelMapper modelMapper) {
-        this.technologyRepository = technologyRepository;
-        this.modelMapper = modelMapper;
-    }
+    private final ModelMapper modelMapper;
 
     @Override
     public TechnologyResponseDto createTechnology(TechnologyCreateRequestDto requestDto) {

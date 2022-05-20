@@ -6,23 +6,16 @@ import com.example.demo.entities.SizeEntity;
 import com.example.demo.exceptions.SizeNotFoundException;
 import com.example.demo.repositories.SizeRepository;
 import com.example.demo.services.interfaces.size.SizeCrudService;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class SizeCrudServiceImpl implements SizeCrudService {
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    private SizeRepository sizeRepository;
-
-    @Autowired
-    public SizeCrudServiceImpl(ModelMapper modelMapper, SizeRepository sizeRepository) {
-        this.modelMapper = modelMapper;
-        this.sizeRepository = sizeRepository;
-    }
+    private final SizeRepository sizeRepository;
 
     @Override
     public SizeResponseDto createSize(SizeRequestDto requestDto) {

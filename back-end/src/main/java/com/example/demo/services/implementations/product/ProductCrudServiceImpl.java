@@ -15,49 +15,29 @@ import com.example.demo.services.interfaces.productgender.ProductGenderService;
 import com.example.demo.services.interfaces.productsize.ProductSizeService;
 import com.example.demo.services.interfaces.productsport.ProductSportService;
 import com.example.demo.services.interfaces.producttechnology.ProductTechnologyService;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class ProductCrudServiceImpl implements ProductCrudService {
-    private CommonConverter modelMapper;
+    private final CommonConverter modelMapper;
 
-    private ProductGenderService productGenderService;
+    private final ProductGenderService productGenderService;
 
-    private ProductSportService productSportService;
+    private final ProductSportService productSportService;
 
-    private ProductCategoryService productCategoryService;
+    private final ProductCategoryService productCategoryService;
 
-    private ProductDatabaseService productDatabaseService;
+    private final ProductDatabaseService productDatabaseService;
 
-    private ProductTechnologyService productTechnologyService;
+    private final ProductTechnologyService productTechnologyService;
 
-    private ProductSizeService productSizeService;
+    private final ProductSizeService productSizeService;
 
-    private AddSizeToProductRequestDtoFactory addSizeToProductRequestDtoFactory;
-
-    @Autowired
-    public ProductCrudServiceImpl(CommonConverter modelMapper,
-                                  ProductGenderService productGenderService,
-                                  ProductSportService productSportService,
-                                  ProductCategoryService productCategoryService,
-                                  ProductDatabaseService productDatabaseService,
-                                  ProductTechnologyService productTechnologyService,
-                                  ProductSizeService productSizeService,
-                                  AddSizeToProductRequestDtoFactory addSizeToProductRequestDtoFactory) {
-        this.modelMapper = modelMapper;
-        this.productGenderService = productGenderService;
-        this.productSportService = productSportService;
-        this.productCategoryService = productCategoryService;
-        this.productDatabaseService = productDatabaseService;
-        this.productTechnologyService = productTechnologyService;
-        this.productSizeService = productSizeService;
-        this.addSizeToProductRequestDtoFactory = addSizeToProductRequestDtoFactory;
-    }
+    private final AddSizeToProductRequestDtoFactory addSizeToProductRequestDtoFactory;
 
     @Override
     public ProductResponseDto createProduct(CreateProductRequestDto createProductRequestDTO) {

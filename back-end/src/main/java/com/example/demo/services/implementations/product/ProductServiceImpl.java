@@ -11,9 +11,8 @@ import com.example.demo.exceptions.ProductNotFoundException;
 import com.example.demo.repositories.ProductRepository;
 import com.example.demo.repositories.UserRateProductRepository;
 import com.example.demo.services.interfaces.product.ProductService;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,20 +25,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
-    private UserRateProductRepository userRateProductRepository;
-
-    @Autowired
-    public ProductServiceImpl(ModelMapper modelMapper, ProductRepository productRepository, UserRateProductRepository userRateProductRepository) {
-        this.modelMapper = modelMapper;
-        this.productRepository = productRepository;
-        this.userRateProductRepository = userRateProductRepository;
-    }
+    private final UserRateProductRepository userRateProductRepository;
 
     @Override
     public ProductResponseDto findById(long id) {

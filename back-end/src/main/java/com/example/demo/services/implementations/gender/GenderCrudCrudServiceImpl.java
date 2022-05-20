@@ -9,25 +9,17 @@ import com.example.demo.entities.GenderEntity;
 import com.example.demo.repositories.GenderRepository;
 import com.example.demo.services.interfaces.gender.GenderCrudService;
 import com.example.demo.services.interfaces.gender.GenderDatabaseService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GenderCrudCrudServiceImpl implements GenderCrudService {
     private final CommonConverter converter;
 
     private final GenderDatabaseService genderDatabaseService;
 
     private final GenderRepository genderRepository;
-
-    @Autowired
-    public GenderCrudCrudServiceImpl(CommonConverter converter,
-                                     GenderDatabaseService genderDatabaseService,
-                                     GenderRepository genderRepository) {
-        this.genderDatabaseService = genderDatabaseService;
-        this.converter = converter;
-        this.genderRepository = genderRepository;
-    }
 
     @Override
     public GenderResponseDto createGender(CreateGenderRequestDto requestDto) {

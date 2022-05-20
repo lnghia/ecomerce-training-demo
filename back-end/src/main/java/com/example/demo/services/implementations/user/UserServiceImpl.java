@@ -16,9 +16,8 @@ import com.example.demo.repositories.UserRepository;
 import com.example.demo.services.interfaces.product.ProductDatabaseService;
 import com.example.demo.services.interfaces.user.UserService;
 import com.example.demo.utilities.wrapper.RoleUtilityWrapper;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,38 +29,21 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-    private RoleUtilityWrapper roleUtilityWrapper;
+    private final RoleUtilityWrapper roleUtilityWrapper;
 
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    private ProductDatabaseService productDatabaseService;
+    private final ProductDatabaseService productDatabaseService;
 
-    private UserRateProductRepository userRateProductRepository;
+    private final UserRateProductRepository userRateProductRepository;
 
-    private ModelMapper modelMapper;
-
-    @Autowired
-    public UserServiceImpl(UserRateProductRepository userRateProductRepository,
-                           UserRepository userRepository,
-                           ProductDatabaseService productDatabaseService,
-                           RoleRepository roleRepository,
-                           RoleUtilityWrapper roleUtilityWrapper,
-                           PasswordEncoder passwordEncoder,
-                           ModelMapper modelMapper) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.roleUtilityWrapper = roleUtilityWrapper;
-        this.passwordEncoder = passwordEncoder;
-        this.modelMapper = modelMapper;
-        this.productDatabaseService = productDatabaseService;
-        this.userRateProductRepository = userRateProductRepository;
-    }
+    private final ModelMapper modelMapper;
 
     @Override
     public UserEntity getUserById(long id) {

@@ -6,7 +6,7 @@ import com.example.demo.dto.responses.ResponseBodyDto;
 import com.example.demo.dto.responses.sport.SportResponseDto;
 import com.example.demo.entities.factories.responsebodydto.ResponseBodyDtoFactory;
 import com.example.demo.services.interfaces.sport.SportCrudService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +15,11 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/api/admin/sport")
+@RequiredArgsConstructor
 public class SportAdminController {
-    @Autowired
-    private SportCrudService sportCrudService;
+    private final SportCrudService sportCrudService;
 
-    @Autowired
-    private ResponseBodyDtoFactory responseBodyDtoFactory;
+    private final ResponseBodyDtoFactory responseBodyDtoFactory;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping

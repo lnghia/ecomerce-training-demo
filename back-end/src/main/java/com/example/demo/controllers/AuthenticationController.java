@@ -13,8 +13,8 @@ import com.example.demo.services.interfaces.permission.PermissionService;
 import com.example.demo.services.interfaces.role.RoleService;
 import com.example.demo.services.interfaces.user.UserRoleService;
 import com.example.demo.services.interfaces.user.UserService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,30 +22,23 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/api/auth")
+@RequiredArgsConstructor
 public class AuthenticationController {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private AuthenticationService authService;
+    private final AuthenticationService authService;
 
-    @Autowired
-    private JWTProvider jwtProvider;
+    private final JWTProvider jwtProvider;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private PermissionService permissionService;
+    private final PermissionService permissionService;
 
-    @Autowired
-    private RoleService roleService;
+    private final RoleService roleService;
 
-    @Autowired
-    private UserRoleService userRoleService;
+    private final UserRoleService userRoleService;
 
-    @Autowired
-    private ResponseBodyDtoFactory responseBodyDtoFactory;
+    private final ResponseBodyDtoFactory responseBodyDtoFactory;
 
     @PostMapping("/login")
     public ResponseEntity<ResponseBodyDto<LoginResponseDto>> login(@Valid @RequestBody LoginRequestDto request) {

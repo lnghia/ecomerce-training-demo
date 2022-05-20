@@ -4,21 +4,15 @@ import com.example.demo.entities.ProductEntity;
 import com.example.demo.exceptions.ProductNotFoundException;
 import com.example.demo.repositories.ProductRepository;
 import com.example.demo.services.interfaces.product.ProductDatabaseService;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class ProductDatabaseServiceImpl implements ProductDatabaseService {
-    private ProductRepository productRepository;
-
-    @Autowired
-    public ProductDatabaseServiceImpl(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
+    private final ProductRepository productRepository;
 
     @Override
     public ProductEntity findById(Long id) {

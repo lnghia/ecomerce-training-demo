@@ -4,19 +4,13 @@ import com.example.demo.entities.GenderEntity;
 import com.example.demo.entities.ProductEntity;
 import com.example.demo.services.interfaces.gender.GenderDatabaseService;
 import com.example.demo.services.interfaces.productgender.ProductGenderService;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class ProductGenderServiceImpl implements ProductGenderService {
-    private GenderDatabaseService genderDatabaseService;
-
-    @Autowired
-    public ProductGenderServiceImpl(GenderDatabaseService genderDatabaseService) {
-        this.genderDatabaseService = genderDatabaseService;
-    }
+    private final GenderDatabaseService genderDatabaseService;
 
     @Override
     public void updateProductGender(ProductEntity productEntity, Long genderId) {

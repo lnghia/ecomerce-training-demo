@@ -6,7 +6,7 @@ import com.example.demo.entities.SizeEntity;
 import com.example.demo.exceptions.SizeNotFoundException;
 import com.example.demo.repositories.SizeRepository;
 import com.example.demo.services.interfaces.size.SizeDatabaseService;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,17 +15,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class SizeDatabaseServiceImpl implements SizeDatabaseService {
-    private SizeRepository sizeRepository;
+    private final SizeRepository sizeRepository;
 
-    private CommonConverter converter;
-
-    public SizeDatabaseServiceImpl(SizeRepository sizeRepository,
-                                   CommonConverter converter) {
-        this.sizeRepository = sizeRepository;
-        this.converter = converter;
-    }
+    private final CommonConverter converter;
 
     @Override
     public SizeEntity findById(Long id) {

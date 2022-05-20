@@ -10,34 +10,22 @@ import com.example.demo.services.interfaces.category.CategoryCrudService;
 import com.example.demo.services.interfaces.category.CategoryDatabaseService;
 import com.example.demo.utilities.converter.ConverterUtil;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Getter
 public class CategoryCrudServiceImpl implements CategoryCrudService {
-    private CategoryDatabaseService categoryDatabaseService;
+    private final CategoryDatabaseService categoryDatabaseService;
 
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
-    private CommonConverter modelMapper;
+    private final CommonConverter modelMapper;
 
-    private ConverterUtil converterUtil;
-
-    @Autowired
-    public CategoryCrudServiceImpl(CategoryDatabaseService categoryDatabaseService,
-                                   CategoryRepository categoryRepository,
-                                   CommonConverter modelMapper,
-                                   ConverterUtil converterUtil) {
-        this.categoryDatabaseService = categoryDatabaseService;
-        this.categoryRepository = categoryRepository;
-        this.modelMapper = modelMapper;
-        this.converterUtil = converterUtil;
-    }
+    private final ConverterUtil converterUtil;
 
     @Override
     public CategoryResponseDto createCategory(CreateCategoryRequestDto requestDto) {

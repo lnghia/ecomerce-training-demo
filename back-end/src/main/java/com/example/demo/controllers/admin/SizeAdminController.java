@@ -5,7 +5,7 @@ import com.example.demo.dto.responses.ResponseBodyDto;
 import com.example.demo.dto.responses.size.SizeResponseDto;
 import com.example.demo.entities.factories.responsebodydto.ResponseBodyDtoFactory;
 import com.example.demo.services.interfaces.size.SizeCrudService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +14,11 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/api/admin/size")
+@RequiredArgsConstructor
 public class SizeAdminController {
-    @Autowired
-    private SizeCrudService sizeCrudService;
+    private final SizeCrudService sizeCrudService;
 
-    @Autowired
-    private ResponseBodyDtoFactory responseBodyDtoFactory;
+    private final ResponseBodyDtoFactory responseBodyDtoFactory;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping

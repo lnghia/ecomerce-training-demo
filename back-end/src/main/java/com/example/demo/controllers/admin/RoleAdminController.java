@@ -4,7 +4,7 @@ import com.example.demo.dto.responses.ResponseBodyDto;
 import com.example.demo.dto.responses.role.RoleResponseDto;
 import com.example.demo.entities.factories.responsebodydto.ResponseBodyDtoFactory;
 import com.example.demo.services.interfaces.role.RoleService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,12 +15,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/admin/role")
+@RequiredArgsConstructor
 public class RoleAdminController {
-    @Autowired
-    private RoleService roleService;
+    private final RoleService roleService;
 
-    @Autowired
-    private ResponseBodyDtoFactory responseBodyDtoFactory;
+    private final ResponseBodyDtoFactory responseBodyDtoFactory;
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping

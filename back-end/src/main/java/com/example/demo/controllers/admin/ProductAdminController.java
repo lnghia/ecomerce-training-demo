@@ -8,11 +8,8 @@ import com.example.demo.dto.responses.ResponseBodyDto;
 import com.example.demo.dto.responses.product.ProductResponseDto;
 import com.example.demo.entities.factories.responsebodydto.ResponseBodyDtoFactory;
 import com.example.demo.services.interfaces.product.ProductCrudService;
-import com.example.demo.services.interfaces.product.ProductService;
 import com.example.demo.services.interfaces.productsize.ProductSizeService;
-import com.example.demo.services.interfaces.user.UserService;
-import com.example.demo.utilities.authentication.AuthenticationUtility;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -21,24 +18,13 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/api/admin/products")
+@RequiredArgsConstructor
 public class ProductAdminController {
-    @Autowired
-    private ResponseBodyDtoFactory responseBodyDtoFactory;
+    private final ResponseBodyDtoFactory responseBodyDtoFactory;
 
-    @Autowired
-    private ProductService productService;
+    private final ProductCrudService productCRUDService;
 
-    @Autowired
-    private ProductCrudService productCRUDService;
-
-    @Autowired
-    private ProductSizeService productSizeService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private AuthenticationUtility authenticationUtility;
+    private final ProductSizeService productSizeService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "/create")
