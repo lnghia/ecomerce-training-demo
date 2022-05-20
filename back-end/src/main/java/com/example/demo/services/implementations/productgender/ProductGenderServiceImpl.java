@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ProductGenderServiceImpl implements ProductGenderService {
-    private final GenderDatabaseService genderDatabaseService;
+  private final GenderDatabaseService genderDatabaseService;
 
-    @Override
-    public void updateProductGender(ProductEntity productEntity, Long genderId) {
-        GenderEntity genderEntity = genderDatabaseService.findById(genderId);
-        productEntity.setGender(genderEntity);
-    }
+  @Override
+  public void updateProductGender(ProductEntity productEntity, Long genderId) {
+    GenderEntity genderEntity = genderDatabaseService.findById(genderId);
+    productEntity.setGender(genderEntity);
+  }
 }

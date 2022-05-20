@@ -17,29 +17,31 @@ import javax.validation.Valid;
 @RequestMapping(path = "/api/admin/category")
 @RequiredArgsConstructor
 public class CategoryAdminController {
-    private final CategoryCrudService categoryCrudService;
+  private final CategoryCrudService categoryCrudService;
 
-    private final ResponseBodyDtoFactory responseBodyDtoFactory;
+  private final ResponseBodyDtoFactory responseBodyDtoFactory;
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UpdateCategoryResponseDto.class)))
-//    })
-    public ResponseEntity<ResponseBodyDto<CategoryResponseDto>> updateCategory(@RequestParam(name = "id") Long categoryId,
-                                                                               @Valid @RequestBody UpdateCategoryRequestDto requestDto) {
-        CategoryResponseDto updatedCategory = categoryCrudService.updateCategory(categoryId, requestDto);
-        ResponseBodyDto<CategoryResponseDto> responseDto = responseBodyDtoFactory.buildResponseBody(updatedCategory, "200");
+  @PreAuthorize("hasRole('ADMIN')")
+  @PutMapping
+  public ResponseEntity<ResponseBodyDto<CategoryResponseDto>> updateCategory(
+      @RequestParam(name = "id") Long categoryId,
+      @Valid @RequestBody UpdateCategoryRequestDto requestDto) {
+    CategoryResponseDto updatedCategory =
+        categoryCrudService.updateCategory(categoryId, requestDto);
+    ResponseBodyDto<CategoryResponseDto> responseDto =
+        responseBodyDtoFactory.buildResponseBody(updatedCategory, "200");
 
-        return ResponseEntity.ok(responseDto);
-    }
+    return ResponseEntity.ok(responseDto);
+  }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping
-    public ResponseEntity<ResponseBodyDto<CategoryResponseDto>> createCategory(@Valid @RequestBody CreateCategoryRequestDto requestDto) {
-        CategoryResponseDto createdCategory = categoryCrudService.createCategory(requestDto);
-        ResponseBodyDto<CategoryResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(createdCategory, "200");
+  @PreAuthorize("hasRole('ADMIN')")
+  @PostMapping
+  public ResponseEntity<ResponseBodyDto<CategoryResponseDto>> createCategory(
+      @Valid @RequestBody CreateCategoryRequestDto requestDto) {
+    CategoryResponseDto createdCategory = categoryCrudService.createCategory(requestDto);
+    ResponseBodyDto<CategoryResponseDto> responseBodyDto =
+        responseBodyDtoFactory.buildResponseBody(createdCategory, "200");
 
-        return ResponseEntity.ok(responseBodyDto);
-    }
+    return ResponseEntity.ok(responseBodyDto);
+  }
 }

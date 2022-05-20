@@ -8,9 +8,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class CreateCategoryRequestDto {
-    @NotNull
-    private String name;
+  @NotNull private String name;
 
-    @NotNull
-    private String description;
+  @NotNull private String description;
 }

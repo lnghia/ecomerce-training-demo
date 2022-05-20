@@ -14,45 +14,45 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class CustomUserDetails implements UserDetails {
-    private UserEntity user;
+  private UserEntity user;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<RoleEntity> roles = user.getRoles();
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    Collection<RoleEntity> roles = user.getRoles();
 
-        return roles.stream().filter(
-                roleEntity -> !roleEntity.isDeleted()).map(
-                roleEntity -> new SimpleGrantedAuthority(roleEntity.getName())
-        ).collect(Collectors.toList());
-    }
+    return roles.stream()
+        .filter(roleEntity -> !roleEntity.isDeleted())
+        .map(roleEntity -> new SimpleGrantedAuthority(roleEntity.getName()))
+        .collect(Collectors.toList());
+  }
 
-    @Override
-    public String getPassword() {
-        return user.getPassword();
-    }
+  @Override
+  public String getPassword() {
+    return user.getPassword();
+  }
 
-    @Override
-    public String getUsername() {
-        return user.getUsername();
-    }
+  @Override
+  public String getUsername() {
+    return user.getUsername();
+  }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+  @Override
+  public boolean isEnabled() {
+    return true;
+  }
 }

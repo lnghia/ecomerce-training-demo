@@ -9,12 +9,12 @@ import java.util.Optional;
 
 @Repository
 public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
-    @Query(value = "SELECT * FROM roles WHERE name=:name AND is_deleted=false", nativeQuery = true)
-    Optional<RoleEntity> findByName(String name);
+  @Query(value = "SELECT * FROM roles WHERE name=:name AND is_deleted=false", nativeQuery = true)
+  Optional<RoleEntity> findByName(String name);
 
-    @Query(value = "SELECT * FROM roles WHERE id=:roleId AND is_deleted=false", nativeQuery = true)
-    RoleEntity getById(long roleId);
+  @Query(value = "SELECT * FROM roles WHERE id=:roleId AND is_deleted=false", nativeQuery = true)
+  RoleEntity getById(long roleId);
 
-    @Query(value = "SELECT * FROM roles WHERE id=:id AND is_deleted=false", nativeQuery = true)
-    Optional<RoleEntity> findById(long id);
+  @Query(value = "SELECT * FROM roles WHERE id=:id AND is_deleted=false", nativeQuery = true)
+  Optional<RoleEntity> findById(long id);
 }

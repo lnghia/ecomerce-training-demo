@@ -15,36 +15,36 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class GenderCrudCrudServiceImpl implements GenderCrudService {
-    private final CommonConverter converter;
+  private final CommonConverter converter;
 
-    private final GenderDatabaseService genderDatabaseService;
+  private final GenderDatabaseService genderDatabaseService;
 
-    private final GenderRepository genderRepository;
+  private final GenderRepository genderRepository;
 
-    @Override
-    public GenderResponseDto createGender(CreateGenderRequestDto requestDto) {
-        GenderEntity genderEntity = new GenderEntity();
+  @Override
+  public GenderResponseDto createGender(CreateGenderRequestDto requestDto) {
+    GenderEntity genderEntity = new GenderEntity();
 
-        converter.convertToEntity(requestDto, genderEntity);
-        return save(genderEntity);
-    }
+    converter.convertToEntity(requestDto, genderEntity);
+    return save(genderEntity);
+  }
 
-    @Override
-    public GenderResponseDto updateGender(UpdateGenderRequestDto requestDto) {
-        GenderEntity genderEntity = genderDatabaseService.findById(requestDto.getGenderId());
+  @Override
+  public GenderResponseDto updateGender(UpdateGenderRequestDto requestDto) {
+    GenderEntity genderEntity = genderDatabaseService.findById(requestDto.getGenderId());
 
-        converter.convertToEntity(requestDto, genderEntity);
-        return save(genderEntity);
-    }
+    converter.convertToEntity(requestDto, genderEntity);
+    return save(genderEntity);
+  }
 
-    @Override
-    public GenderResponseDto deleteGender(DeleteGenderRequestDto requestDto) {
-        return null;
-    }
+  @Override
+  public GenderResponseDto deleteGender(DeleteGenderRequestDto requestDto) {
+    return null;
+  }
 
-    GenderResponseDto save(GenderEntity genderEntity) {
-        genderEntity = genderRepository.save(genderEntity);
+  GenderResponseDto save(GenderEntity genderEntity) {
+    genderEntity = genderRepository.save(genderEntity);
 
-        return converter.convertToResponse(genderEntity, GenderResponseDto.class);
-    }
+    return converter.convertToResponse(genderEntity, GenderResponseDto.class);
+  }
 }

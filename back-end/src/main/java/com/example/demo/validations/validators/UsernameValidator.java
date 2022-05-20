@@ -10,13 +10,12 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.Optional;
 
 public class UsernameValidator implements ConstraintValidator<ValidUsername, String> {
-    @Autowired
-    private UserRepository userRepository;
+  @Autowired private UserRepository userRepository;
 
-    @Override
-    public boolean isValid(String username, ConstraintValidatorContext constraintValidatorContext) {
-        Optional<UserEntity> user = userRepository.findByUsername(username);
+  @Override
+  public boolean isValid(String username, ConstraintValidatorContext constraintValidatorContext) {
+    Optional<UserEntity> user = userRepository.findByUsername(username);
 
-        return user.isEmpty();
-    }
+    return user.isEmpty();
+  }
 }

@@ -10,18 +10,21 @@ import java.util.stream.Collectors;
 
 @Component
 public class ConverterUtil {
-    @Autowired
-    private ModelMapper modelMapper;
+  @Autowired private ModelMapper modelMapper;
 
-    public <T> Set<T> convertToSet(List<T> source) {
-        return source.stream().collect(Collectors.toSet());
-    }
+  public <T> Set<T> convertToSet(List<T> source) {
+    return source.stream().collect(Collectors.toSet());
+  }
 
-    public <T, S> Set<S> convertListToSet(List<T> source, Class<S> destination) {
-        return source.stream().map(item -> modelMapper.map(item, destination)).collect(Collectors.toSet());
-    }
+  public <T, S> Set<S> convertListToSet(List<T> source, Class<S> destination) {
+    return source.stream()
+        .map(item -> modelMapper.map(item, destination))
+        .collect(Collectors.toSet());
+  }
 
-    public <T, S> List<S> buildListOfType(List<T> source, Class<S> destination) {
-        return source.stream().map(item -> modelMapper.map(item, destination)).collect(Collectors.toList());
-    }
+  public <T, S> List<S> buildListOfType(List<T> source, Class<S> destination) {
+    return source.stream()
+        .map(item -> modelMapper.map(item, destination))
+        .collect(Collectors.toList());
+  }
 }

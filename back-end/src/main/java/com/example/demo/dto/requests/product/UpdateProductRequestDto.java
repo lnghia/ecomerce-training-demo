@@ -9,26 +9,25 @@ import java.util.List;
 @Getter
 @Setter
 public class UpdateProductRequestDto {
-    @NotNull
-    private Long productId;
+  @NotNull private Long productId;
 
-    private Long genderId;
+  private Long genderId;
 
-    private String name;
+  private String name;
 
-    private String description;
+  private String description;
 
-    private double price;
+  private double price;
 
-    private int year;
+  private int year;
 
-    private Long sportId;
+  private Long sportId;
 
-    private List<Long> categoryIds;
+  private List<Long> categoryIds;
 
-    private List<Long> technologyIds;
+  private List<Long> technologyIds;
 
-    private List<ProductSizeDto> productSizeDtoList;
+  private List<ProductSizeDto> productSizeDtoList;
 
-    private String thumbnail;
+  private String thumbnail;
 }

@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UpdateCategoryRequestDto {
-    private String name;
+  private String name;
 
-    private String description;
+  private String description;
 }

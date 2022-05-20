@@ -17,17 +17,21 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Component
 public class RestAccessDeniedHandler implements AccessDeniedHandler {
-    @Override
-    public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException {
-        ResponseBodyDto response = new ResponseBodyDto();
+  @Override
+  public void handle(
+      HttpServletRequest httpServletRequest,
+      HttpServletResponse httpServletResponse,
+      AccessDeniedException e)
+      throws IOException, ServletException {
+    ResponseBodyDto response = new ResponseBodyDto();
 
-        response.getErrors().put("authorization", "Access denied");
+    response.getErrors().put("authorization", "Access denied");
 
-        OutputStream out = httpServletResponse.getOutputStream();
-        ObjectMapper mapper = new ObjectMapper();
-        httpServletResponse.setStatus(FORBIDDEN.value());
-        httpServletResponse.setContentType(APPLICATION_JSON_VALUE);
-        mapper.writeValue(out, response);
-        out.flush();
-    }
+    OutputStream out = httpServletResponse.getOutputStream();
+    ObjectMapper mapper = new ObjectMapper();
+    httpServletResponse.setStatus(FORBIDDEN.value());
+    httpServletResponse.setContentType(APPLICATION_JSON_VALUE);
+    mapper.writeValue(out, response);
+    out.flush();
+  }
 }

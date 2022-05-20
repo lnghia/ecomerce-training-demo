@@ -8,6 +8,5 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class DeleteProductRequestDto {
-    @NotNull
-    private Long productId;
+  @NotNull private Long productId;
 }

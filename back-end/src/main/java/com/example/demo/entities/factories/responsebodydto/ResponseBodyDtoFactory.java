@@ -7,23 +7,25 @@ import java.util.HashMap;
 
 @Component
 public class ResponseBodyDtoFactory {
-    public <T> ResponseBodyDto<T> buildResponseBody(T source) {
-        return new ResponseBodyDto<>("200", source);
-    }
+  public <T> ResponseBodyDto<T> buildResponseBody(T source) {
+    return new ResponseBodyDto<>("200", source);
+  }
 
-    public <T> ResponseBodyDto<T> buildResponseBody(T source, String status) {
-        return new ResponseBodyDto<>(status, source);
-    }
+  public <T> ResponseBodyDto<T> buildResponseBody(T source, String status) {
+    return new ResponseBodyDto<>(status, source);
+  }
 
-    public <T> ResponseBodyDto<T> buildResponseBody(T source, String status, HashMap<String, String> errors) {
-        return new ResponseBodyDto<>(status, source, errors);
-    }
+  public <T> ResponseBodyDto<T> buildResponseBody(
+      T source, String status, HashMap<String, String> errors) {
+    return new ResponseBodyDto<>(status, source, errors);
+  }
 
-    public <T, S> S buildResponseBody(T source, String status, Class<S> classType) {
-        return classType.cast(new ResponseBodyDto<>(status, source));
-    }
+  public <T, S> S buildResponseBody(T source, String status, Class<S> classType) {
+    return classType.cast(new ResponseBodyDto<>(status, source));
+  }
 
-    public <T, S> S buildResponseBody(T source, String status, HashMap<String, String> errors, Class<S> classType) {
-        return classType.cast(new ResponseBodyDto<>(status, source, errors));
-    }
+  public <T, S> S buildResponseBody(
+      T source, String status, HashMap<String, String> errors, Class<S> classType) {
+    return classType.cast(new ResponseBodyDto<>(status, source, errors));
+  }
 }

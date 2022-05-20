@@ -12,34 +12,37 @@ import java.time.format.DateTimeFormatter;
 
 @Configuration
 public class ModelMapperConfigurer {
-    @Bean
-    public ModelMapper modelMapper() {
-        ModelMapper modelMapper = new ModelMapper();
+  @Bean
+  public ModelMapper modelMapper() {
+    ModelMapper modelMapper = new ModelMapper();
 
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
-        modelMapper.getConfiguration().setPreferNestedProperties(true);
+    modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+    modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+    modelMapper.getConfiguration().setPreferNestedProperties(true);
 
-        resolveCircularReferencedBetweenProductAndProductSizeWhenMapping(modelMapper);
+    resolveCircularReferencedBetweenProductAndProductSizeWhenMapping(modelMapper);
 
-        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        Converter<LocalDateTime, String> timeConverter = new AbstractConverter<>() {
-            @Override
-            protected String convert(LocalDateTime localDateTime) {
-                return null == localDateTime ? null : localDateTime.format(pattern);
-            }
+    DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    Converter<LocalDateTime, String> timeConverter =
+        new AbstractConverter<>() {
+          @Override
+          protected String convert(LocalDateTime localDateTime) {
+            return null == localDateTime ? null : localDateTime.format(pattern);
+          }
         };
-        modelMapper.addConverter(timeConverter);
+    modelMapper.addConverter(timeConverter);
 
-        return modelMapper;
-    }
+    return modelMapper;
+  }
 
-    public void resolveCircularReferencedBetweenProductAndProductSizeWhenMapping(ModelMapper modelMapper) {
-        modelMapper.addMappings(new PropertyMap<ProductSizeEntity, ProductSizeResponseDto>() {
-            @Override
-            protected void configure() {
-                skip(destination.getProduct());
-            }
+  public void resolveCircularReferencedBetweenProductAndProductSizeWhenMapping(
+      ModelMapper modelMapper) {
+    modelMapper.addMappings(
+        new PropertyMap<ProductSizeEntity, ProductSizeResponseDto>() {
+          @Override
+          protected void configure() {
+            skip(destination.getProduct());
+          }
         });
-    }
+  }
 }

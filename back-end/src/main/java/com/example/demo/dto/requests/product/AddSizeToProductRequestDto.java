@@ -11,9 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class AddSizeToProductRequestDto {
-    @NotNull
-    private Long productId;
+  @NotNull private Long productId;
 
-    @NotNull
-    private List<ProductSizeDto> productSizeDto;
+  @NotNull private List<ProductSizeDto> productSizeDto;
 }

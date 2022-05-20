@@ -6,9 +6,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SizeResponseDto {
-    private Long id;
+  private Long id;
 
-    private String description;
+  private String description;
 
-    private String name;
+  private String name;
 }

@@ -14,31 +14,35 @@ import java.util.Set;
 @Builder(toBuilder = true)
 @Table(name = "users")
 public class UserEntity extends Auditable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private long id;
 
-    private String username;
+  private String username;
 
-    private String password;
+  private String password;
 
-    private String email;
+  private String email;
 
-    private String avatar;
+  private String avatar;
 
-    private String otp;
+  private String otp;
 
-    private String firstName;
+  private String firstName;
 
-    private String lastName;
+  private String lastName;
 
-    private Date lastSentOTPTime;
+  private Date lastSentOTPTime;
 
-    private boolean isDeleted = false;
+  private boolean isDeleted = false;
 
-    private Boolean isActive = true;
+  private Boolean isActive = true;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"), uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role_id"})})
-    private Set<RoleEntity> roles;
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(
+      name = "user_role",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "role_id"),
+      uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role_id"})})
+  private Set<RoleEntity> roles;
 }

@@ -16,26 +16,29 @@ import javax.validation.Valid;
 @RequestMapping(path = "/api/admin/size")
 @RequiredArgsConstructor
 public class SizeAdminController {
-    private final SizeCrudService sizeCrudService;
+  private final SizeCrudService sizeCrudService;
 
-    private final ResponseBodyDtoFactory responseBodyDtoFactory;
+  private final ResponseBodyDtoFactory responseBodyDtoFactory;
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping
-    public ResponseEntity<ResponseBodyDto<SizeResponseDto>> createSize(@Valid @RequestBody SizeRequestDto requestDto) {
-        SizeResponseDto responseDto = sizeCrudService.createSize(requestDto);
-        ResponseBodyDto<SizeResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(responseDto, "200");
+  @PreAuthorize("hasRole('ADMIN')")
+  @PostMapping
+  public ResponseEntity<ResponseBodyDto<SizeResponseDto>> createSize(
+      @Valid @RequestBody SizeRequestDto requestDto) {
+    SizeResponseDto responseDto = sizeCrudService.createSize(requestDto);
+    ResponseBodyDto<SizeResponseDto> responseBodyDto =
+        responseBodyDtoFactory.buildResponseBody(responseDto, "200");
 
-        return ResponseEntity.ok(responseBodyDto);
-    }
+    return ResponseEntity.ok(responseBodyDto);
+  }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping
-    public ResponseEntity<ResponseBodyDto<SizeResponseDto>> updateSize(@RequestParam(name = "id") Long sizeId,
-                                                                       @Valid @RequestBody SizeRequestDto requestDto) {
-        SizeResponseDto responseDto = sizeCrudService.updateSize(sizeId, requestDto);
-        ResponseBodyDto<SizeResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(responseDto, "200");
+  @PreAuthorize("hasRole('ADMIN')")
+  @PutMapping
+  public ResponseEntity<ResponseBodyDto<SizeResponseDto>> updateSize(
+      @RequestParam(name = "id") Long sizeId, @Valid @RequestBody SizeRequestDto requestDto) {
+    SizeResponseDto responseDto = sizeCrudService.updateSize(sizeId, requestDto);
+    ResponseBodyDto<SizeResponseDto> responseBodyDto =
+        responseBodyDtoFactory.buildResponseBody(responseDto, "200");
 
-        return ResponseEntity.ok(responseBodyDto);
-    }
+    return ResponseEntity.ok(responseBodyDto);
+  }
 }

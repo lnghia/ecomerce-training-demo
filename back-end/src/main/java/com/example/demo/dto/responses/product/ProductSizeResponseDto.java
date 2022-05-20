@@ -8,9 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProductSizeResponseDto {
-    private SizeEntity size;
+  private SizeEntity size;
 
-    private int inStock;
+  private int inStock;
 
-    private ProductEntity product;
+  private ProductEntity product;
 }

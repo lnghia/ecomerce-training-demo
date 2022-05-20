@@ -10,11 +10,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class AssignRoleToUserRequestDto {
-    @NotNull
-    @ValidUserId
-    private Long userId;
+  @NotNull @ValidUserId private Long userId;
 
-    @NotNull
-    @ValidRoleId
-    private Long roleId;
+  @NotNull @ValidRoleId private Long roleId;
 }

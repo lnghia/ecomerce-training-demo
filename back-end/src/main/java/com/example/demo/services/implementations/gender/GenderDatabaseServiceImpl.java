@@ -16,28 +16,31 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class GenderDatabaseServiceImpl implements GenderDatabaseService {
-    private final CommonConverter converter;
+  private final CommonConverter converter;
 
-    private final GenderRepository genderRepository;
+  private final GenderRepository genderRepository;
 
-    @Override
-    public GenderEntity findById(Long id) {
-        Optional<GenderEntity> genderEntity = genderRepository.findById(id);
+  @Override
+  public GenderEntity findById(Long id) {
+    Optional<GenderEntity> genderEntity = genderRepository.findById(id);
 
-        if (genderEntity.isPresent()) {
-            return genderEntity.get();
-        }
-
-        throw new GenderNotFoundException();
+    if (genderEntity.isPresent()) {
+      return genderEntity.get();
     }
 
-    @Override
-    public List<GenderResponseDto> findAll() {
-        List<GenderEntity> genders = genderRepository.findAll();
-        List<GenderResponseDto> result;
+    throw new GenderNotFoundException();
+  }
 
-        result = genders.stream().map(genderEntity -> converter.convertToResponse(genderEntity, GenderResponseDto.class)).collect(Collectors.toList());
+  @Override
+  public List<GenderResponseDto> findAll() {
+    List<GenderEntity> genders = genderRepository.findAll();
+    List<GenderResponseDto> result;
 
-        return result;
-    }
+    result =
+        genders.stream()
+            .map(genderEntity -> converter.convertToResponse(genderEntity, GenderResponseDto.class))
+            .collect(Collectors.toList());
+
+    return result;
+  }
 }

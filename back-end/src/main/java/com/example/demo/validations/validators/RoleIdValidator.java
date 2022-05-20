@@ -8,11 +8,10 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 public class RoleIdValidator implements ConstraintValidator<ValidRoleId, Long> {
-    @Autowired
-    private RoleService roleService;
+  @Autowired private RoleService roleService;
 
-    @Override
-    public boolean isValid(Long roleId, ConstraintValidatorContext constraintValidatorContext) {
-        return roleId != null && roleService.hasRoleExisted(roleId);
-    }
+  @Override
+  public boolean isValid(Long roleId, ConstraintValidatorContext constraintValidatorContext) {
+    return roleId != null && roleService.hasRoleExisted(roleId);
+  }
 }

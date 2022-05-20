@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class GenderResponseDto {
-    private Long id;
+  private Long id;
 
-    private String name;
+  private String name;
 }

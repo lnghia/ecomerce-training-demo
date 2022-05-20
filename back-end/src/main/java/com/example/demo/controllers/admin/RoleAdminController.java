@@ -17,16 +17,17 @@ import java.util.List;
 @RequestMapping(path = "/api/admin/role")
 @RequiredArgsConstructor
 public class RoleAdminController {
-    private final RoleService roleService;
+  private final RoleService roleService;
 
-    private final ResponseBodyDtoFactory responseBodyDtoFactory;
+  private final ResponseBodyDtoFactory responseBodyDtoFactory;
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping
-    public ResponseEntity<ResponseBodyDto<List<RoleResponseDto>>> getRoles() {
-        List<RoleResponseDto> roleResponseDtoList = roleService.findAll();
-        ResponseBodyDto<List<RoleResponseDto>> responseBodyDto = responseBodyDtoFactory.buildResponseBody(roleResponseDtoList, "200");
+  @PreAuthorize("hasRole('ADMIN')")
+  @GetMapping
+  public ResponseEntity<ResponseBodyDto<List<RoleResponseDto>>> getRoles() {
+    List<RoleResponseDto> roleResponseDtoList = roleService.findAll();
+    ResponseBodyDto<List<RoleResponseDto>> responseBodyDto =
+        responseBodyDtoFactory.buildResponseBody(roleResponseDtoList, "200");
 
-        return ResponseEntity.ok(responseBodyDto);
-    }
+    return ResponseEntity.ok(responseBodyDto);
+  }
 }

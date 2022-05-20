@@ -9,31 +9,23 @@ import java.util.List;
 @Getter
 @Setter
 public class CreateProductRequestDto {
-    @NotNull
-    private Long genderId;
+  @NotNull private Long genderId;
 
-    private String thumbnail;
+  private String thumbnail;
 
-    @NotNull
-    private String name;
+  @NotNull private String name;
 
-    private String description;
+  private String description;
 
-    @NotNull
-    private double price;
+  @NotNull private double price;
 
-    @NotNull
-    private int year;
+  @NotNull private int year;
 
-    @NotNull
-    private Long sportId;
+  @NotNull private Long sportId;
 
-    @NotNull
-    private List<Long> technologyIds;
+  @NotNull private List<Long> technologyIds;
 
-    @NotNull
-    private List<Long> categoryIds;
+  @NotNull private List<Long> categoryIds;
 
-    @NotNull
-    private List<ProductSizeDto> productSizeDtoList;
+  @NotNull private List<ProductSizeDto> productSizeDtoList;
 }

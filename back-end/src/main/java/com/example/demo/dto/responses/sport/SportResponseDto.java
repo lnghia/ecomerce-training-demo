@@ -10,9 +10,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SportResponseDto {
-    private Long id;
+  private Long id;
 
-    private String name;
+  private String name;
 
-    private String description;
+  private String description;
 }

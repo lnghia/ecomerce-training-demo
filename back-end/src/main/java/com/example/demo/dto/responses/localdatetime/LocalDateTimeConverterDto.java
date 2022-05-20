@@ -5,6 +5,4 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LocalDateTimeConverterDto {
-
-}
+public class LocalDateTimeConverterDto {}

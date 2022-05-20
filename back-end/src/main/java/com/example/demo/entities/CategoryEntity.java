@@ -12,11 +12,11 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class CategoryEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
-    private String name;
+  private String name;
 
-    private String description;
+  private String description;
 }

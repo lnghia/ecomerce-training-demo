@@ -23,90 +23,91 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProductCrudServiceImpl implements ProductCrudService {
-    private final CommonConverter modelMapper;
+  private final CommonConverter modelMapper;
 
-    private final ProductGenderService productGenderService;
+  private final ProductGenderService productGenderService;
 
-    private final ProductSportService productSportService;
+  private final ProductSportService productSportService;
 
-    private final ProductCategoryService productCategoryService;
+  private final ProductCategoryService productCategoryService;
 
-    private final ProductDatabaseService productDatabaseService;
+  private final ProductDatabaseService productDatabaseService;
 
-    private final ProductTechnologyService productTechnologyService;
+  private final ProductTechnologyService productTechnologyService;
 
-    private final ProductSizeService productSizeService;
+  private final ProductSizeService productSizeService;
 
-    private final AddSizeToProductRequestDtoFactory addSizeToProductRequestDtoFactory;
+  private final AddSizeToProductRequestDtoFactory addSizeToProductRequestDtoFactory;
 
-    @Override
-    public ProductResponseDto createProduct(CreateProductRequestDto createProductRequestDTO) {
-        Long genderId = createProductRequestDTO.getGenderId();
-        Long sportId = createProductRequestDTO.getSportId();
-        List<Long> categoryIds = createProductRequestDTO.getCategoryIds();
-        List<Long> technologyIds = createProductRequestDTO.getTechnologyIds();
+  @Override
+  public ProductResponseDto createProduct(CreateProductRequestDto createProductRequestDTO) {
+    Long genderId = createProductRequestDTO.getGenderId();
+    Long sportId = createProductRequestDTO.getSportId();
+    List<Long> categoryIds = createProductRequestDTO.getCategoryIds();
+    List<Long> technologyIds = createProductRequestDTO.getTechnologyIds();
 
-        ProductEntity productEntity = modelMapper.convertToEntity(createProductRequestDTO, ProductEntity.class);
+    ProductEntity productEntity =
+        modelMapper.convertToEntity(createProductRequestDTO, ProductEntity.class);
 
-        productTechnologyService.updateProductTechnologies(productEntity, technologyIds);
+    productTechnologyService.updateProductTechnologies(productEntity, technologyIds);
 
-        productCategoryService.updateProductCategories(productEntity, categoryIds);
+    productCategoryService.updateProductCategories(productEntity, categoryIds);
 
-        productGenderService.updateProductGender(productEntity, genderId);
+    productGenderService.updateProductGender(productEntity, genderId);
 
-        productSportService.updateProductSport(productEntity, sportId);
+    productSportService.updateProductSport(productEntity, sportId);
 
-        productEntity = productDatabaseService.saveProduct(productEntity);
+    productEntity = productDatabaseService.saveProduct(productEntity);
 
-        List<ProductSizeDto> productSizeDtoList = createProductRequestDTO.getProductSizeDtoList();
-        Long productId = productEntity.getId();
+    List<ProductSizeDto> productSizeDtoList = createProductRequestDTO.getProductSizeDtoList();
+    Long productId = productEntity.getId();
 
-        AddSizeToProductRequestDto requestDto = addSizeToProductRequestDtoFactory.createAddSizeToRequestDto(productId, productSizeDtoList);
-        productEntity = productSizeService.addSizeToProduct(requestDto);
+    AddSizeToProductRequestDto requestDto =
+        addSizeToProductRequestDtoFactory.createAddSizeToRequestDto(productId, productSizeDtoList);
+    productEntity = productSizeService.addSizeToProduct(requestDto);
 
-        return modelMapper.convertToResponse(productEntity, ProductResponseDto.class);
+    return modelMapper.convertToResponse(productEntity, ProductResponseDto.class);
+  }
+
+  @Override
+  public ProductResponseDto updateProduct(UpdateProductRequestDto updateProductRequestDto) {
+    Long productId = updateProductRequestDto.getProductId();
+    ProductEntity productEntity = productDatabaseService.findById(productId);
+
+    modelMapper.convertToEntity(updateProductRequestDto, productEntity);
+
+    List<Long> categoryIds = updateProductRequestDto.getCategoryIds();
+    if (categoryIds != null && !categoryIds.isEmpty()) {
+      productCategoryService.updateProductCategories(productEntity, categoryIds);
     }
 
-
-    @Override
-    public ProductResponseDto updateProduct(UpdateProductRequestDto updateProductRequestDto) {
-        Long productId = updateProductRequestDto.getProductId();
-        ProductEntity productEntity = productDatabaseService.findById(productId);
-
-        modelMapper.convertToEntity(updateProductRequestDto, productEntity);
-
-        List<Long> categoryIds = updateProductRequestDto.getCategoryIds();
-        if (categoryIds != null && !categoryIds.isEmpty()) {
-            productCategoryService.updateProductCategories(productEntity, categoryIds);
-        }
-
-        List<Long> technologyIds = updateProductRequestDto.getTechnologyIds();
-        if (technologyIds != null && !technologyIds.isEmpty()) {
-            productTechnologyService.updateProductTechnologies(productEntity, technologyIds);
-        }
-
-        List<ProductSizeDto> productSizeDtoList = updateProductRequestDto.getProductSizeDtoList();
-        if (productSizeDtoList != null && !productSizeDtoList.isEmpty()) {
-            productSizeService.updateProductSizes(productEntity, productSizeDtoList);
-        }
-
-        Long genderId = updateProductRequestDto.getGenderId();
-        if (updateProductRequestDto.getGenderId() != null) {
-            productGenderService.updateProductGender(productEntity, genderId);
-        }
-
-        Long sportId = updateProductRequestDto.getSportId();
-        if (updateProductRequestDto.getSportId() != null) {
-            productSportService.updateProductSport(productEntity, sportId);
-        }
-
-        productEntity = productDatabaseService.saveProduct(productEntity);
-
-        return modelMapper.convertToResponse(productEntity, ProductResponseDto.class);
+    List<Long> technologyIds = updateProductRequestDto.getTechnologyIds();
+    if (technologyIds != null && !technologyIds.isEmpty()) {
+      productTechnologyService.updateProductTechnologies(productEntity, technologyIds);
     }
 
-    @Override
-    public Boolean deleteProduct(Long id) {
-        return productDatabaseService.deleteProduct(id);
+    List<ProductSizeDto> productSizeDtoList = updateProductRequestDto.getProductSizeDtoList();
+    if (productSizeDtoList != null && !productSizeDtoList.isEmpty()) {
+      productSizeService.updateProductSizes(productEntity, productSizeDtoList);
     }
+
+    Long genderId = updateProductRequestDto.getGenderId();
+    if (updateProductRequestDto.getGenderId() != null) {
+      productGenderService.updateProductGender(productEntity, genderId);
+    }
+
+    Long sportId = updateProductRequestDto.getSportId();
+    if (updateProductRequestDto.getSportId() != null) {
+      productSportService.updateProductSport(productEntity, sportId);
+    }
+
+    productEntity = productDatabaseService.saveProduct(productEntity);
+
+    return modelMapper.convertToResponse(productEntity, ProductResponseDto.class);
+  }
+
+  @Override
+  public Boolean deleteProduct(Long id) {
+    return productDatabaseService.deleteProduct(id);
+  }
 }

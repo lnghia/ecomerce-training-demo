@@ -13,13 +13,13 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProductCategoryServiceImpl implements ProductCategoryService {
-    private final CategoryDatabaseService categoryDatabaseService;
+  private final CategoryDatabaseService categoryDatabaseService;
 
-    @Override
-    public void updateProductCategories(ProductEntity productEntity, List<Long> categoryIds) {
-        List<CategoryEntity> categoryEntities = categoryDatabaseService.findAllById(categoryIds);
+  @Override
+  public void updateProductCategories(ProductEntity productEntity, List<Long> categoryIds) {
+    List<CategoryEntity> categoryEntities = categoryDatabaseService.findAllById(categoryIds);
 
-        productEntity.getCategories().clear();
-        productEntity.setCategories(new HashSet<>(categoryEntities));
-    }
+    productEntity.getCategories().clear();
+    productEntity.setCategories(new HashSet<>(categoryEntities));
+  }
 }

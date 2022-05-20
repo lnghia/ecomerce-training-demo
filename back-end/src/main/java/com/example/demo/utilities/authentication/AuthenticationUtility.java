@@ -8,18 +8,19 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AuthenticationUtility {
-    @Bean
-    public UserEntity getUserDetailFromSecurityContext() {
-        UserEntity userEntity = null;
+  @Bean
+  public UserEntity getUserDetailFromSecurityContext() {
+    UserEntity userEntity = null;
 
-        if (SecurityContextHolder.getContext() != null && SecurityContextHolder.getContext().getAuthentication() != null) {
-            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    if (SecurityContextHolder.getContext() != null
+        && SecurityContextHolder.getContext().getAuthentication() != null) {
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-            if (principal instanceof CustomUserDetails) {
-                userEntity = ((CustomUserDetails) principal).getUser();
-            }
-        }
-
-        return userEntity;
+      if (principal instanceof CustomUserDetails) {
+        userEntity = ((CustomUserDetails) principal).getUser();
+      }
     }
+
+    return userEntity;
+  }
 }

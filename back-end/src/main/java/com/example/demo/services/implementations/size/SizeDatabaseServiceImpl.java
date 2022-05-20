@@ -17,36 +17,38 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class SizeDatabaseServiceImpl implements SizeDatabaseService {
-    private final SizeRepository sizeRepository;
+  private final SizeRepository sizeRepository;
 
-    private final CommonConverter converter;
+  private final CommonConverter converter;
 
-    @Override
-    public SizeEntity findById(Long id) {
-        Optional<SizeEntity> sizeEntity = sizeRepository.findById(id);
+  @Override
+  public SizeEntity findById(Long id) {
+    Optional<SizeEntity> sizeEntity = sizeRepository.findById(id);
 
-        if (sizeEntity.isPresent()) {
-            return sizeEntity.get();
-        }
-
-        throw new SizeNotFoundException();
+    if (sizeEntity.isPresent()) {
+      return sizeEntity.get();
     }
 
-    @Override
-    public List<SizeEntity> findByIds(Set<Long> ids) {
-        List<SizeEntity> sizeEntities = sizeRepository.findAllById(ids);
+    throw new SizeNotFoundException();
+  }
 
-        if (sizeEntities.size() != ids.size()) {
-            throw new SizeNotFoundException();
-        }
+  @Override
+  public List<SizeEntity> findByIds(Set<Long> ids) {
+    List<SizeEntity> sizeEntities = sizeRepository.findAllById(ids);
 
-        return sizeEntities;
+    if (sizeEntities.size() != ids.size()) {
+      throw new SizeNotFoundException();
     }
 
-    @Override
-    public List<SizeResponseDto> getAll() {
-        List<SizeEntity> sizeEntities = sizeRepository.findAll();
+    return sizeEntities;
+  }
 
-        return sizeEntities.stream().map(sizeEntity -> converter.convertToResponse(sizeEntity, SizeResponseDto.class)).collect(Collectors.toList());
-    }
+  @Override
+  public List<SizeResponseDto> getAll() {
+    List<SizeEntity> sizeEntities = sizeRepository.findAll();
+
+    return sizeEntities.stream()
+        .map(sizeEntity -> converter.convertToResponse(sizeEntity, SizeResponseDto.class))
+        .collect(Collectors.toList());
+  }
 }

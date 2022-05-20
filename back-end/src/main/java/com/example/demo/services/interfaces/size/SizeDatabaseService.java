@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Set;
 
 public interface SizeDatabaseService {
-    SizeEntity findById(Long id);
+  SizeEntity findById(Long id);
 
-    List<SizeEntity> findByIds(Set<Long> ids);
+  List<SizeEntity> findByIds(Set<Long> ids);
 
-    List<SizeResponseDto> getAll();
+  List<SizeResponseDto> getAll();
 }

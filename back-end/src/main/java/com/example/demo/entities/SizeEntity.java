@@ -12,14 +12,14 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class SizeEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
-    private String name;
+  private String name;
 
-    private String description;
+  private String description;
 
-//    @OneToMany(mappedBy = "size")
-//    private Set<ProductSizeEntity> products;
+  //    @OneToMany(mappedBy = "size")
+  //    private Set<ProductSizeEntity> products;
 }

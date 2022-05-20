@@ -7,9 +7,9 @@ import com.example.demo.dto.responses.category.CategoryResponseDto;
 import java.util.List;
 
 public interface CategoryCrudService {
-    CategoryResponseDto createCategory(CreateCategoryRequestDto requestDto);
+  CategoryResponseDto createCategory(CreateCategoryRequestDto requestDto);
 
-    CategoryResponseDto updateCategory(Long categoryId, UpdateCategoryRequestDto requestDto);
+  CategoryResponseDto updateCategory(Long categoryId, UpdateCategoryRequestDto requestDto);
 
-    List<CategoryResponseDto> getAll();
+  List<CategoryResponseDto> getAll();
 }

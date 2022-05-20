@@ -19,36 +19,36 @@ import java.util.List;
 @RequiredArgsConstructor
 @Getter
 public class CategoryCrudServiceImpl implements CategoryCrudService {
-    private final CategoryDatabaseService categoryDatabaseService;
+  private final CategoryDatabaseService categoryDatabaseService;
 
-    private final CategoryRepository categoryRepository;
+  private final CategoryRepository categoryRepository;
 
-    private final CommonConverter modelMapper;
+  private final CommonConverter modelMapper;
 
-    private final ConverterUtil converterUtil;
+  private final ConverterUtil converterUtil;
 
-    @Override
-    public CategoryResponseDto createCategory(CreateCategoryRequestDto requestDto) {
-        CategoryEntity categoryEntity = modelMapper.convertToEntity(requestDto, CategoryEntity.class);
-        categoryEntity = categoryRepository.save(categoryEntity);
+  @Override
+  public CategoryResponseDto createCategory(CreateCategoryRequestDto requestDto) {
+    CategoryEntity categoryEntity = modelMapper.convertToEntity(requestDto, CategoryEntity.class);
+    categoryEntity = categoryRepository.save(categoryEntity);
 
-        return modelMapper.convertToResponse(categoryEntity, CategoryResponseDto.class);
-    }
+    return modelMapper.convertToResponse(categoryEntity, CategoryResponseDto.class);
+  }
 
-    @Override
-    public CategoryResponseDto updateCategory(Long categoryId, UpdateCategoryRequestDto requestDto) {
-        CategoryEntity categoryEntity = categoryDatabaseService.findById(categoryId);
+  @Override
+  public CategoryResponseDto updateCategory(Long categoryId, UpdateCategoryRequestDto requestDto) {
+    CategoryEntity categoryEntity = categoryDatabaseService.findById(categoryId);
 
-        modelMapper.convertToEntity(requestDto, categoryEntity);
-        categoryEntity = categoryRepository.save(categoryEntity);
+    modelMapper.convertToEntity(requestDto, categoryEntity);
+    categoryEntity = categoryRepository.save(categoryEntity);
 
-        return modelMapper.convertToResponse(categoryEntity, CategoryResponseDto.class);
-    }
+    return modelMapper.convertToResponse(categoryEntity, CategoryResponseDto.class);
+  }
 
-    @Override
-    public List<CategoryResponseDto> getAll() {
-        List<CategoryEntity> categoryEntities = categoryDatabaseService.findAll();
+  @Override
+  public List<CategoryResponseDto> getAll() {
+    List<CategoryEntity> categoryEntities = categoryDatabaseService.findAll();
 
-        return modelMapper.convertToResponseList(categoryEntities, CategoryResponseDto.class);
-    }
+    return modelMapper.convertToResponseList(categoryEntities, CategoryResponseDto.class);
+  }
 }

@@ -5,9 +5,9 @@ import com.example.demo.dto.requests.product.UpdateProductRequestDto;
 import com.example.demo.dto.responses.product.ProductResponseDto;
 
 public interface ProductCrudService {
-    ProductResponseDto createProduct(CreateProductRequestDto createProductRequestDTO);
+  ProductResponseDto createProduct(CreateProductRequestDto createProductRequestDTO);
 
-    ProductResponseDto updateProduct(UpdateProductRequestDto updateProductRequestDto);
+  ProductResponseDto updateProduct(UpdateProductRequestDto updateProductRequestDto);
 
-    Boolean deleteProduct(Long id);
+  Boolean deleteProduct(Long id);
 }

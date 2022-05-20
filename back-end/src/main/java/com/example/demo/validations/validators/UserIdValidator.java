@@ -8,11 +8,10 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 public class UserIdValidator implements ConstraintValidator<ValidUserId, Long> {
-    @Autowired
-    private UserService userService;
+  @Autowired private UserService userService;
 
-    @Override
-    public boolean isValid(Long userId, ConstraintValidatorContext constraintValidatorContext) {
-        return userId != null && userService.hasUserExisted(userId);
-    }
+  @Override
+  public boolean isValid(Long userId, ConstraintValidatorContext constraintValidatorContext) {
+    return userId != null && userService.hasUserExisted(userId);
+  }
 }

@@ -9,11 +9,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class UpdateSportRequestDto {
-    @NotNull
-    @NotEmpty
-    private String name;
+  @NotNull @NotEmpty private String name;
 
-    @NotNull
-    @NotEmpty
-    private String description;
+  @NotNull @NotEmpty private String description;
 }

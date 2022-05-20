@@ -9,11 +9,11 @@ import java.util.List;
 @Getter
 @Setter
 public class PageableProductListResponseDto {
-    private Long totalElements;
+  private Long totalElements;
 
-    private int totalPages;
+  private int totalPages;
 
-    private int size;
+  private int size;
 
-    private List<ProductResponseDto> content;
+  private List<ProductResponseDto> content;
 }

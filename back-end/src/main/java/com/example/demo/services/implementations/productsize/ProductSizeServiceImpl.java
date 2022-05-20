@@ -19,62 +19,75 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ProductSizeServiceImpl implements ProductSizeService {
-    private final SizeDatabaseService sizeDatabaseService;
+  private final SizeDatabaseService sizeDatabaseService;
 
-    private final ProductSizeRepository productSizeRepository;
+  private final ProductSizeRepository productSizeRepository;
 
-    private final ProductRepository productRepository;
+  private final ProductRepository productRepository;
 
-    @Override
-    public void createProductSize(ProductEntity productEntity, Long sizeId, int inStock) {
-        SizeEntity sizeEntity = sizeDatabaseService.findById(sizeId);
+  @Override
+  public void createProductSize(ProductEntity productEntity, Long sizeId, int inStock) {
+    SizeEntity sizeEntity = sizeDatabaseService.findById(sizeId);
 
-        ProductSizeEntity productSizeEntity = ProductSizeEntity.builder()
-                .size(sizeEntity)
-                .product(productEntity)
-                .inStock(inStock).build();
+    ProductSizeEntity productSizeEntity =
+        ProductSizeEntity.builder()
+            .size(sizeEntity)
+            .product(productEntity)
+            .inStock(inStock)
+            .build();
 
-        productSizeRepository.save(productSizeEntity);
+    productSizeRepository.save(productSizeEntity);
+  }
+
+  @Override
+  public ProductEntity addSizeToProduct(AddSizeToProductRequestDto addSizeToProductRequestDto) {
+    Long productId = addSizeToProductRequestDto.getProductId();
+    Optional<ProductEntity> productEntity = productRepository.findById(productId);
+
+    if (productEntity.isEmpty()) {
+      throw new ProductNotFoundException();
     }
 
-    @Override
-    public ProductEntity addSizeToProduct(AddSizeToProductRequestDto addSizeToProductRequestDto) {
-        Long productId = addSizeToProductRequestDto.getProductId();
-        Optional<ProductEntity> productEntity = productRepository.findById(productId);
+    ProductEntity product = productEntity.get();
+    Map<Long, Integer> sizes =
+        addSizeToProductRequestDto.getProductSizeDto().stream()
+            .collect(Collectors.toMap(ProductSizeDto::getSizeId, ProductSizeDto::getNumber));
+    List<SizeEntity> sizeEntities = sizeDatabaseService.findByIds(sizes.keySet());
+    List<ProductSizeEntity> productSizeEntities =
+        sizeEntities.stream()
+            .map(
+                sizeEntity ->
+                    ProductSizeEntity.builder()
+                        .size(sizeEntity)
+                        .product(product)
+                        .inStock(sizes.get(sizeEntity.getId()))
+                        .build())
+            .collect(Collectors.toList());
+    productSizeEntities = productSizeRepository.saveAll(productSizeEntities);
+    product.setSizes(new HashSet<>(productSizeEntities));
 
-        if (productEntity.isEmpty()) {
-            throw new ProductNotFoundException();
-        }
+    return product;
+  }
 
-        ProductEntity product = productEntity.get();
-        Map<Long, Integer> sizes = addSizeToProductRequestDto.getProductSizeDto().stream().collect(Collectors.toMap(ProductSizeDto::getSizeId, ProductSizeDto::getNumber));
-        List<SizeEntity> sizeEntities = sizeDatabaseService.findByIds(sizes.keySet());
-        List<ProductSizeEntity> productSizeEntities = sizeEntities.stream().map(sizeEntity -> ProductSizeEntity.builder()
-                .size(sizeEntity)
-                .product(product)
-                .inStock(sizes.get(sizeEntity.getId()))
-                .build()).collect(Collectors.toList());
-        productSizeEntities = productSizeRepository.saveAll(productSizeEntities);
-        product.setSizes(new HashSet<>(productSizeEntities));
+  @Override
+  public void updateProductSizes(
+      ProductEntity productEntity, List<ProductSizeDto> productSizeDtoList) {
+    HashMap<Long, Integer> sizeNumber = new HashMap<>();
 
-        return product;
+    for (var item : productSizeDtoList) {
+      sizeNumber.put(item.getSizeId(), item.getNumber());
     }
+    Set<ProductSizeEntity> productSizeEntities =
+        productEntity.getSizes().stream()
+            .peek(
+                productSizeEntity -> {
+                  Long id = productSizeEntity.getSize().getId();
+                  if (sizeNumber.containsKey(id)) {
+                    productSizeEntity.setInStock(sizeNumber.get(id));
+                  }
+                })
+            .collect(Collectors.toSet());
 
-    @Override
-    public void updateProductSizes(ProductEntity productEntity, List<ProductSizeDto> productSizeDtoList) {
-        HashMap<Long, Integer> sizeNumber = new HashMap<>();
-
-        for (var item : productSizeDtoList) {
-            sizeNumber.put(item.getSizeId(), item.getNumber());
-        }
-        Set<ProductSizeEntity> productSizeEntities = productEntity.getSizes().stream().peek(productSizeEntity -> {
-            Long id = productSizeEntity.getSize().getId();
-            if (sizeNumber.containsKey(id)) {
-                productSizeEntity.setInStock(sizeNumber.get(id));
-            }
-
-        }).collect(Collectors.toSet());
-
-        productEntity.setSizes(productSizeEntities);
-    }
+    productEntity.setSizes(productSizeEntities);
+  }
 }

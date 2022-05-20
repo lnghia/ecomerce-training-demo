@@ -23,73 +23,78 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Getter
 public class AuthenticationServiceImpl implements AuthenticationService {
-    private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    private final PasswordEncoder passwordEncoder;
+  private final PasswordEncoder passwordEncoder;
 
-    private final JWTProvider jwtProvider;
+  private final JWTProvider jwtProvider;
 
-    private final ModelMapper modelMapper;
+  private final ModelMapper modelMapper;
 
-    private final RoleService roleService;
+  private final RoleService roleService;
 
-    private final RoleUtilityWrapper roleUtilityWrapper;
+  private final RoleUtilityWrapper roleUtilityWrapper;
 
-    @Override
-    public LoginResponseDto authenticateUser(String username, String password) {
-        Optional<UserEntity> user = userRepository.findByUsername(username);
+  @Override
+  public LoginResponseDto authenticateUser(String username, String password) {
+    Optional<UserEntity> user = userRepository.findByUsername(username);
 
-        if (user.isPresent() && passwordEncoder.matches(password, user.get().getPassword())) {
-            UserEntity userEntity = user.get();
+    if (user.isPresent() && passwordEncoder.matches(password, user.get().getPassword())) {
+      UserEntity userEntity = user.get();
 
-            if (!userEntity.getIsActive()) {
-                throw new UserBlockedException();
-            }
+      if (!userEntity.getIsActive()) {
+        throw new UserBlockedException();
+      }
 
-            String accessToken = jwtProvider.generateAccessToken(userEntity);
-            String refreshToken = jwtProvider.generateRefreshToken(userEntity);
+      String accessToken = jwtProvider.generateAccessToken(userEntity);
+      String refreshToken = jwtProvider.generateRefreshToken(userEntity);
 
-            return new LoginResponseDto(accessToken, refreshToken);
-        }
-
-        throw new UsernamePasswordInvalidException();
+      return new LoginResponseDto(accessToken, refreshToken);
     }
 
-    @Override
-    public LoginResponseDto refreshAccessToken(String refreshToken) {
-        if (jwtProvider.validateRefreshToken(refreshToken)) {
-            long userId = jwtProvider.getUserIdFromJWT(refreshToken);
-            Optional<UserEntity> user = userRepository.findById(userId);
+    throw new UsernamePasswordInvalidException();
+  }
 
-            if (user.isPresent()) {
-                String newAccessToken = jwtProvider.generateAccessToken(user.get());
-                String newRefreshToken = jwtProvider.generateRefreshToken(user.get());
+  @Override
+  public LoginResponseDto refreshAccessToken(String refreshToken) {
+    if (jwtProvider.validateRefreshToken(refreshToken)) {
+      long userId = jwtProvider.getUserIdFromJWT(refreshToken);
+      Optional<UserEntity> user = userRepository.findById(userId);
 
-                return LoginResponseDto.builder().accessToken(newAccessToken).refreshToken(newRefreshToken).build();
-            }
-        }
+      if (user.isPresent()) {
+        String newAccessToken = jwtProvider.generateAccessToken(user.get());
+        String newRefreshToken = jwtProvider.generateRefreshToken(user.get());
 
-        throw new InvalidTokenException();
+        return LoginResponseDto.builder()
+            .accessToken(newAccessToken)
+            .refreshToken(newRefreshToken)
+            .build();
+      }
     }
 
-    @Override
-    public LoginResponseDto authenticateAdmin(String username, String password) {
-        Optional<UserEntity> user = userRepository.findByUsername(username);
-        RoleEntity adminRole = roleService.findByName(roleUtilityWrapper.getAdminRoleString());
+    throw new InvalidTokenException();
+  }
 
-        if (user.isPresent() && passwordEncoder.matches(password, user.get().getPassword()) && user.get().getRoles().contains(adminRole)) {
-            UserEntity userEntity = user.get();
+  @Override
+  public LoginResponseDto authenticateAdmin(String username, String password) {
+    Optional<UserEntity> user = userRepository.findByUsername(username);
+    RoleEntity adminRole = roleService.findByName(roleUtilityWrapper.getAdminRoleString());
 
-            if (!userEntity.getIsActive()) {
-                throw new UserBlockedException();
-            }
+    if (user.isPresent()
+        && passwordEncoder.matches(password, user.get().getPassword())
+        && user.get().getRoles().contains(adminRole)) {
+      UserEntity userEntity = user.get();
 
-            String accessToken = jwtProvider.generateAccessToken(userEntity);
-            String refreshToken = jwtProvider.generateRefreshToken(userEntity);
+      if (!userEntity.getIsActive()) {
+        throw new UserBlockedException();
+      }
 
-            return new LoginResponseDto(accessToken, refreshToken);
-        }
+      String accessToken = jwtProvider.generateAccessToken(userEntity);
+      String refreshToken = jwtProvider.generateRefreshToken(userEntity);
 
-        throw new UsernamePasswordInvalidException();
+      return new LoginResponseDto(accessToken, refreshToken);
     }
+
+    throw new UsernamePasswordInvalidException();
+  }
 }

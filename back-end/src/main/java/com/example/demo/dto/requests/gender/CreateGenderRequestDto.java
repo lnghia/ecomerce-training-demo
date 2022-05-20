@@ -9,7 +9,7 @@ import javax.validation.constraints.Pattern;
 @Getter
 @Setter
 public class CreateGenderRequestDto {
-    @NotNull
-    @Pattern(regexp = "\\p{L}")
-    private String name;
+  @NotNull
+  @Pattern(regexp = "\\p{L}")
+  private String name;
 }

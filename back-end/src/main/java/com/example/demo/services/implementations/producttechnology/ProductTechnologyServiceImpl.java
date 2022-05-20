@@ -13,13 +13,13 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProductTechnologyServiceImpl implements ProductTechnologyService {
-    private final TechnologyDatabaseService technologyDatabaseService;
+  private final TechnologyDatabaseService technologyDatabaseService;
 
-    @Override
-    public void updateProductTechnologies(ProductEntity productEntity, List<Long> technologyIds) {
-        List<TechnologyEntity> technologyEntities = technologyDatabaseService.findByIds(technologyIds);
+  @Override
+  public void updateProductTechnologies(ProductEntity productEntity, List<Long> technologyIds) {
+    List<TechnologyEntity> technologyEntities = technologyDatabaseService.findByIds(technologyIds);
 
-        productEntity.getTechnologies().clear();
-        productEntity.setTechnologies(new HashSet<>(technologyEntities));
-    }
+    productEntity.getTechnologies().clear();
+    productEntity.setTechnologies(new HashSet<>(technologyEntities));
+  }
 }

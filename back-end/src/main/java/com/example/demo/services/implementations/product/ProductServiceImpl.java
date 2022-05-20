@@ -27,73 +27,102 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
-    private final ModelMapper modelMapper;
+  private final ModelMapper modelMapper;
 
-    private final ProductRepository productRepository;
+  private final ProductRepository productRepository;
 
-    private final UserRateProductRepository userRateProductRepository;
+  private final UserRateProductRepository userRateProductRepository;
 
-    @Override
-    public ProductResponseDto findById(long id) {
-        Optional<ProductEntity> productEntity = productRepository.findById(id);
+  @Override
+  public ProductResponseDto findById(long id) {
+    Optional<ProductEntity> productEntity = productRepository.findById(id);
 
-        if (productEntity.isEmpty()) {
-            throw new ProductNotFoundException();
-        }
-
-        return modelMapper.map(productEntity.orElse(null), ProductResponseDto.class);
+    if (productEntity.isEmpty()) {
+      throw new ProductNotFoundException();
     }
 
-    @Override
-    public PageableProductListResponseDto findAllWithFilterAndSort(List<Long> categoryIds, List<Long> genderIds, List<Long> sportIds, List<Long> technologyIds, String name, int page, int size, String sortType, String sortBy) {
-        Pageable pageable;
-        if (sortType != null && sortBy != null && !sortType.isEmpty() && !sortBy.isEmpty()) {
-            pageable = PageRequest.of(page, size, Sort.by(sortType.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy));
-        } else {
-            pageable = PageRequest.of(page, size);
-        }
+    return modelMapper.map(productEntity.orElse(null), ProductResponseDto.class);
+  }
 
-        List<String> categoryIdsInString = categoryIds != null ? categoryIds.stream().map(Object::toString).collect(Collectors.toList()) : new ArrayList<>();
-        List<String> technologyIdsInString = technologyIds != null ? technologyIds.stream().map(Object::toString).collect(Collectors.toList()) : new ArrayList<>();
-        List<String> genderIdsInString = genderIds != null ? genderIds.stream().map(Object::toString).collect(Collectors.toList()) : new ArrayList<>();
-        List<String> sportIdsInString = sportIds != null ? sportIds.stream().map(Object::toString).collect(Collectors.toList()) : new ArrayList<>();
-
-        Page<ProductEntity> productEntities = productRepository.findAllFilter(
-                categoryIdsInString,
-                genderIdsInString,
-                sportIdsInString,
-                technologyIdsInString,
-                name != null ? name : "",
-                pageable
-        );
-
-        return modelMapper.map(productEntities, PageableProductListResponseDto.class);
+  @Override
+  public PageableProductListResponseDto findAllWithFilterAndSort(
+      List<Long> categoryIds,
+      List<Long> genderIds,
+      List<Long> sportIds,
+      List<Long> technologyIds,
+      String name,
+      int page,
+      int size,
+      String sortType,
+      String sortBy) {
+    Pageable pageable;
+    if (sortType != null && sortBy != null && !sortType.isEmpty() && !sortBy.isEmpty()) {
+      pageable =
+          PageRequest.of(
+              page,
+              size,
+              Sort.by(sortType.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy));
+    } else {
+      pageable = PageRequest.of(page, size);
     }
 
-    @Override
-    public List<ProductResponseDto> getAll() {
-        List<ProductEntity> productEntities = productRepository.findAll();
+    List<String> categoryIdsInString =
+        categoryIds != null
+            ? categoryIds.stream().map(Object::toString).collect(Collectors.toList())
+            : new ArrayList<>();
+    List<String> technologyIdsInString =
+        technologyIds != null
+            ? technologyIds.stream().map(Object::toString).collect(Collectors.toList())
+            : new ArrayList<>();
+    List<String> genderIdsInString =
+        genderIds != null
+            ? genderIds.stream().map(Object::toString).collect(Collectors.toList())
+            : new ArrayList<>();
+    List<String> sportIdsInString =
+        sportIds != null
+            ? sportIds.stream().map(Object::toString).collect(Collectors.toList())
+            : new ArrayList<>();
 
-        return productEntities.stream().map(product -> modelMapper.map(product, ProductResponseDto.class)).collect(Collectors.toList());
-    }
+    Page<ProductEntity> productEntities =
+        productRepository.findAllFilter(
+            categoryIdsInString,
+            genderIdsInString,
+            sportIdsInString,
+            technologyIdsInString,
+            name != null ? name : "",
+            pageable);
 
-    @Override
-    public PageableUserRateProductResponseDto getLatestCommentUserProduct(Long productId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    return modelMapper.map(productEntities, PageableProductListResponseDto.class);
+  }
 
-        Page<UserRateProductEntity> userRateProductEntities = userRateProductRepository.getLatestRatings(productId, pageable);
+  @Override
+  public List<ProductResponseDto> getAll() {
+    List<ProductEntity> productEntities = productRepository.findAll();
 
-        return modelMapper.map(userRateProductEntities, PageableUserRateProductResponseDto.class);
-    }
+    return productEntities.stream()
+        .map(product -> modelMapper.map(product, ProductResponseDto.class))
+        .collect(Collectors.toList());
+  }
 
-    @Override
-    public UserRateProductResponseDto findReviewOfUserOnProduct(UserEntity userEntity, Long productId) {
-        Optional<UserRateProductEntity> optionalResult = userRateProductRepository.findByUserIdProductId(
-                userEntity.getId(),
-                productId);
+  @Override
+  public PageableUserRateProductResponseDto getLatestCommentUserProduct(
+      Long productId, int page, int size) {
+    Pageable pageable = PageRequest.of(page, size);
 
-        UserRateProductEntity result = optionalResult.orElse(null);
+    Page<UserRateProductEntity> userRateProductEntities =
+        userRateProductRepository.getLatestRatings(productId, pageable);
 
-        return modelMapper.map(result, UserRateProductResponseDto.class);
-    }
+    return modelMapper.map(userRateProductEntities, PageableUserRateProductResponseDto.class);
+  }
+
+  @Override
+  public UserRateProductResponseDto findReviewOfUserOnProduct(
+      UserEntity userEntity, Long productId) {
+    Optional<UserRateProductEntity> optionalResult =
+        userRateProductRepository.findByUserIdProductId(userEntity.getId(), productId);
+
+    UserRateProductEntity result = optionalResult.orElse(null);
+
+    return modelMapper.map(result, UserRateProductResponseDto.class);
+  }
 }

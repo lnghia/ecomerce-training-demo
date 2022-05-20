@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProductSizeNumberDto {
-    private Long sizeId;
+  private Long sizeId;
 
-    private Integer number;
+  private Integer number;
 }

@@ -9,19 +9,19 @@ import java.util.Set;
 @Getter
 @Setter
 public class UserResponseDto {
-    protected long id;
+  protected long id;
 
-    protected String firstName;
+  protected String firstName;
 
-    protected String lastName;
+  protected String lastName;
 
-    protected String email;
+  protected String email;
 
-    protected Set<RoleResponseDto> roles;
+  protected Set<RoleResponseDto> roles;
 
-    protected String createdDate;
+  protected String createdDate;
 
-    protected String lastModifiedDate;
+  protected String lastModifiedDate;
 
-    protected boolean isActive;
+  protected boolean isActive;
 }

@@ -10,13 +10,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRateProductRequestDto {
-    private Long productId;
+  private Long productId;
 
-    private String comment;
+  private String comment;
 
-    private int rating;
+  private int rating;
 
-    private int page = 0;
+  private int page = 0;
 
-    private int size = 3;
+  private int size = 3;
 }

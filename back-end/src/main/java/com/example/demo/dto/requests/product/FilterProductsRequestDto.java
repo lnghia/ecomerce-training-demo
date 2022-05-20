@@ -12,21 +12,21 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FilterProductsRequestDto {
-    private String name;
+  private String name;
 
-    private List<Long> genderIds;
+  private List<Long> genderIds;
 
-    private List<Long> sportIds;
+  private List<Long> sportIds;
 
-    private List<Long> categoryIds;
+  private List<Long> categoryIds;
 
-    private List<Long> technologyIds;
+  private List<Long> technologyIds;
 
-    private int page = 0;
+  private int page = 0;
 
-    private int size = 9;
+  private int size = 9;
 
-    private String sortType;
+  private String sortType;
 
-    private String sortBy;
+  private String sortBy;
 }

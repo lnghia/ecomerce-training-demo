@@ -13,20 +13,23 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class RoleEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private long id;
 
-    private String name;
+  private String name;
 
-    private int value;
+  private int value;
 
-    private boolean isDeleted = false;
+  private boolean isDeleted = false;
 
-    @ManyToMany()
-    @JoinTable(name = "role_permission", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
-    private Set<PermissionEntity> permissions;
+  @ManyToMany()
+  @JoinTable(
+      name = "role_permission",
+      joinColumns = @JoinColumn(name = "role_id"),
+      inverseJoinColumns = @JoinColumn(name = "permission_id"))
+  private Set<PermissionEntity> permissions;
 
-//    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
-//    private Collection<UserEntity> users;
+  //    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
+  //    private Collection<UserEntity> users;
 }

@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ProductSportServiceImpl implements ProductSportService {
-    private final SportDatabaseService SportDatabaseService;
+  private final SportDatabaseService SportDatabaseService;
 
-    @Override
-    public void updateProductSport(ProductEntity productEntity, Long sportId) {
-        SportEntity sportEntity = SportDatabaseService.findById(sportId);
-        productEntity.setSport(sportEntity);
-    }
+  @Override
+  public void updateProductSport(ProductEntity productEntity, Long sportId) {
+    SportEntity sportEntity = SportDatabaseService.findById(sportId);
+    productEntity.setSport(sportEntity);
+  }
 }

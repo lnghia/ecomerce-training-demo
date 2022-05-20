@@ -12,13 +12,13 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name = "permissions")
 public class PermissionEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private long id;
 
-    private String name;
+  private String name;
 
-    private int value;
+  private int value;
 
-    private boolean isDeleted = false;
+  private boolean isDeleted = false;
 }

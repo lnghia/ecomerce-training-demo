@@ -11,33 +11,34 @@ import java.util.Collection;
 import java.util.List;
 
 public interface UserService {
-    UserEntity getUserById(long id);
+  UserEntity getUserById(long id);
 
-    UserEntity findById(Long id);
+  UserEntity findById(Long id);
 
-    UserEntity getUserByUsername(String username);
+  UserEntity getUserByUsername(String username);
 
-    UserResponseDto createNormalUser(UserEntity newUser);
+  UserResponseDto createNormalUser(UserEntity newUser);
 
-    Collection<RoleEntity> getUserGrantedPermissions(long id);
+  Collection<RoleEntity> getUserGrantedPermissions(long id);
 
-    UserEntity save(UserEntity user);
+  UserEntity save(UserEntity user);
 
-    boolean hasUserExisted(long id);
+  boolean hasUserExisted(long id);
 
-    boolean hasUserExisted(String email);
+  boolean hasUserExisted(String email);
 
-    UserRateProductResponseDto rateProduct(UserRateProductRequestDto requestDto, UserEntity userEntity);
+  UserRateProductResponseDto rateProduct(
+      UserRateProductRequestDto requestDto, UserEntity userEntity);
 
-    UserResponseDto activeUser(Long userId);
+  UserResponseDto activeUser(Long userId);
 
-    UserResponseDto deActiveUser(Long userId);
+  UserResponseDto deActiveUser(Long userId);
 
-    UserResponseDto changeStatusActive(Long userId, boolean status);
+  UserResponseDto changeStatusActive(Long userId, boolean status);
 
-    List<UserListResponseDto> getListUser();
+  List<UserListResponseDto> getListUser();
 
-    List<UserListResponseDto> getListNormalUser();
+  List<UserListResponseDto> getListNormalUser();
 
-    List<UserListResponseDto> getListBlockedUser();
+  List<UserListResponseDto> getListBlockedUser();
 }

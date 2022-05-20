@@ -14,43 +14,43 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class ProductResponseDto {
-    private Long id;
+  private Long id;
 
-    private GenderEntity gender;
+  private GenderEntity gender;
 
-    private String name;
+  private String name;
 
-    private String description;
+  private String description;
 
-    private int oneStarRating;
+  private int oneStarRating;
 
-    private int twoStarRating;
+  private int twoStarRating;
 
-    private int threeStarRating;
+  private int threeStarRating;
 
-    private int fourStarRating;
+  private int fourStarRating;
 
-    private int fiveStarRating;
+  private int fiveStarRating;
 
-    private double averageRating;
+  private double averageRating;
 
-    private double price;
+  private double price;
 
-    private int year;
+  private int year;
 
-    private SportResponseDto sport;
+  private SportResponseDto sport;
 
-    private Set<ProductSizeResponseDto> sizes;
+  private Set<ProductSizeResponseDto> sizes;
 
-    private Set<CategoryEntity> categories;
+  private Set<CategoryEntity> categories;
 
-    private Set<TechnologyEntity> technologies;
+  private Set<TechnologyEntity> technologies;
 
-    private String thumbnail;
+  private String thumbnail;
 
-    private Integer countRating;
+  private Integer countRating;
 
-    private String createdDate;
+  private String createdDate;
 
-    private String lastModifiedDate;
+  private String lastModifiedDate;
 }

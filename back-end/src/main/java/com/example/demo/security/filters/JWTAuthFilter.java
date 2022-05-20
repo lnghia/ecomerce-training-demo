@@ -26,62 +26,67 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Component
 public class JWTAuthFilter extends OncePerRequestFilter {
-    @Autowired
-    private JWTProvider jwtProvider;
+  @Autowired private JWTProvider jwtProvider;
 
-    @Autowired
-    private UserService userService;
+  @Autowired private UserService userService;
 
-    @Autowired
-    private PermittedUrlsUtil permittedUrlsUtil;
+  @Autowired private PermittedUrlsUtil permittedUrlsUtil;
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        Long userId;
-        CustomUserDetails customUserDetails;
-        String jwt = extractJWTFromHeader(httpServletRequest);
+  @Override
+  protected void doFilterInternal(
+      HttpServletRequest httpServletRequest,
+      HttpServletResponse httpServletResponse,
+      FilterChain filterChain)
+      throws ServletException, IOException {
+    Long userId;
+    CustomUserDetails customUserDetails;
+    String jwt = extractJWTFromHeader(httpServletRequest);
 
-        if (!permittedUrlsUtil.isPermitted(httpServletRequest.getRequestURI())) {
-            try {
-                if (jwtProvider.validateToken(jwt)) {
+    if (!permittedUrlsUtil.isPermitted(httpServletRequest.getRequestURI())) {
+      try {
+        if (jwtProvider.validateToken(jwt)) {
 
-                    userId = (long) jwtProvider.getUserIdFromJWT(jwt);
+          userId = (long) jwtProvider.getUserIdFromJWT(jwt);
 
-                    if (SecurityContextHolder.getContext().getAuthentication() == null) {
-                        UserEntity user = userService.getUserById(userId);
+          if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserEntity user = userService.getUserById(userId);
 
-                        if (user != null) {
-                            customUserDetails = new CustomUserDetails(user);
+            if (user != null) {
+              customUserDetails = new CustomUserDetails(user);
 
-                            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
-                            usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+              UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                  new UsernamePasswordAuthenticationToken(
+                      customUserDetails, null, customUserDetails.getAuthorities());
+              usernamePasswordAuthenticationToken.setDetails(
+                  new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
 
-                            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-                        }
-                    }
-                }
-            } catch (JwtException exception) {
-                ResponseBodyDto responseBodyDTO = new ResponseBodyDto();
-
-                responseBodyDTO.getErrors().put("JWT token", "Invalid token");
-
-                httpServletResponse.setStatus(UNAUTHORIZED.value());
-                httpServletResponse.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(httpServletResponse.getOutputStream(), responseBodyDTO);
+              SecurityContextHolder.getContext()
+                  .setAuthentication(usernamePasswordAuthenticationToken);
             }
+          }
         }
+      } catch (JwtException exception) {
+        ResponseBodyDto responseBodyDTO = new ResponseBodyDto();
 
-        filterChain.doFilter(httpServletRequest, httpServletResponse);
+        responseBodyDTO.getErrors().put("JWT token", "Invalid token");
+
+        httpServletResponse.setStatus(UNAUTHORIZED.value());
+        httpServletResponse.setContentType(APPLICATION_JSON_VALUE);
+        new ObjectMapper().writeValue(httpServletResponse.getOutputStream(), responseBodyDTO);
+      }
     }
 
-    private String extractJWTFromHeader(HttpServletRequest request) {
-        final String authorizationHeader = request.getHeader("Authorization");
-        String jwt = null;
+    filterChain.doFilter(httpServletRequest, httpServletResponse);
+  }
 
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            jwt = authorizationHeader.substring(7);
-        }
+  private String extractJWTFromHeader(HttpServletRequest request) {
+    final String authorizationHeader = request.getHeader("Authorization");
+    String jwt = null;
 
-        return jwt;
+    if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+      jwt = authorizationHeader.substring(7);
     }
+
+    return jwt;
+  }
 }

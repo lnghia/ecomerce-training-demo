@@ -8,9 +8,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class UpdateGenderRequestDto {
-    @NotNull
-    private Long genderId;
+  @NotNull private Long genderId;
 
-    @NotNull
-    private String name;
+  @NotNull private String name;
 }

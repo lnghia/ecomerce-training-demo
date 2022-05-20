@@ -8,11 +8,11 @@ import java.util.List;
 @Getter
 @Setter
 public class PageableResponseDto<T> {
-    private Long totalElements;
+  private Long totalElements;
 
-    private int totalPages;
+  private int totalPages;
 
-    private int size;
+  private int size;
 
-    private List<T> content;
+  private List<T> content;
 }

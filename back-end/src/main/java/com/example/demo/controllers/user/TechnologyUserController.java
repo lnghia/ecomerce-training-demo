@@ -4,7 +4,7 @@ import com.example.demo.dto.responses.ResponseBodyDto;
 import com.example.demo.dto.responses.technology.TechnologyResponseDto;
 import com.example.demo.entities.factories.responsebodydto.ResponseBodyDtoFactory;
 import com.example.demo.services.interfaces.technology.TechnologyDatabaseService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,18 +14,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/technology")
+@RequiredArgsConstructor
 public class TechnologyUserController {
-    @Autowired
-    private TechnologyDatabaseService technologyDatabaseService;
+  private final TechnologyDatabaseService technologyDatabaseService;
 
-    @Autowired
-    private ResponseBodyDtoFactory responseBodyDtoFactory;
+  private final ResponseBodyDtoFactory responseBodyDtoFactory;
 
-    @GetMapping
-    public ResponseEntity<ResponseBodyDto<List<TechnologyResponseDto>>> getAll() {
-        List<TechnologyResponseDto> technologyResponseDtoList = technologyDatabaseService.findAll();
-        ResponseBodyDto<List<TechnologyResponseDto>> responseBody = responseBodyDtoFactory.buildResponseBody(technologyResponseDtoList, "200");
+  @GetMapping
+  public ResponseEntity<ResponseBodyDto<List<TechnologyResponseDto>>> getAll() {
+    List<TechnologyResponseDto> technologyResponseDtoList = technologyDatabaseService.findAll();
+    ResponseBodyDto<List<TechnologyResponseDto>> responseBody =
+        responseBodyDtoFactory.buildResponseBody(technologyResponseDtoList, "200");
 
-        return ResponseEntity.ok(responseBody);
-    }
+    return ResponseEntity.ok(responseBody);
+  }
 }

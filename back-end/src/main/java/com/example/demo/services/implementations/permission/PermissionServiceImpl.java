@@ -9,11 +9,10 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class PermissionServiceImpl implements PermissionService {
-    private final PermissionRepository permissionRepository;
+  private final PermissionRepository permissionRepository;
 
-
-    @Override
-    public PermissionEntity save(PermissionEntity permissionEntity) {
-        return permissionRepository.save(permissionEntity);
-    }
+  @Override
+  public PermissionEntity save(PermissionEntity permissionEntity) {
+    return permissionRepository.save(permissionEntity);
+  }
 }

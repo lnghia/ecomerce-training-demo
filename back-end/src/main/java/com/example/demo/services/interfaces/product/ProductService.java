@@ -9,21 +9,23 @@ import com.example.demo.entities.UserEntity;
 import java.util.List;
 
 public interface ProductService {
-    ProductResponseDto findById(long id);
+  ProductResponseDto findById(long id);
 
-    PageableProductListResponseDto findAllWithFilterAndSort(List<Long> categoryIds,
-                                                            List<Long> genderIds,
-                                                            List<Long> sportIds,
-                                                            List<Long> technologyIds,
-                                                            String name,
-                                                            int page,
-                                                            int size,
-                                                            String sortType,
-                                                            String sortBy);
+  PageableProductListResponseDto findAllWithFilterAndSort(
+      List<Long> categoryIds,
+      List<Long> genderIds,
+      List<Long> sportIds,
+      List<Long> technologyIds,
+      String name,
+      int page,
+      int size,
+      String sortType,
+      String sortBy);
 
-    List<ProductResponseDto> getAll();
+  List<ProductResponseDto> getAll();
 
-    PageableUserRateProductResponseDto getLatestCommentUserProduct(Long productId, int page, int size);
+  PageableUserRateProductResponseDto getLatestCommentUserProduct(
+      Long productId, int page, int size);
 
-    UserRateProductResponseDto findReviewOfUserOnProduct(UserEntity userEntity, Long productId);
+  UserRateProductResponseDto findReviewOfUserOnProduct(UserEntity userEntity, Long productId);
 }

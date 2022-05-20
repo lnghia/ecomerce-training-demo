@@ -17,26 +17,30 @@ import javax.validation.Valid;
 @RequestMapping(path = "/api/admin/sport")
 @RequiredArgsConstructor
 public class SportAdminController {
-    private final SportCrudService sportCrudService;
+  private final SportCrudService sportCrudService;
 
-    private final ResponseBodyDtoFactory responseBodyDtoFactory;
+  private final ResponseBodyDtoFactory responseBodyDtoFactory;
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping
-    public ResponseEntity<ResponseBodyDto<SportResponseDto>> updateSport(@RequestParam(name = "id") Long sportId,
-                                                                         @Valid @RequestBody UpdateSportRequestDto requestDto) {
-        SportResponseDto updatedSport = sportCrudService.updateSport(sportId, requestDto);
-        ResponseBodyDto<SportResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(updatedSport, "200");
+  @PreAuthorize("hasRole('ADMIN')")
+  @PutMapping
+  public ResponseEntity<ResponseBodyDto<SportResponseDto>> updateSport(
+      @RequestParam(name = "id") Long sportId,
+      @Valid @RequestBody UpdateSportRequestDto requestDto) {
+    SportResponseDto updatedSport = sportCrudService.updateSport(sportId, requestDto);
+    ResponseBodyDto<SportResponseDto> responseBodyDto =
+        responseBodyDtoFactory.buildResponseBody(updatedSport, "200");
 
-        return ResponseEntity.ok(responseBodyDto);
-    }
+    return ResponseEntity.ok(responseBodyDto);
+  }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping
-    public ResponseEntity<ResponseBodyDto<SportResponseDto>> createSport(@Valid @RequestBody CreateSportRequestDto requestDto) {
-        SportResponseDto createdSport = sportCrudService.createSport(requestDto);
-        ResponseBodyDto<SportResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(createdSport, "200");
+  @PreAuthorize("hasRole('ADMIN')")
+  @PostMapping
+  public ResponseEntity<ResponseBodyDto<SportResponseDto>> createSport(
+      @Valid @RequestBody CreateSportRequestDto requestDto) {
+    SportResponseDto createdSport = sportCrudService.createSport(requestDto);
+    ResponseBodyDto<SportResponseDto> responseBodyDto =
+        responseBodyDtoFactory.buildResponseBody(createdSport, "200");
 
-        return ResponseEntity.ok(responseBodyDto);
-    }
+    return ResponseEntity.ok(responseBodyDto);
+  }
 }

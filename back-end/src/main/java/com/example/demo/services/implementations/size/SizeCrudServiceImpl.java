@@ -13,28 +13,28 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class SizeCrudServiceImpl implements SizeCrudService {
-    private final ModelMapper modelMapper;
+  private final ModelMapper modelMapper;
 
-    private final SizeRepository sizeRepository;
+  private final SizeRepository sizeRepository;
 
-    @Override
-    public SizeResponseDto createSize(SizeRequestDto requestDto) {
-        String name = requestDto.getName();
-        String description = requestDto.getDescription();
+  @Override
+  public SizeResponseDto createSize(SizeRequestDto requestDto) {
+    String name = requestDto.getName();
+    String description = requestDto.getDescription();
 
-        SizeEntity sizeEntity = SizeEntity.builder().name(name).description(description).build();
-        sizeEntity = sizeRepository.save(sizeEntity);
+    SizeEntity sizeEntity = SizeEntity.builder().name(name).description(description).build();
+    sizeEntity = sizeRepository.save(sizeEntity);
 
-        return modelMapper.map(sizeEntity, SizeResponseDto.class);
-    }
+    return modelMapper.map(sizeEntity, SizeResponseDto.class);
+  }
 
-    @Override
-    public SizeResponseDto updateSize(Long sizeId, SizeRequestDto requestDto) {
-        SizeEntity sizeEntity = sizeRepository.findById(sizeId).orElseThrow(SizeNotFoundException::new);
+  @Override
+  public SizeResponseDto updateSize(Long sizeId, SizeRequestDto requestDto) {
+    SizeEntity sizeEntity = sizeRepository.findById(sizeId).orElseThrow(SizeNotFoundException::new);
 
-        modelMapper.map(requestDto, sizeEntity);
-        sizeEntity = sizeRepository.save(sizeEntity);
+    modelMapper.map(requestDto, sizeEntity);
+    sizeEntity = sizeRepository.save(sizeEntity);
 
-        return modelMapper.map(sizeEntity, SizeResponseDto.class);
-    }
+    return modelMapper.map(sizeEntity, SizeResponseDto.class);
+  }
 }

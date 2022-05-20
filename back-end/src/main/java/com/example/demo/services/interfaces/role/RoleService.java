@@ -6,11 +6,11 @@ import com.example.demo.entities.RoleEntity;
 import java.util.List;
 
 public interface RoleService {
-    RoleEntity save(RoleEntity roleEntity);
+  RoleEntity save(RoleEntity roleEntity);
 
-    RoleEntity findByName(String name);
+  RoleEntity findByName(String name);
 
-    boolean hasRoleExisted(long id);
+  boolean hasRoleExisted(long id);
 
-    List<RoleResponseDto> findAll();
+  List<RoleResponseDto> findAll();
 }

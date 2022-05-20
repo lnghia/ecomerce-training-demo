@@ -5,5 +5,5 @@ import com.example.demo.entities.ProductEntity;
 import java.util.List;
 
 public interface ProductCategoryService {
-    void updateProductCategories(ProductEntity productEntity, List<Long> categoryIds);
+  void updateProductCategories(ProductEntity productEntity, List<Long> categoryIds);
 }

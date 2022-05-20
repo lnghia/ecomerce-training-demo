@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class UserListResponseDto extends UserResponseDto {
-    private String username;
+  private String username;
 
-    private String avatar;
+  private String avatar;
 }

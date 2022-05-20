@@ -31,154 +31,165 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    private final RoleRepository roleRepository;
+  private final RoleRepository roleRepository;
 
-    private final RoleUtilityWrapper roleUtilityWrapper;
+  private final RoleUtilityWrapper roleUtilityWrapper;
 
-    private final PasswordEncoder passwordEncoder;
+  private final PasswordEncoder passwordEncoder;
 
-    private final ProductDatabaseService productDatabaseService;
+  private final ProductDatabaseService productDatabaseService;
 
-    private final UserRateProductRepository userRateProductRepository;
+  private final UserRateProductRepository userRateProductRepository;
 
-    private final ModelMapper modelMapper;
+  private final ModelMapper modelMapper;
 
-    @Override
-    public UserEntity getUserById(long id) {
-        Optional<UserEntity> user = userRepository.findById(id);
+  @Override
+  public UserEntity getUserById(long id) {
+    Optional<UserEntity> user = userRepository.findById(id);
 
-        return user.orElse(null);
+    return user.orElse(null);
+  }
+
+  @Override
+  public UserEntity findById(Long id) {
+    Optional<UserEntity> user = userRepository.findById(id);
+
+    if (user.isPresent()) {
+      return user.get();
     }
 
-    @Override
-    public UserEntity findById(Long id) {
-        Optional<UserEntity> user = userRepository.findById(id);
+    throw new UserNotFoundException();
+  }
 
-        if (user.isPresent()) {
-            return user.get();
-        }
+  @Override
+  public UserEntity getUserByUsername(String username) {
+    Optional<UserEntity> user = userRepository.findByUsername(username);
 
-        throw new UserNotFoundException();
+    return user.orElse(null);
+  }
+
+  @Override
+  public UserResponseDto createNormalUser(UserEntity newUser) {
+    Optional<UserEntity> userEntity = userRepository.findByUsername(newUser.getEmail());
+
+    if (userEntity.isPresent()) {
+      throw new UserExistedException();
     }
 
-    @Override
-    public UserEntity getUserByUsername(String username) {
-        Optional<UserEntity> user = userRepository.findByUsername(username);
+    String plainPassword = newUser.getPassword();
+    String encryptedPassword = passwordEncoder.encode(plainPassword);
+    Optional<RoleEntity> roleEntity =
+        roleRepository.findByName(roleUtilityWrapper.getUserRoleString());
 
-        return user.orElse(null);
-    }
+    newUser.setPassword(encryptedPassword);
+    newUser.setUsername(newUser.getEmail());
+    newUser.setRoles(Set.of(roleEntity.get()));
 
-    @Override
-    public UserResponseDto createNormalUser(UserEntity newUser) {
-        Optional<UserEntity> userEntity = userRepository.findByUsername(newUser.getEmail());
+    return modelMapper.map(userRepository.save(newUser), UserResponseDto.class);
+  }
 
-        if (userEntity.isPresent()) {
-            throw new UserExistedException();
-        }
+  @Override
+  public Collection<RoleEntity> getUserGrantedPermissions(long id) {
+    Optional<UserEntity> user = userRepository.findById(id);
 
-        String plainPassword = newUser.getPassword();
-        String encryptedPassword = passwordEncoder.encode(plainPassword);
-        Optional<RoleEntity> roleEntity = roleRepository.findByName(roleUtilityWrapper.getUserRoleString());
+    return user.get().getRoles();
+  }
 
-        newUser.setPassword(encryptedPassword);
-        newUser.setUsername(newUser.getEmail());
-        newUser.setRoles(Set.of(roleEntity.get()));
+  @Override
+  public UserEntity save(UserEntity user) {
+    return userRepository.save(user);
+  }
 
-        return modelMapper.map(userRepository.save(newUser), UserResponseDto.class);
-    }
+  @Override
+  public boolean hasUserExisted(long id) {
+    Optional<UserEntity> user = userRepository.findById(id);
 
+    return user.isPresent();
+  }
 
-    @Override
-    public Collection<RoleEntity> getUserGrantedPermissions(long id) {
-        Optional<UserEntity> user = userRepository.findById(id);
+  @Override
+  public boolean hasUserExisted(String email) {
+    Optional<UserEntity> user = userRepository.findByUsername(email);
 
-        return user.get().getRoles();
-    }
+    return user.isPresent();
+  }
 
-    @Override
-    public UserEntity save(UserEntity user) {
-        return userRepository.save(user);
-    }
+  @Override
+  @Transactional
+  public UserRateProductResponseDto rateProduct(
+      UserRateProductRequestDto requestDto, UserEntity userEntity) {
+    Long productId = requestDto.getProductId();
+    int rating = requestDto.getRating();
+    String comment = requestDto.getComment();
 
-    @Override
-    public boolean hasUserExisted(long id) {
-        Optional<UserEntity> user = userRepository.findById(id);
+    ProductEntity product = productDatabaseService.findById(productId);
+    double averageRating = product.getAverageRating();
+    averageRating =
+        (averageRating * product.getCountRating() + requestDto.getRating())
+            / (product.getCountRating() + 1);
+    product.setCountRating(product.getCountRating() + 1);
+    product.setAverageRating(averageRating);
 
-        return user.isPresent();
-    }
+    UserRateProductEntity userRateProductEntity =
+        UserRateProductEntity.builder()
+            .rating(rating)
+            .comment(comment)
+            .product(product)
+            .user(userEntity)
+            .build();
 
-    @Override
-    public boolean hasUserExisted(String email) {
-        Optional<UserEntity> user = userRepository.findByUsername(email);
+    userRateProductEntity = userRateProductRepository.save(userRateProductEntity);
+    productDatabaseService.saveProduct(product);
 
-        return user.isPresent();
-    }
+    return modelMapper.map(userRateProductEntity, UserRateProductResponseDto.class);
+  }
 
-    @Override
-    @Transactional
-    public UserRateProductResponseDto rateProduct(UserRateProductRequestDto requestDto, UserEntity userEntity) {
-        Long productId = requestDto.getProductId();
-        int rating = requestDto.getRating();
-        String comment = requestDto.getComment();
+  @Override
+  public UserResponseDto activeUser(Long userId) {
+    return this.changeStatusActive(userId, true);
+  }
 
-        ProductEntity product = productDatabaseService.findById(productId);
-        double averageRating = product.getAverageRating();
-        averageRating = (averageRating * product.getCountRating() + requestDto.getRating()) / (product.getCountRating() + 1);
-        product.setCountRating(product.getCountRating() + 1);
-        product.setAverageRating(averageRating);
+  @Override
+  public UserResponseDto deActiveUser(Long userId) {
+    return this.changeStatusActive(userId, false);
+  }
 
-        UserRateProductEntity userRateProductEntity = UserRateProductEntity.builder()
-                .rating(rating)
-                .comment(comment)
-                .product(product)
-                .user(userEntity)
-                .build();
+  @Override
+  @Transactional
+  public UserResponseDto changeStatusActive(Long userId, boolean status) {
+    UserEntity user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+    user.setIsActive(status);
+    user = userRepository.save(user);
+    return modelMapper.map(user, UserResponseDto.class);
+  }
 
-        userRateProductEntity = userRateProductRepository.save(userRateProductEntity);
-        productDatabaseService.saveProduct(product);
+  @Override
+  public List<UserListResponseDto> getListUser() {
+    return userRepository.findAll().stream()
+        .map(user -> modelMapper.map(user, UserListResponseDto.class))
+        .collect(Collectors.toList());
+  }
 
-        return modelMapper.map(userRateProductEntity, UserRateProductResponseDto.class);
-    }
+  @Override
+  public List<UserListResponseDto> getListNormalUser() {
+    List<UserEntity> userEntities = userRepository.findAllWithStatus(true);
 
-    @Override
-    public UserResponseDto activeUser(Long userId) {
-        return this.changeStatusActive(userId, true);
-    }
+    return userEntities.stream()
+        .map(userEntity -> modelMapper.map(userEntity, UserListResponseDto.class))
+        .collect(Collectors.toList());
+  }
 
-    @Override
-    public UserResponseDto deActiveUser(Long userId) {
-        return this.changeStatusActive(userId, false);
-    }
+  @Override
+  public List<UserListResponseDto> getListBlockedUser() {
+    List<UserEntity> userEntities = userRepository.findAllWithStatus(false);
 
-    @Override
-    @Transactional
-    public UserResponseDto changeStatusActive(Long userId, boolean status) {
-        UserEntity user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        user.setIsActive(status);
-        user = userRepository.save(user);
-        return modelMapper.map(user, UserResponseDto.class);
-    }
-
-    @Override
-    public List<UserListResponseDto> getListUser() {
-        return userRepository.findAll().stream().map(user -> modelMapper.map(user, UserListResponseDto.class)).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<UserListResponseDto> getListNormalUser() {
-        List<UserEntity> userEntities = userRepository.findAllWithStatus(true);
-
-        return userEntities.stream().map(userEntity -> modelMapper.map(userEntity, UserListResponseDto.class)).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<UserListResponseDto> getListBlockedUser() {
-        List<UserEntity> userEntities = userRepository.findAllWithStatus(false);
-
-        return userEntities.stream().map(userEntity -> {
-            return modelMapper.map(userEntity, UserListResponseDto.class);
-        }).collect(Collectors.toList());
-    }
+    return userEntities.stream()
+        .map(
+            userEntity -> {
+              return modelMapper.map(userEntity, UserListResponseDto.class);
+            })
+        .collect(Collectors.toList());
+  }
 }

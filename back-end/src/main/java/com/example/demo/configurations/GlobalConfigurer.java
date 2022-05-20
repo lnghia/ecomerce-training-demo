@@ -13,21 +13,21 @@ import java.util.Optional;
 @Configuration
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
 public class GlobalConfigurer {
-    @Bean
-    AuditorAware<String> auditorProvider() {
-        return new AuditorAware<>() {
-            @Override
-            public Optional<String> getCurrentAuditor() {
-                Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+  @Bean
+  AuditorAware<String> auditorProvider() {
+    return new AuditorAware<>() {
+      @Override
+      public Optional<String> getCurrentAuditor() {
+        Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-                if (obj instanceof String) {
-                    return Optional.ofNullable((String) obj);
-                }
+        if (obj instanceof String) {
+          return Optional.ofNullable((String) obj);
+        }
 
-                CustomUserDetails customUserDetails = (CustomUserDetails) obj;
-                UserEntity userEntity = customUserDetails.getUser();
-                return Optional.ofNullable(userEntity.getUsername());
-            }
-        };
-    }
+        CustomUserDetails customUserDetails = (CustomUserDetails) obj;
+        UserEntity userEntity = customUserDetails.getUser();
+        return Optional.ofNullable(userEntity.getUsername());
+      }
+    };
+  }
 }

@@ -13,15 +13,15 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class SportEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
-    private String name;
+  private String name;
 
-    private String description;
+  private String description;
 
-    @OneToMany
-    @JoinColumn(name = "sport_id", referencedColumnName = "id")
-    private Set<ProductEntity> products;
+  @OneToMany
+  @JoinColumn(name = "sport_id", referencedColumnName = "id")
+  private Set<ProductEntity> products;
 }

@@ -13,26 +13,26 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class CategoryDatabaseServiceImpl implements CategoryDatabaseService {
-    private final CategoryRepository categoryRepository;
+  private final CategoryRepository categoryRepository;
 
-    @Override
-    public CategoryEntity findById(Long id) {
-        Optional<CategoryEntity> categoryEntity = categoryRepository.findById(id);
+  @Override
+  public CategoryEntity findById(Long id) {
+    Optional<CategoryEntity> categoryEntity = categoryRepository.findById(id);
 
-        if (categoryEntity.isEmpty()) {
-            throw new CategoryNotFoundException();
-        }
-
-        return categoryEntity.get();
+    if (categoryEntity.isEmpty()) {
+      throw new CategoryNotFoundException();
     }
 
-    @Override
-    public List<CategoryEntity> findAllById(List<Long> ids) {
-        return categoryRepository.findAllById(ids);
-    }
+    return categoryEntity.get();
+  }
 
-    @Override
-    public List<CategoryEntity> findAll() {
-        return categoryRepository.findAll();
-    }
+  @Override
+  public List<CategoryEntity> findAllById(List<Long> ids) {
+    return categoryRepository.findAllById(ids);
+  }
+
+  @Override
+  public List<CategoryEntity> findAll() {
+    return categoryRepository.findAll();
+  }
 }

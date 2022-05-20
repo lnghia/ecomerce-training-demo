@@ -17,17 +17,21 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Component
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
-    @Override
-    public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-        ResponseBodyDto response = new ResponseBodyDto();
+  @Override
+  public void commence(
+      HttpServletRequest httpServletRequest,
+      HttpServletResponse httpServletResponse,
+      AuthenticationException e)
+      throws IOException, ServletException {
+    ResponseBodyDto response = new ResponseBodyDto();
 
-        response.getErrors().put("authorization", "Unauthorised");
+    response.getErrors().put("authorization", "Unauthorised");
 
-        OutputStream out = httpServletResponse.getOutputStream();
-        ObjectMapper mapper = new ObjectMapper();
-        httpServletResponse.setStatus(UNAUTHORIZED.value());
-        httpServletResponse.setContentType(APPLICATION_JSON_VALUE);
-        mapper.writeValue(out, response);
-        out.flush();
-    }
+    OutputStream out = httpServletResponse.getOutputStream();
+    ObjectMapper mapper = new ObjectMapper();
+    httpServletResponse.setStatus(UNAUTHORIZED.value());
+    httpServletResponse.setContentType(APPLICATION_JSON_VALUE);
+    mapper.writeValue(out, response);
+    out.flush();
+  }
 }

@@ -6,9 +6,9 @@ import com.example.demo.entities.TechnologyEntity;
 import java.util.List;
 
 public interface TechnologyDatabaseService {
-    List<TechnologyEntity> findByIds(List<Long> ids);
+  List<TechnologyEntity> findByIds(List<Long> ids);
 
-    List<TechnologyResponseDto> findAll();
+  List<TechnologyResponseDto> findAll();
 
-    TechnologyEntity findById(Long id);
+  TechnologyEntity findById(Long id);
 }

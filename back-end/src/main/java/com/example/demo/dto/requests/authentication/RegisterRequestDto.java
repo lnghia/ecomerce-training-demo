@@ -9,16 +9,11 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class RegisterRequestDto {
-    @NotNull
-    @Email
-    private String email;
+  @NotNull @Email private String email;
 
-    @NotNull
-    private String password;
+  @NotNull private String password;
 
-    @NotNull
-    private String firstName;
+  @NotNull private String firstName;
 
-    @NotNull
-    private String lastName;
+  @NotNull private String lastName;
 }

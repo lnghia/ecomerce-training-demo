@@ -12,32 +12,36 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ProductDatabaseServiceImpl implements ProductDatabaseService {
-    private final ProductRepository productRepository;
+  private final ProductRepository productRepository;
 
-    @Override
-    public ProductEntity findById(Long id) {
-        Optional<ProductEntity> productEntity = productRepository.findById(id);
+  @Override
+  public ProductEntity findById(Long id) {
+    Optional<ProductEntity> productEntity = productRepository.findById(id);
 
-        if (productEntity.isEmpty()) {
-            throw new ProductNotFoundException();
-        }
-
-        return productEntity.get();
+    if (productEntity.isEmpty()) {
+      throw new ProductNotFoundException();
     }
 
-    @Override
-    public ProductEntity saveProduct(ProductEntity productEntity) {
-        return productRepository.save(productEntity);
-    }
+    return productEntity.get();
+  }
 
-    @Override
-    public boolean deleteProduct(Long id) {
-        ProductEntity productEntity = productRepository.findById(id).orElseThrow(() -> {
-            throw new ProductNotFoundException();
-        });
+  @Override
+  public ProductEntity saveProduct(ProductEntity productEntity) {
+    return productRepository.save(productEntity);
+  }
 
-        productRepository.delete(productEntity);
+  @Override
+  public boolean deleteProduct(Long id) {
+    ProductEntity productEntity =
+        productRepository
+            .findById(id)
+            .orElseThrow(
+                () -> {
+                  throw new ProductNotFoundException();
+                });
 
-        return true;
-    }
+    productRepository.delete(productEntity);
+
+    return true;
+  }
 }

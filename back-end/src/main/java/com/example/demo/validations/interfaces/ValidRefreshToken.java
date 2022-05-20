@@ -13,12 +13,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Documented
 @Retention(RUNTIME)
-@Target({ FIELD, ANNOTATION_TYPE, TYPE_USE })
+@Target({FIELD, ANNOTATION_TYPE, TYPE_USE})
 @Constraint(validatedBy = RefreshTokenValidator.class)
 public @interface ValidRefreshToken {
-    String message() default "Invalid token";
+  String message() default "Invalid token";
 
-    Class<?>[] groups() default {};
+  Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default {};
+  Class<? extends Payload>[] payload() default {};
 }

@@ -15,7 +15,7 @@ import com.example.demo.services.interfaces.product.ProductService;
 import com.example.demo.services.interfaces.productsize.ProductSizeService;
 import com.example.demo.services.interfaces.user.UserService;
 import com.example.demo.utilities.authentication.AuthenticationUtility;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -25,96 +25,96 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/product")
+@RequiredArgsConstructor
 public class ProductUserController {
-    @Autowired
-    private ProductService productService;
+  private final ProductService productService;
 
-    @Autowired
-    private ProductCrudService productCRUDService;
+  private final ProductCrudService productCRUDService;
 
-    @Autowired
-    private ProductSizeService productSizeService;
+  private final ProductSizeService productSizeService;
 
-    @Autowired
-    private UserService userService;
+  private final UserService userService;
 
-    @Autowired
-    private AuthenticationUtility authenticationUtility;
+  private final AuthenticationUtility authenticationUtility;
 
-    @Autowired
-    private ResponseBodyDtoFactory responseBodyDtoFactory;
+  private final ResponseBodyDtoFactory responseBodyDtoFactory;
 
-    @GetMapping(path = "/{id}")
-    public ResponseEntity<ResponseBodyDto<ProductResponseDto>> getProduct(@PathVariable Long id) {
-        ProductResponseDto productResponseDTO = productService.findById(id);
-        ResponseBodyDto<ProductResponseDto> responseBodyDTO = responseBodyDtoFactory.buildResponseBody(productResponseDTO, "200");
+  @GetMapping(path = "/{id}")
+  public ResponseEntity<ResponseBodyDto<ProductResponseDto>> getProduct(@PathVariable Long id) {
+    ProductResponseDto productResponseDTO = productService.findById(id);
+    ResponseBodyDto<ProductResponseDto> responseBodyDTO =
+        responseBodyDtoFactory.buildResponseBody(productResponseDTO, "200");
 
-        return ResponseEntity.ok(responseBodyDTO);
-    }
+    return ResponseEntity.ok(responseBodyDTO);
+  }
 
-    @PostMapping(path = "/search")
-    public ResponseEntity<ResponseBodyDto<PageableProductListResponseDto>> getProducts(@Valid @RequestBody FilterProductsRequestDto requestDto) {
-        int size = requestDto.getSize();
-        int page = requestDto.getPage();
-        String name = requestDto.getName();
-        List<Long> genderId = requestDto.getGenderIds();
-        List<Long> sportId = requestDto.getSportIds();
-        List<Long> categoryIds = requestDto.getCategoryIds();
-        List<Long> technologyIds = requestDto.getTechnologyIds();
-        String sortType = requestDto.getSortType();
-        String sortBy = requestDto.getSortBy();
+  @PostMapping(path = "/search")
+  public ResponseEntity<ResponseBodyDto<PageableProductListResponseDto>> getProducts(
+      @Valid @RequestBody FilterProductsRequestDto requestDto) {
+    int size = requestDto.getSize();
+    int page = requestDto.getPage();
+    String name = requestDto.getName();
+    List<Long> genderId = requestDto.getGenderIds();
+    List<Long> sportId = requestDto.getSportIds();
+    List<Long> categoryIds = requestDto.getCategoryIds();
+    List<Long> technologyIds = requestDto.getTechnologyIds();
+    String sortType = requestDto.getSortType();
+    String sortBy = requestDto.getSortBy();
 
-        PageableProductListResponseDto products = productService.findAllWithFilterAndSort(
-                categoryIds,
-                genderId,
-                sportId,
-                technologyIds,
-                name,
-                page,
-                size,
-                sortType,
-                sortBy
-        );
-        ResponseBodyDto<PageableProductListResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(products, "200");
+    PageableProductListResponseDto products =
+        productService.findAllWithFilterAndSort(
+            categoryIds, genderId, sportId, technologyIds, name, page, size, sortType, sortBy);
+    ResponseBodyDto<PageableProductListResponseDto> responseBodyDto =
+        responseBodyDtoFactory.buildResponseBody(products, "200");
 
-        return ResponseEntity.ok(responseBodyDto);
-    }
+    return ResponseEntity.ok(responseBodyDto);
+  }
 
-    @GetMapping(path = "/all")
-    public ResponseEntity<ResponseBodyDto<List<ProductResponseDto>>> findAllProduct() {
-        List<ProductResponseDto> result = productService.getAll();
-        ResponseBodyDto<List<ProductResponseDto>> response = responseBodyDtoFactory.buildResponseBody(result, "200");
+  @GetMapping(path = "/all")
+  public ResponseEntity<ResponseBodyDto<List<ProductResponseDto>>> findAllProduct() {
+    List<ProductResponseDto> result = productService.getAll();
+    ResponseBodyDto<List<ProductResponseDto>> response =
+        responseBodyDtoFactory.buildResponseBody(result, "200");
 
-        return ResponseEntity.ok(response);
-    }
+    return ResponseEntity.ok(response);
+  }
 
-    @PostMapping(path = "/rate_product")
-    public ResponseEntity<ResponseBodyDto<UserRateProductResponseDto>> rateProduct(@Valid @RequestBody UserRateProductRequestDto requestDto,
-                                                                                   @RequestParam Long productId) {
-        UserEntity userEntity = authenticationUtility.getUserDetailFromSecurityContext();
-        requestDto.setProductId(productId);
-        UserRateProductResponseDto responseDto = userService.rateProduct(requestDto, userEntity);
-        ResponseBodyDto<UserRateProductResponseDto> responseBody = responseBodyDtoFactory.buildResponseBody(responseDto, "200");
+  @PostMapping(path = "/rate_product")
+  public ResponseEntity<ResponseBodyDto<UserRateProductResponseDto>> rateProduct(
+      @Valid @RequestBody UserRateProductRequestDto requestDto, @RequestParam Long productId) {
+    UserEntity userEntity = authenticationUtility.getUserDetailFromSecurityContext();
+    requestDto.setProductId(productId);
+    UserRateProductResponseDto responseDto = userService.rateProduct(requestDto, userEntity);
+    ResponseBodyDto<UserRateProductResponseDto> responseBody =
+        responseBodyDtoFactory.buildResponseBody(responseDto, "200");
 
-        return ResponseEntity.ok(responseBody);
-    }
+    return ResponseEntity.ok(responseBody);
+  }
 
-    @GetMapping(path = "/ratings")
-    public ResponseEntity<ResponseBodyDto<PageableUserRateProductResponseDto>> getProductRatings(@RequestParam(value = "productId") Long productId,
-                                                                                                 @RequestParam(value = "page", defaultValue = "0") int page,
-                                                                                                 @RequestParam(value = "size", defaultValue = "3") int size) {
-        PageableUserRateProductResponseDto result = productService.getLatestCommentUserProduct(productId, page, size);
-        ResponseBodyDto<PageableUserRateProductResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(result, "200");
+  @GetMapping(path = "/ratings")
+  public ResponseEntity<ResponseBodyDto<PageableUserRateProductResponseDto>> getProductRatings(
+      @RequestParam(value = "productId") Long productId,
+      @RequestParam(value = "page", defaultValue = "0") int page,
+      @RequestParam(value = "size", defaultValue = "3") int size) {
+    PageableUserRateProductResponseDto result =
+        productService.getLatestCommentUserProduct(productId, page, size);
+    ResponseBodyDto<PageableUserRateProductResponseDto> responseBodyDto =
+        responseBodyDtoFactory.buildResponseBody(result, "200");
 
-        return ResponseEntity.ok(responseBodyDto);
-    }
+    return ResponseEntity.ok(responseBodyDto);
+  }
 
-    @GetMapping(path = "/user_review_on_product")
-    public ResponseEntity<ResponseBodyDto<UserRateProductResponseDto>> getUserReviewOnProduct(@RequestParam(value = "productId") Long productId) {
-        UserEntity userEntity = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-        UserRateProductResponseDto result = productService.findReviewOfUserOnProduct(userEntity, productId);
-        ResponseBodyDto<UserRateProductResponseDto> responseBody = responseBodyDtoFactory.buildResponseBody(result, "200");
+  @GetMapping(path = "/user_review_on_product")
+  public ResponseEntity<ResponseBodyDto<UserRateProductResponseDto>> getUserReviewOnProduct(
+      @RequestParam(value = "productId") Long productId) {
+    UserEntity userEntity =
+        ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+            .getUser();
+    UserRateProductResponseDto result =
+        productService.findReviewOfUserOnProduct(userEntity, productId);
+    ResponseBodyDto<UserRateProductResponseDto> responseBody =
+        responseBodyDtoFactory.buildResponseBody(result, "200");
 
-        return ResponseEntity.ok(responseBody);
-    }
+    return ResponseEntity.ok(responseBody);
+  }
 }

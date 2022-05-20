@@ -14,26 +14,27 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class SportCrudServiceImpl implements SportCrudService {
-    private final ModelMapper modelMapper;
+  private final ModelMapper modelMapper;
 
-    private final SportRepository sportRepository;
+  private final SportRepository sportRepository;
 
-    @Override
-    public SportResponseDto updateSport(Long sportId, UpdateSportRequestDto requestDto) {
-        SportEntity sportEntity = sportRepository.findById(sportId).orElseThrow(SportNotFoundException::new);
+  @Override
+  public SportResponseDto updateSport(Long sportId, UpdateSportRequestDto requestDto) {
+    SportEntity sportEntity =
+        sportRepository.findById(sportId).orElseThrow(SportNotFoundException::new);
 
-        modelMapper.map(requestDto, sportEntity);
-        sportEntity = sportRepository.save(sportEntity);
+    modelMapper.map(requestDto, sportEntity);
+    sportEntity = sportRepository.save(sportEntity);
 
-        return modelMapper.map(sportEntity, SportResponseDto.class);
-    }
+    return modelMapper.map(sportEntity, SportResponseDto.class);
+  }
 
-    @Override
-    public SportResponseDto createSport(CreateSportRequestDto requestDto) {
-        SportEntity sportEntity = new SportEntity();
-        modelMapper.map(requestDto, sportEntity);
-        sportEntity = sportRepository.save(sportEntity);
+  @Override
+  public SportResponseDto createSport(CreateSportRequestDto requestDto) {
+    SportEntity sportEntity = new SportEntity();
+    modelMapper.map(requestDto, sportEntity);
+    sportEntity = sportRepository.save(sportEntity);
 
-        return modelMapper.map(sportEntity, SportResponseDto.class);
-    }
+    return modelMapper.map(sportEntity, SportResponseDto.class);
+  }
 }

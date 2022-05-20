@@ -13,12 +13,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Documented
 @Retention(RUNTIME)
-@Target({ FIELD, ANNOTATION_TYPE, TYPE_USE })
+@Target({FIELD, ANNOTATION_TYPE, TYPE_USE})
 @Constraint(validatedBy = RoleIdValidator.class)
 public @interface ValidRoleId {
-    String message() default "Invalid role id";
+  String message() default "Invalid role id";
 
-    Class<?>[] groups() default {};
+  Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default {};
+  Class<? extends Payload>[] payload() default {};
 }

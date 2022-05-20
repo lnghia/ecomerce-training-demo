@@ -19,54 +19,63 @@ import java.util.List;
 @RequestMapping(path = "/api/admin/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final UserService userService;
+  private final UserService userService;
 
-    private final UserRoleService userRoleService;
+  private final UserRoleService userRoleService;
 
-    private final ResponseBodyDtoFactory responseBodyDtoFactory;
+  private final ResponseBodyDtoFactory responseBodyDtoFactory;
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/active")
-    public ResponseEntity<ResponseBodyDto<UserResponseDto>> activeUser(@RequestParam(name = "id") Long userId) {
-        UserResponseDto userResponseDto = userService.activeUser(userId);
-        ResponseBodyDto<UserResponseDto> responseBody = responseBodyDtoFactory.buildResponseBody(userResponseDto, "200");
+  @PreAuthorize("hasRole('ADMIN')")
+  @PutMapping("/active")
+  public ResponseEntity<ResponseBodyDto<UserResponseDto>> activeUser(
+      @RequestParam(name = "id") Long userId) {
+    UserResponseDto userResponseDto = userService.activeUser(userId);
+    ResponseBodyDto<UserResponseDto> responseBody =
+        responseBodyDtoFactory.buildResponseBody(userResponseDto, "200");
 
-        return ResponseEntity.ok(responseBody);
-    }
+    return ResponseEntity.ok(responseBody);
+  }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/de_active")
-    public ResponseEntity<ResponseBodyDto<UserResponseDto>> deactiveUser(@RequestParam(name = "id") Long userId) {
-        UserResponseDto userResponseDto = userService.deActiveUser(userId);
-        ResponseBodyDto<UserResponseDto> responseBody = responseBodyDtoFactory.buildResponseBody(userResponseDto, "200");
+  @PreAuthorize("hasRole('ADMIN')")
+  @PutMapping("/de_active")
+  public ResponseEntity<ResponseBodyDto<UserResponseDto>> deactiveUser(
+      @RequestParam(name = "id") Long userId) {
+    UserResponseDto userResponseDto = userService.deActiveUser(userId);
+    ResponseBodyDto<UserResponseDto> responseBody =
+        responseBodyDtoFactory.buildResponseBody(userResponseDto, "200");
 
-        return ResponseEntity.ok(responseBody);
-    }
+    return ResponseEntity.ok(responseBody);
+  }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/active")
-    public ResponseEntity<ResponseBodyDto<List<UserListResponseDto>>> getListNormalUser() {
-        List<UserListResponseDto> users = userService.getListNormalUser();
-        ResponseBodyDto<List<UserListResponseDto>> responseBody = responseBodyDtoFactory.buildResponseBody(users, "200");
+  @PreAuthorize("hasRole('ADMIN')")
+  @GetMapping("/active")
+  public ResponseEntity<ResponseBodyDto<List<UserListResponseDto>>> getListNormalUser() {
+    List<UserListResponseDto> users = userService.getListNormalUser();
+    ResponseBodyDto<List<UserListResponseDto>> responseBody =
+        responseBodyDtoFactory.buildResponseBody(users, "200");
 
-        return ResponseEntity.ok(responseBody);
-    }
+    return ResponseEntity.ok(responseBody);
+  }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/de_active")
-    public ResponseEntity<ResponseBodyDto<List<UserListResponseDto>>> getListBlockedUser() {
-        List<UserListResponseDto> users = userService.getListBlockedUser();
-        ResponseBodyDto<List<UserListResponseDto>> responseBody = responseBodyDtoFactory.buildResponseBody(users, "200");
+  @PreAuthorize("hasRole('ADMIN')")
+  @GetMapping("/de_active")
+  public ResponseEntity<ResponseBodyDto<List<UserListResponseDto>>> getListBlockedUser() {
+    List<UserListResponseDto> users = userService.getListBlockedUser();
+    ResponseBodyDto<List<UserListResponseDto>> responseBody =
+        responseBodyDtoFactory.buildResponseBody(users, "200");
 
-        return ResponseEntity.ok(responseBody);
-    }
+    return ResponseEntity.ok(responseBody);
+  }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/assign_role")
-    public ResponseEntity<ResponseBodyDto<UserResponseDto>> assignRoleToUser(@Valid @RequestBody AssignRoleToUserRequestDto requestBody) {
-        UserResponseDto userResponseDTO = userRoleService.assignRoleToUser(requestBody.getUserId(), requestBody.getRoleId());
-        ResponseBodyDto<UserResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(userResponseDTO, "200");
+  @PreAuthorize("hasRole('ADMIN')")
+  @PostMapping("/assign_role")
+  public ResponseEntity<ResponseBodyDto<UserResponseDto>> assignRoleToUser(
+      @Valid @RequestBody AssignRoleToUserRequestDto requestBody) {
+    UserResponseDto userResponseDTO =
+        userRoleService.assignRoleToUser(requestBody.getUserId(), requestBody.getRoleId());
+    ResponseBodyDto<UserResponseDto> responseBodyDto =
+        responseBodyDtoFactory.buildResponseBody(userResponseDTO, "200");
 
-        return ResponseEntity.ok(responseBodyDto);
-    }
+    return ResponseEntity.ok(responseBodyDto);
+  }
 }

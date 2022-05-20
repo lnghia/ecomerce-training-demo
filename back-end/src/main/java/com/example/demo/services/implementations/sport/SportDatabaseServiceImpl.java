@@ -16,28 +16,31 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class SportDatabaseServiceImpl implements SportDatabaseService {
-    private final ModelMapper modelMapper;
+  private final ModelMapper modelMapper;
 
-    private final SportRepository sportRepository;
+  private final SportRepository sportRepository;
 
-    @Override
-    public List<SportResponseDto> findAll() {
-        List<SportEntity> sportEntities = sportRepository.findAll();
-        List<SportResponseDto> result;
+  @Override
+  public List<SportResponseDto> findAll() {
+    List<SportEntity> sportEntities = sportRepository.findAll();
+    List<SportResponseDto> result;
 
-        result = sportEntities.stream().map(sportEntity -> modelMapper.map(sportEntity, SportResponseDto.class)).collect(Collectors.toList());
+    result =
+        sportEntities.stream()
+            .map(sportEntity -> modelMapper.map(sportEntity, SportResponseDto.class))
+            .collect(Collectors.toList());
 
-        return result;
+    return result;
+  }
+
+  @Override
+  public SportEntity findById(Long id) {
+    Optional<SportEntity> sportEntity = sportRepository.findById(id);
+
+    if (sportEntity.isPresent()) {
+      return sportEntity.get();
     }
 
-    @Override
-    public SportEntity findById(Long id) {
-        Optional<SportEntity> sportEntity = sportRepository.findById(id);
-
-        if (sportEntity.isPresent()) {
-            return sportEntity.get();
-        }
-
-        throw new SportNotFoundException();
-    }
+    throw new SportNotFoundException();
+  }
 }

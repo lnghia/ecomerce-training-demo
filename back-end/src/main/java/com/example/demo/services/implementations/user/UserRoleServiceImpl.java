@@ -16,22 +16,22 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserRoleServiceImpl implements UserRoleService {
-    private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    private final RoleRepository roleRepository;
+  private final RoleRepository roleRepository;
 
-    private final ModelMapper modelMapper;
+  private final ModelMapper modelMapper;
 
-    @Override
-    public UserResponseDto assignRoleToUser(long userId, long roleId) {
-        Optional<UserEntity> userEntity = userRepository.findById(userId);
-        UserEntity user = userEntity.orElseThrow(UserNotFoundException::new);
-        RoleEntity roleEntity = roleRepository.getById(roleId);
+  @Override
+  public UserResponseDto assignRoleToUser(long userId, long roleId) {
+    Optional<UserEntity> userEntity = userRepository.findById(userId);
+    UserEntity user = userEntity.orElseThrow(UserNotFoundException::new);
+    RoleEntity roleEntity = roleRepository.getById(roleId);
 
-        user.getRoles().clear();
-        user.getRoles().add(roleEntity);
-        user = userRepository.save(user);
+    user.getRoles().clear();
+    user.getRoles().add(roleEntity);
+    user = userRepository.save(user);
 
-        return modelMapper.map(user, UserResponseDto.class);
-    }
+    return modelMapper.map(user, UserResponseDto.class);
+  }
 }

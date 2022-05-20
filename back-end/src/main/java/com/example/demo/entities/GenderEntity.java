@@ -12,12 +12,12 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class GenderEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
-    private String name;
+  private String name;
 
-//    @OneToMany(mappedBy = "gender", fetch = FetchType.LAZY)
-//    private Set<ProductEntity> products;
+  //    @OneToMany(mappedBy = "gender", fetch = FetchType.LAZY)
+  //    private Set<ProductEntity> products;
 }

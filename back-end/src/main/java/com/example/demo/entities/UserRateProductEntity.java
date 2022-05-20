@@ -13,17 +13,17 @@ import javax.persistence.*;
 @Builder(toBuilder = true)
 @IdClass(UserRateProductId.class)
 public class UserRateProductEntity extends Auditable {
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private ProductEntity product;
+  @Id
+  @ManyToOne
+  @JoinColumn(name = "product_id", referencedColumnName = "id")
+  private ProductEntity product;
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private UserEntity user;
+  @Id
+  @ManyToOne
+  @JoinColumn(name = "user_id", referencedColumnName = "id")
+  private UserEntity user;
 
-    private int rating;
+  private int rating;
 
-    private String comment;
+  private String comment;
 }

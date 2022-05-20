@@ -1,4 +1,3 @@
 package com.example.demo.exceptions;
 
-public class CategoryNotFoundException extends RuntimeException {
-}
+public class CategoryNotFoundException extends RuntimeException {}

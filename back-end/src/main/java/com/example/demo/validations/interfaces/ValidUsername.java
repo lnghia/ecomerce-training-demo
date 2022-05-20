@@ -13,12 +13,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Documented
 @Retention(RUNTIME)
-@Target({ FIELD, ANNOTATION_TYPE, TYPE_USE })
+@Target({FIELD, ANNOTATION_TYPE, TYPE_USE})
 @Constraint(validatedBy = UsernameValidator.class)
 public @interface ValidUsername {
-    String message() default "Username has existed";
+  String message() default "Username has existed";
 
-    Class<?>[] groups() default {};
+  Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default {};
+  Class<? extends Payload>[] payload() default {};
 }

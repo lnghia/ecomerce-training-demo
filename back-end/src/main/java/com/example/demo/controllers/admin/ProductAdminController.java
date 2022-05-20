@@ -20,45 +20,52 @@ import javax.validation.Valid;
 @RequestMapping(path = "/api/admin/products")
 @RequiredArgsConstructor
 public class ProductAdminController {
-    private final ResponseBodyDtoFactory responseBodyDtoFactory;
+  private final ResponseBodyDtoFactory responseBodyDtoFactory;
 
-    private final ProductCrudService productCRUDService;
+  private final ProductCrudService productCRUDService;
 
-    private final ProductSizeService productSizeService;
+  private final ProductSizeService productSizeService;
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping(path = "/create")
-    public ResponseEntity<ResponseBodyDto<ProductResponseDto>> createProduct(@Valid @RequestBody CreateProductRequestDto createProductRequestDTO) {
-        ProductResponseDto productResponseDTO = productCRUDService.createProduct(createProductRequestDTO);
-        ResponseBodyDto<ProductResponseDto> responseBodyDTO = responseBodyDtoFactory.buildResponseBody(productResponseDTO, "200");
+  @PreAuthorize("hasRole('ADMIN')")
+  @PostMapping(path = "/create")
+  public ResponseEntity<ResponseBodyDto<ProductResponseDto>> createProduct(
+      @Valid @RequestBody CreateProductRequestDto createProductRequestDTO) {
+    ProductResponseDto productResponseDTO =
+        productCRUDService.createProduct(createProductRequestDTO);
+    ResponseBodyDto<ProductResponseDto> responseBodyDTO =
+        responseBodyDtoFactory.buildResponseBody(productResponseDTO, "200");
 
-        return ResponseEntity.ok(responseBodyDTO);
-    }
+    return ResponseEntity.ok(responseBodyDTO);
+  }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping(path = "/add_size")
-    public ResponseEntity<ResponseBodyDto<Object>> addSizeToProduct(@Valid @RequestBody AddSizeToProductRequestDto requestDto) {
-        productSizeService.addSizeToProduct(requestDto);
-        ResponseBodyDto<Object> responseBodyDto = responseBodyDtoFactory.buildResponseBody(null, "200");
+  @PreAuthorize("hasRole('ADMIN')")
+  @PutMapping(path = "/add_size")
+  public ResponseEntity<ResponseBodyDto<Object>> addSizeToProduct(
+      @Valid @RequestBody AddSizeToProductRequestDto requestDto) {
+    productSizeService.addSizeToProduct(requestDto);
+    ResponseBodyDto<Object> responseBodyDto = responseBodyDtoFactory.buildResponseBody(null, "200");
 
-        return ResponseEntity.ok(responseBodyDto);
-    }
+    return ResponseEntity.ok(responseBodyDto);
+  }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping(path = "/update")
-    public ResponseEntity<ResponseBodyDto<ProductResponseDto>> updateProduct(@Valid @RequestBody UpdateProductRequestDto requestDto) {
-        ProductResponseDto productResponseDto = productCRUDService.updateProduct(requestDto);
-        ResponseBodyDto<ProductResponseDto> responseBodyDto = responseBodyDtoFactory.buildResponseBody(productResponseDto, "200");
+  @PreAuthorize("hasRole('ADMIN')")
+  @PutMapping(path = "/update")
+  public ResponseEntity<ResponseBodyDto<ProductResponseDto>> updateProduct(
+      @Valid @RequestBody UpdateProductRequestDto requestDto) {
+    ProductResponseDto productResponseDto = productCRUDService.updateProduct(requestDto);
+    ResponseBodyDto<ProductResponseDto> responseBodyDto =
+        responseBodyDtoFactory.buildResponseBody(productResponseDto, "200");
 
-        return ResponseEntity.ok(responseBodyDto);
-    }
+    return ResponseEntity.ok(responseBodyDto);
+  }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping(path = "/delete")
-    public ResponseEntity<ResponseBodyDto<Object>> deleteProduct(@Valid @RequestBody DeleteProductRequestDto requestDto) {
-        productCRUDService.deleteProduct(requestDto.getProductId());
-        ResponseBodyDto<Object> responseBodyDto = responseBodyDtoFactory.buildResponseBody(null, "200");
+  @PreAuthorize("hasRole('ADMIN')")
+  @DeleteMapping(path = "/delete")
+  public ResponseEntity<ResponseBodyDto<Object>> deleteProduct(
+      @Valid @RequestBody DeleteProductRequestDto requestDto) {
+    productCRUDService.deleteProduct(requestDto.getProductId());
+    ResponseBodyDto<Object> responseBodyDto = responseBodyDtoFactory.buildResponseBody(null, "200");
 
-        return ResponseEntity.ok(responseBodyDto);
-    }
+    return ResponseEntity.ok(responseBodyDto);
+  }
 }

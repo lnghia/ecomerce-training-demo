@@ -9,9 +9,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class SizeRequestDto {
-    @NotNull
-    @NotEmpty
-    private String name;
+  @NotNull @NotEmpty private String name;
 
-    private String description;
+  private String description;
 }

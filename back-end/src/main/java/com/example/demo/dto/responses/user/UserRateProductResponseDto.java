@@ -6,11 +6,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserRateProductResponseDto {
-    private UserResponseDto user;
+  private UserResponseDto user;
 
-    private int rating;
+  private int rating;
 
-    private String comment;
+  private String comment;
 
-    private String lastModifiedDate;
+  private String lastModifiedDate;
 }
