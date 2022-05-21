@@ -28,7 +28,7 @@ jobs:
     - name: install postgres client
       run: |
         sudo apt-get update
-        apt-get install --yes postgresql-client
+        sudo apt-get install --yes postgresql-client
 
     - name: create database demo
       run: |
