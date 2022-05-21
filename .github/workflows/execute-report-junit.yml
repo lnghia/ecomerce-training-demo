@@ -54,7 +54,7 @@ jobs:
           cd back-end
           mvn clean install
         env:
-          spring.datasource.url: ${{secrets.SPRING_DATASOURCE_URL}}
-          spring.datasource.username: ${{secrets.POSTGRES_USER}}
-          spring.datasource.password: ${{secrets.POSTGRES_PASSWORD}}
+          SPRING_DATASOURCE_URL: ${{secrets.SPRING_DATASOURCE_URL}}
+          SPRING_DATASOURCE_USERNAME: ${{secrets.POSTGRES_USER}}
+          SPRING_DATASOURCE_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
           JWT_SECRET: ${{secrets.JWT_SECRET}}
