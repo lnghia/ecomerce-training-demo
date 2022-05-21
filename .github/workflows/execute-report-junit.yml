@@ -71,4 +71,4 @@ jobs:
           PASSWORD: ${{secrets.TESTOPS_PASSWORD}}
           PROJECT_ID: 118383
           TYPE: junit
-          REPORT_PATH: back-end/surefire-reports
+          REPORT_PATH: back-end/target/surefire-reports
