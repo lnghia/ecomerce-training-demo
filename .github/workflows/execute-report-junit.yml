@@ -52,7 +52,7 @@ jobs:
         run: |
           pwd
           cd back-end
-          mvn clean install
+          mvn test
         env:
           SPRING_DATASOURCE_URL: ${{secrets.SPRING_DATASOURCE_URL}}
           SPRING_DATASOURCE_USERNAME: ${{secrets.POSTGRES_USER}}
