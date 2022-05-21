@@ -1,8 +1,6 @@
 name: Java CI with Maven
 
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
 
@@ -26,29 +24,30 @@ jobs:
           --health-retries 5
 
     steps:
-      - name: install PostgreSQL client
+      - name: Install PostgreSQL Client
         run: |
           sudo apt-get update
           sudo apt-get install --yes postgresql-client
 
-      - name: create database demo
+      - name: Create Database Demo
         run: |
           psql -h localhost -U ${{secrets.POSTGRES_USER}} -c 'CREATE DATABASE "demo";'
         env:
           PGPASSWORD: ${{secrets.POSTGRES_PASSWORD}}
 
-      - uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v3
         with:
           token: ${{secrets.PERSONAL_ACCESS_TOKEN}}
 
-      - name: set up JDK 11
+      - name: Set Up JDK 11
         uses: actions/setup-java@v3
         with:
           java-version: "11"
           distribution: "temurin"
           cache: maven
 
-      - name: run tests with maven
+      - name: Run Tests With Maven
         run: |
           pwd
           cd back-end
@@ -59,9 +58,17 @@ jobs:
           SPRING_DATASOURCE_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
           JWT_SECRET: ${{secrets.JWT_SECRET}}
 
-      - name: publish test results
-        run: pwd
+      - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
         with:
-          files: "target/surefire-reports/*.xml"
+          files: "back-end/target/surefire-reports/*.xml"
+
+      - name: Katalon Report Uploader
+        uses: katalon-studio/report-uploader@v0.0.7.11
+        env:
+          EMAIL: ${{secrets.TESTOPS_EMAIL}}
+          PASSWORD: ${{secrets.TESTOPS_PASSWORD}}
+          PROJECT_ID: 118383
+          TYPE: junit
+          REPORT_PATH: back-end/target/surefire-reports
