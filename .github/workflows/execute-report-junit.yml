@@ -51,10 +51,10 @@ jobs:
       - name: run tests with maven
         run: |
           pwd
-          mvn test --file ./backend/pom.xml
+          cd backend
+          mvn -B package --file pom.xml
         env:
-          ACCESS_TOKEN_EXPIRATION: 36000000
-          REFRESH_TOKEN_EXPIRATION: 604800000
           spring.datasource.url: ${{secrets.SPRING_DATASOURCE_URL}}
           spring.datasource.username: ${{secrets.POSTGRES_USER}}
           spring.datasource.password: ${{secrets.POSTGRES_PASSWORD}}
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
