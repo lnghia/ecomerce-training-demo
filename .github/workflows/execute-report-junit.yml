@@ -33,7 +33,7 @@ jobs:
 
     - name: create database demo
       run: |
-        psql -h postgres -U postgres -c 'CREATE DATABASE "postgres_db";'
+        psql -h localhost -U postgres -c 'CREATE DATABASE "demo";'
       env:
         POSTGRES_PASSWORD: postgres
 
