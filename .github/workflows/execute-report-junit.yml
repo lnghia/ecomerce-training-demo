@@ -61,4 +61,4 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
         with:
-          files: "back_end/target/surefire-reports/*.xml"
+          files: "back-end/target/surefire-reports/*.xml"
