@@ -2,9 +2,9 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -26,25 +26,24 @@ jobs:
           --health-retries 5
 
     steps:
-    - name: install postgres client
-      run: |
-        sudo apt-get update
-        sudo apt-get install --yes postgresql-client
+      - name: install postgres client
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes postgresql-client
 
-    - name: create database demo
-      run: |
-        psql -h localhost -U postgres -W postgres -c 'CREATE DATABASE "demo";'
-      env:
-        POSTGRES_PASSWORD: postgres
+      - name: create database demo
+        run: |
+          psql -h localhost -U postgres -c 'CREATE DATABASE "demo";'
+        env:
+          PGPASSWORD: postgres
 
-    # - uses: actions/checkout@v3
-    - name: Set up JDK 11
-      uses: actions/setup-java@v3
-      with:
-        java-version: '11'
-        distribution: 'temurin'
-        cache: maven
+      # - uses: actions/checkout@v3
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: "11"
+          distribution: "temurin"
+          cache: maven
 
     # - name: Build with Maven
     #   run: mvn -B package --file pom.xml
-
