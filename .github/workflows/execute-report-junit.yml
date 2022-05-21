@@ -67,7 +67,7 @@ jobs:
       - name: Katalon Report Uploader
         uses: katalon-studio/report-uploader@v0.0.7.11
         env:
-          PASSWORD: $
+          PASSWORD: ${{secrets.TESTOPS_PASSWORD}}
           PROJECT_ID: 118383
           TYPE: junit
           REPORT_PATH: back-end/surefire-reports
