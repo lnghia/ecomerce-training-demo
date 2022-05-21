@@ -49,4 +49,4 @@ jobs:
           cache: maven
 
       - name: run tests with maven
-        run: mvn test
+        run: mvn test --file pom.xml
