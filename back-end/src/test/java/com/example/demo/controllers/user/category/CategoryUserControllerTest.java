@@ -4,7 +4,6 @@ import com.example.demo.dto.responses.ResponseBodyDto;
 import com.example.demo.dto.responses.category.CategoryResponseDto;
 import com.example.demo.entities.factories.responsebodydto.ResponseBodyDtoFactory;
 import com.example.demo.services.interfaces.category.CategoryCrudService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -12,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -31,17 +29,11 @@ public class CategoryUserControllerTest {
 
   @Autowired private MockMvc mockMvc;
 
-  @BeforeEach
-  void setUp() {
-    //    categoryCrudService = mock(CategoryCrudService.class);
-    //    responseBodyDtoFactory = mock(ResponseBodyDtoFactory.class);
-  }
-
   @Test
   public void shouldReturnListOfCategories() throws Exception {
     List<CategoryResponseDto> categoryResponseDtoList = mock(List.class);
     ResponseBodyDto<List<CategoryResponseDto>> expectedResult =
-        new ResponseBodyDto<>("200", new ArrayList<>());
+        new ResponseBodyDto<>("200", List.of());
 
     when(categoryCrudService.getAll()).thenReturn(categoryResponseDtoList);
     when(responseBodyDtoFactory.buildResponseBody(categoryResponseDtoList))
@@ -50,7 +42,7 @@ public class CategoryUserControllerTest {
     mockMvc
         .perform(get("/api/category"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.data", equalTo(new ArrayList())))
+        .andExpect(jsonPath("$.data", equalTo(List.of())))
         .andExpect(jsonPath("$.errors", equalTo(null)));
   }
 }
