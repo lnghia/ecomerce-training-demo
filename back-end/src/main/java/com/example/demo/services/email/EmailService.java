@@ -16,6 +16,7 @@ import java.util.Date;
 public class EmailService {
   @Autowired private final JavaMailSender javaMailSender;
 
+  // TODO: should take advantage of thread pool to schedule and execute sending emails
   @Async
   public boolean sendOTPEmail(String otp, String receiver) {
     SimpleMailMessage message = new SimpleMailMessage();
@@ -39,6 +40,7 @@ public class EmailService {
     return true;
   }
 
+  // TODO: should take advantage of thread pool to schedule and execute sending emails
   @Async
   public boolean sendResetPwOTPEmail(String otp, String receiver) {
     SimpleMailMessage message = new SimpleMailMessage();
@@ -60,6 +62,7 @@ public class EmailService {
     return true;
   }
 
+  // TODO: should take advantage of thread pool to schedule and execute sending emails
   public boolean sendPasswordHasChangedEmail(String receiver) {
     SimpleMailMessage message = new SimpleMailMessage();
     Date now = new Date();
