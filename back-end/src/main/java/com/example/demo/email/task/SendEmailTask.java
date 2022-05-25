@@ -1,6 +1,5 @@
 package com.example.demo.email.task;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +47,6 @@ public class SendEmailTask implements Callable<SendEmailTask.SendEmailResult> {
   }
 
   @Data
-  @Builder
   public static class SendEmailResult {
     public final String title;
 

@@ -4,12 +4,15 @@ import com.example.demo.email.model.EmailToSend;
 import com.example.demo.email.model.SendEmailExecutionResult;
 import com.example.demo.email.task.SendEmailTask;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.*;
 
+@Component
 @Slf4j
 public class EmailSenderThreadSchedulers implements AutoCloseable {
   private final int THREAD_NUM = 15;
@@ -24,6 +27,7 @@ public class EmailSenderThreadSchedulers implements AutoCloseable {
 
   private final JavaMailSender javaMailSender;
 
+  @Autowired
   public EmailSenderThreadSchedulers(JavaMailSender javaMailSender) {
     this.javaMailSender = javaMailSender;
     sendExecutor = Executors.newFixedThreadPool(THREAD_NUM);
