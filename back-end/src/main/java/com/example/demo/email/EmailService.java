@@ -9,7 +9,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
@@ -17,10 +16,10 @@ import java.util.concurrent.ExecutionException;
 public class EmailService {
   @Autowired private final JavaMailSender javaMailSender;
 
-  private final EmailSenderThreadSchedulers emailSenderThreadSchedulers;
+  private final EmailSenderThreadSchedulers emailSenderThreadSchedulers =
+      new EmailSenderThreadSchedulers(javaMailSender);
 
-  public void sendEmail(String receiver, String title, String content)
-      throws ExecutionException, InterruptedException {
+  public void sendEmail(String receiver, String title, String content) {
     emailSenderThreadSchedulers.sendEmails(
         List.of(EmailToSend.builder().title(title).content(content).receiver(receiver).build()));
   }
