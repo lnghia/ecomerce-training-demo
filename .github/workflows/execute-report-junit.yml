@@ -1,0 +1,77 @@
+name: Java CI with Maven
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: ${{secrets.POSTGRES_DB}}
+          POSTGRES_USER: ${{secrets.POSTGRES_USER}}
+          POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Install PostgreSQL Client
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes postgresql-client
+
+      - name: Create Database Demo
+        run: |
+          psql -h localhost -U ${{secrets.POSTGRES_USER}} -c 'CREATE DATABASE "demo";'
+        env:
+          PGPASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{secrets.PERSONAL_ACCESS_TOKEN}}
+
+      - name: Set Up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: "11"
+          distribution: "temurin"
+          cache: maven
+
+      - name: Run Tests With Maven
+        run: |
+          pwd
+          cd back-end
+          mvn test
+        env:
+          SPRING_DATASOURCE_URL: ${{secrets.SPRING_DATASOURCE_URL}}
+          SPRING_DATASOURCE_USERNAME: ${{secrets.POSTGRES_USER}}
+          SPRING_DATASOURCE_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
+          EMAIL: ${{secrets.EMAIL}}
+          EMAIL_PASSWORD: ${{secrets.EMAIL_PASSWORD}}
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: "back-end/target/surefire-reports/*.xml"
+
+      - name: Katalon Report Uploader
+        uses: katalon-studio/report-uploader@v0.0.7.11
+        if: always()
+        env:
+          EMAIL: ${{secrets.TESTOPS_EMAIL}}
+          PASSWORD: ${{secrets.TESTOPS_PASSWORD}}
+          PROJECT_ID: 118383
+          TYPE: junit
+          REPORT_PATH: back-end/target/surefire-reports
