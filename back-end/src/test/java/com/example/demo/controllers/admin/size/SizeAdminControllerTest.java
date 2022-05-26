@@ -63,7 +63,7 @@ public class SizeAdminControllerTest {
                 .content(mapper.writeValueAsString(sizeRequestDto))
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
         .andDo(print())
-        .andExpect(status().is4xxClientError());
+        .andExpect(status().isOk());
 
     verify(sizeCrudService).createSize(sizeRequestDtoArgumentCaptor.capture());
     SizeRequestDto passedInSizeRequestDto = sizeRequestDtoArgumentCaptor.getValue();
