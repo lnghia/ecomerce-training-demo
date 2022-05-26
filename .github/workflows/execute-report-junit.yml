@@ -68,6 +68,7 @@ jobs:
 
       - name: Katalon Report Uploader
         uses: katalon-studio/report-uploader@v0.0.7.11
+        if: always()
         env:
           EMAIL: ${{secrets.TESTOPS_EMAIL}}
           PASSWORD: ${{secrets.TESTOPS_PASSWORD}}
