@@ -8,7 +8,7 @@ import com.example.demo.security.providers.JWTProvider;
 import com.example.demo.services.interfaces.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -25,12 +25,13 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Component
+@RequiredArgsConstructor
 public class JWTAuthFilter extends OncePerRequestFilter {
-  @Autowired private JWTProvider jwtProvider;
+  private final JWTProvider jwtProvider;
 
-  @Autowired private UserService userService;
+  private final UserService userService;
 
-  @Autowired private PermittedUrlsUtil permittedUrlsUtil;
+  private final PermittedUrlsUtil permittedUrlsUtil;
 
   @Override
   protected void doFilterInternal(
@@ -38,7 +39,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
       HttpServletResponse httpServletResponse,
       FilterChain filterChain)
       throws ServletException, IOException {
-    Long userId;
+    long userId;
     CustomUserDetails customUserDetails;
     String jwt = extractJWTFromHeader(httpServletRequest);
 
@@ -46,7 +47,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
       try {
         if (jwtProvider.validateToken(jwt)) {
 
-          userId = (long) jwtProvider.getUserIdFromJWT(jwt);
+          userId = jwtProvider.getUserIdFromJWT(jwt);
 
           if (SecurityContextHolder.getContext().getAuthentication() == null) {
             UserEntity user = userService.getUserById(userId);
@@ -66,7 +67,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
           }
         }
       } catch (JwtException exception) {
-        ResponseBodyDto responseBodyDTO = new ResponseBodyDto();
+        ResponseBodyDto<Object> responseBodyDTO = new ResponseBodyDto<>();
 
         responseBodyDTO.getErrors().put("JWT token", "Invalid token");
 

@@ -4,7 +4,7 @@ import com.example.demo.exceptions.RestAccessDeniedHandler;
 import com.example.demo.exceptions.RestAuthenticationEntryPoint;
 import com.example.demo.security.filters.JWTAuthFilter;
 import com.example.demo.services.implementations.UserDetail.CustomUserDetailsService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
@@ -20,15 +20,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@RequiredArgsConstructor
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
-  private final CustomUserDetailsService customUserDetailsService;
+  @Autowired private CustomUserDetailsService customUserDetailsService;
 
-  private final JWTAuthFilter jwtAuthFilter;
+  @Autowired private JWTAuthFilter jwtAuthFilter;
 
-  private final RestAccessDeniedHandler accessDeniedHandler;
+  @Autowired private RestAccessDeniedHandler accessDeniedHandler;
 
-  private final RestAuthenticationEntryPoint authenticationEntryPoint;
+  @Autowired private RestAuthenticationEntryPoint authenticationEntryPoint;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
