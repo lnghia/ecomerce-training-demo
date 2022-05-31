@@ -186,10 +186,7 @@ public class UserServiceImpl implements UserService {
     List<UserEntity> userEntities = userRepository.findAllWithStatus(false);
 
     return userEntities.stream()
-        .map(
-            userEntity -> {
-              return modelMapper.map(userEntity, UserListResponseDto.class);
-            })
+        .map(userEntity -> modelMapper.map(userEntity, UserListResponseDto.class))
         .collect(Collectors.toList());
   }
 }

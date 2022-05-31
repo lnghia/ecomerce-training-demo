@@ -1,12 +1,12 @@
 package com.example.demo.dto.responses.user;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder(toBuilder = true)
+@Builder
 public class UserListResponseDto extends UserResponseDto {
   private String username;
 

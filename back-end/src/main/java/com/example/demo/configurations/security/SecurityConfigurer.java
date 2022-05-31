@@ -20,14 +20,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
-  @Autowired private CustomUserDetailsService customUserDetailsService;
+  private final CustomUserDetailsService customUserDetailsService;
 
-  @Autowired private JWTAuthFilter jwtAuthFilter;
+  private final JWTAuthFilter jwtAuthFilter;
 
-  @Autowired private RestAccessDeniedHandler accessDeniedHandler;
+  private final RestAccessDeniedHandler accessDeniedHandler;
 
-  @Autowired private RestAuthenticationEntryPoint authenticationEntryPoint;
+  private final RestAuthenticationEntryPoint authenticationEntryPoint;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
