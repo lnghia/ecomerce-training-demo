@@ -1,6 +1,8 @@
 package com.example.demo.services.implementations.user;
 
+import com.example.demo.dto.requests.user.EditUserRequestDto;
 import com.example.demo.dto.requests.user.UserRateProductRequestDto;
+import com.example.demo.dto.responses.user.UserEditResponseDto;
 import com.example.demo.dto.responses.user.UserListResponseDto;
 import com.example.demo.dto.responses.user.UserRateProductResponseDto;
 import com.example.demo.dto.responses.user.UserResponseDto;
@@ -8,6 +10,7 @@ import com.example.demo.entities.ProductEntity;
 import com.example.demo.entities.RoleEntity;
 import com.example.demo.entities.UserEntity;
 import com.example.demo.entities.UserRateProductEntity;
+import com.example.demo.exceptions.RoleNotFoundException;
 import com.example.demo.exceptions.UserExistedException;
 import com.example.demo.exceptions.UserNotFoundException;
 import com.example.demo.repositories.RoleRepository;
@@ -80,21 +83,23 @@ public class UserServiceImpl implements UserService {
 
     String plainPassword = newUser.getPassword();
     String encryptedPassword = passwordEncoder.encode(plainPassword);
-    Optional<RoleEntity> roleEntity =
-        roleRepository.findByName(roleUtilityWrapper.getUserRoleString());
+    RoleEntity roleEntity =
+        roleRepository
+            .findByName(roleUtilityWrapper.getUserRoleString())
+            .orElseThrow(RoleNotFoundException::new);
 
     newUser.setPassword(encryptedPassword);
     newUser.setUsername(newUser.getEmail());
-    newUser.setRoles(Set.of(roleEntity.get()));
+    newUser.setRoles(Set.of(roleEntity));
 
     return modelMapper.map(userRepository.save(newUser), UserResponseDto.class);
   }
 
   @Override
   public Collection<RoleEntity> getUserGrantedPermissions(long id) {
-    Optional<UserEntity> user = userRepository.findById(id);
+    UserEntity user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
 
-    return user.get().getRoles();
+    return user.getRoles();
   }
 
   @Override
@@ -188,5 +193,18 @@ public class UserServiceImpl implements UserService {
     return userEntities.stream()
         .map(userEntity -> modelMapper.map(userEntity, UserListResponseDto.class))
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public UserEditResponseDto editUser(EditUserRequestDto requestDto, UserEntity editor) {
+    if (editor == null) {
+      throw new UserNotFoundException();
+    }
+
+    modelMapper.map(requestDto, editor);
+
+    userRepository.save(editor);
+
+    return modelMapper.map(editor, UserEditResponseDto.class);
   }
 }

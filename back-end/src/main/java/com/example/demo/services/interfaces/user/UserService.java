@@ -1,6 +1,8 @@
 package com.example.demo.services.interfaces.user;
 
+import com.example.demo.dto.requests.user.EditUserRequestDto;
 import com.example.demo.dto.requests.user.UserRateProductRequestDto;
+import com.example.demo.dto.responses.user.UserEditResponseDto;
 import com.example.demo.dto.responses.user.UserListResponseDto;
 import com.example.demo.dto.responses.user.UserRateProductResponseDto;
 import com.example.demo.dto.responses.user.UserResponseDto;
@@ -41,4 +43,6 @@ public interface UserService {
   List<UserListResponseDto> getListNormalUser();
 
   List<UserListResponseDto> getListBlockedUser();
+
+  UserEditResponseDto editUser(EditUserRequestDto requestDto, UserEntity editor);
 }
