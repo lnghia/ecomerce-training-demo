@@ -203,4 +203,14 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
   }
+
+  @ExceptionHandler(RoleNotFoundException.class)
+  public ResponseEntity<ResponseBodyDto<Object>> handleGlobalException(
+      RoleNotFoundException exception, WebRequest request) {
+    ResponseBodyDto<Object> response = new ResponseBodyDto<>();
+
+    response.getErrors().put("RoleId", "Role doesn't exist.");
+
+    return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+  }
 }
