@@ -49,7 +49,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
       String accessToken = jwtProvider.generateAccessToken(userEntity);
       String refreshToken = jwtProvider.generateRefreshToken(userEntity);
 
-      return new LoginResponseDto(accessToken, refreshToken);
+      return LoginResponseDto.builder().accessToken(accessToken).refreshToken(refreshToken).build();
     }
 
     throw new UsernamePasswordInvalidException();
@@ -92,7 +92,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
       String accessToken = jwtProvider.generateAccessToken(userEntity);
       String refreshToken = jwtProvider.generateRefreshToken(userEntity);
 
-      return new LoginResponseDto(accessToken, refreshToken);
+      return LoginResponseDto.builder().accessToken(accessToken).refreshToken(refreshToken).build();
     }
 
     throw new UsernamePasswordInvalidException();

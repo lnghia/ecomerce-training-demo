@@ -38,6 +38,11 @@ public class UserEntity extends Auditable {
 
   private Boolean isActive = true;
 
+  public void setEmail(String email) {
+    this.email = email;
+    this.username = email;
+  }
+
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
       name = "user_role",

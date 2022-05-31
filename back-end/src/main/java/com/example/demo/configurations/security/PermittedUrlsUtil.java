@@ -10,6 +10,7 @@ public class PermittedUrlsUtil {
   private final ArrayList<String> protectedUrlPatterns =
       new ArrayList<>(
           List.of(
+              "/api/users/edit_info",
               "/api/admin/",
               "/api/auth/refresh_tokens",
               "/api/product/rate_product",

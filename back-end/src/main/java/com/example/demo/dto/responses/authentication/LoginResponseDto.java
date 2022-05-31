@@ -1,11 +1,11 @@
 package com.example.demo.dto.responses.authentication;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder(toBuilder = true)
 public class LoginResponseDto {
   private String accessToken;
