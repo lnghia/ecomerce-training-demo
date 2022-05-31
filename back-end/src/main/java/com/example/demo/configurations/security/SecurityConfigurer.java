@@ -4,7 +4,7 @@ import com.example.demo.exceptions.RestAccessDeniedHandler;
 import com.example.demo.exceptions.RestAuthenticationEntryPoint;
 import com.example.demo.security.filters.JWTAuthFilter;
 import com.example.demo.services.implementations.UserDetail.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
