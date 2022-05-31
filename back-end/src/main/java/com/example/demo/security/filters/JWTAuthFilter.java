@@ -9,6 +9,7 @@ import com.example.demo.services.interfaces.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -27,11 +28,11 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Component
 @RequiredArgsConstructor
 public class JWTAuthFilter extends OncePerRequestFilter {
-  private final JWTProvider jwtProvider;
+  @Autowired private JWTProvider jwtProvider;
 
-  private final UserService userService;
+  @Autowired private UserService userService;
 
-  private final PermittedUrlsUtil permittedUrlsUtil;
+  @Autowired private PermittedUrlsUtil permittedUrlsUtil;
 
   @Override
   protected void doFilterInternal(
