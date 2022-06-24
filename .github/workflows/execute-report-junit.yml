@@ -116,4 +116,4 @@ jobs:
       - name: Push docker compose
         run: |
           cd .docker
-          docker-compose push ghcr.io/n3w-us3r/ecommerce-training:latest
+          docker-compose push $(docker-compose images)
