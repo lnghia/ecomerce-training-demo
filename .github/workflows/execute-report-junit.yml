@@ -66,12 +66,13 @@ jobs:
           EMAIL: ${{secrets.EMAIL}}
           EMAIL_PASSWORD: ${{secrets.EMAIL_PASSWORD}}
         run: |
+          cd .docker
           docker compose up
           docker compose push ghcr.io/n3w-us3r/ecommerce-training:latest
+          cd ../
 
       - name: Run Tests With Maven
         run: |
-          pwd
           cd back-end
           mvn test
         env:
