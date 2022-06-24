@@ -6,8 +6,8 @@ services:
     ports:
       - "3000:5432"
 #    restart: always
-    env_file:
-      - ./env/postgres-image.env
+#    env_file:
+#      - ./env/postgres-image.env
     networks:
       - app_network
 
