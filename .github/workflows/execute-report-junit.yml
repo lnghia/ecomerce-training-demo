@@ -76,7 +76,7 @@ jobs:
           REPORT_PATH: back-end/target/surefire-reports
 
       - name: Log in to the Container registry
-#        if: ${{ github.ref == 'refs/heads/main' }}
+        #        if: ${{ github.ref == 'refs/heads/main' }}
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
@@ -84,12 +84,12 @@ jobs:
           password: ${{secrets.GITHUB_TOKEN}}
 
       - name: Build backend application with maven
-#        if: ${{ github.ref == 'refs/heads/main' }}
+        #        if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           cd back-end
           mvn install -DskipTests
           cd ../
-          env:
+        env:
           SPRING_DATASOURCE_URL: ${{secrets.SPRING_DATASOURCE_URL}}
           SPRING_DATASOURCE_USERNAME: ${{secrets.POSTGRES_USER}}
           SPRING_DATASOURCE_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
@@ -98,7 +98,7 @@ jobs:
           EMAIL_PASSWORD: ${{secrets.EMAIL_PASSWORD}}
 
       - name: Build and push docker compose
-#        if: ${{ github.ref == 'refs/heads/main' }}
+        #        if: ${{ github.ref == 'refs/heads/main' }}
         env:
           POSTGRES_DB: ${{secrets.POSTGRES_DB}}
           POSTGRES_USER: ${{secrets.POSTGRES_USER}}
