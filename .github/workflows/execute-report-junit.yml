@@ -115,6 +115,5 @@ jobs:
 
       - name: Push docker compose
         run: |
-#          docker compose down
           docker-compose push ghcr.io/n3w-us3r/ecommerce-training:latest
           cd ../
