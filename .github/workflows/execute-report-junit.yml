@@ -47,6 +47,30 @@ jobs:
           distribution: "temurin"
           cache: maven
 
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{github.actor}}
+          password: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Build and push docker compose
+        uses: docker/build-push-action@v3
+        env:
+          POSTGRES_DB: ${{secrets.POSTGRES_DB}}
+          POSTGRES_USER: ${{secrets.POSTGRES_USER}}
+          POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+          SPRING_DATASOURCE_URL: ${{secrets.SPRING_DATASOURCE_URL}}
+          SPRING_DATASOURCE_USERNAME: ${{secrets.POSTGRES_USER}}
+          SPRING_DATASOURCE_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
+          EMAIL: ${{secrets.EMAIL}}
+          EMAIL_PASSWORD: ${{secrets.EMAIL_PASSWORD}}
+        with:
+          push: true
+          context: .
+          tags: ghcr.io/n3w-us3r/ecommerce-training:latest
+
       - name: Run Tests With Maven
         run: |
           pwd
