@@ -111,6 +111,7 @@ jobs:
           EMAIL_PASSWORD: ${{secrets.EMAIL_PASSWORD}}
         run: |
           cd .docker
-          docker compose up
+          docker compose up -d --wait
+          docker compose down
           docker compose push ghcr.io/n3w-us3r/ecommerce-training:latest
           cd ../
