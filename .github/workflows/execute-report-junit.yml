@@ -97,7 +97,7 @@ jobs:
           EMAIL: ${{secrets.EMAIL}}
           EMAIL_PASSWORD: ${{secrets.EMAIL_PASSWORD}}
 
-      - name: Build and push docker compose
+      - name: Build docker compose
         #        if: ${{ github.ref == 'refs/heads/main' }}
         env:
           POSTGRES_DB: ${{secrets.POSTGRES_DB}}
@@ -111,7 +111,10 @@ jobs:
           EMAIL_PASSWORD: ${{secrets.EMAIL_PASSWORD}}
         run: |
           cd .docker
-          docker compose up -d --wait -t=15
+          docker compose up -d --wait
+
+      - name: Push docker compose
+        run: |
           docker compose down
           docker compose push ghcr.io/n3w-us3r/ecommerce-training:latest
           cd ../
