@@ -56,7 +56,7 @@ public class ProductRepositoryTest {
     ProductEntity result = productRepository.findById(productEntity.getId()).orElse(null);
 
     assertThat(result, notNullValue());
-    assertThat(result.getId(), is(productEntity.getId()));
+    assertThat(result.getId(), is(100L));
     assertThat(result.getName(), is(productEntity.getName()));
     assertThat(result.getSizes(), contains(productSizeEntity));
     assertThat(result.getReviews(), contains(userRateProductEntity));

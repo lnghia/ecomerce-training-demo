@@ -1,0 +1,12 @@
+FROM node:latest
+
+WORKDIR /app
+
+COPY /front-end/admin/package*.json .
+COPY /front-end/admin/public /front-end/admin/src .
+
+RUN pwd
+
+RUN npm install
+
+CMD ["npm", "start"]
