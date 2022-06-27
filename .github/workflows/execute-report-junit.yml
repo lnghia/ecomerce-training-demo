@@ -2,7 +2,7 @@ name: Java CI with Maven
 
 on:
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   build:
@@ -47,46 +47,6 @@ jobs:
           distribution: "temurin"
           cache: maven
 
-      - name: Log in to the Container registry
-        if: ${{ github.ref == 'refs/heads/main' }}
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{github.actor}}
-          password: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Build backend application with maven
-        if: ${{ github.ref == 'refs/heads/main' }}
-        run: |
-          cd back-end
-          mvn clean install -DskipTests
-          cd ../
-        env:
-          SPRING_DATASOURCE_URL: ${{secrets.SPRING_DATASOURCE_URL}}
-          SPRING_DATASOURCE_USERNAME: ${{secrets.POSTGRES_USER}}
-          SPRING_DATASOURCE_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
-          JWT_SECRET: ${{secrets.JWT_SECRET}}
-          EMAIL: ${{secrets.EMAIL}}
-          EMAIL_PASSWORD: ${{secrets.EMAIL_PASSWORD}}
-
-      - name: Build and push docker compose
-        if: ${{ github.ref == 'refs/heads/main' }}
-        env:
-          POSTGRES_DB: ${{secrets.POSTGRES_DB}}
-          POSTGRES_USER: ${{secrets.POSTGRES_USER}}
-          POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
-          SPRING_DATASOURCE_URL: ${{secrets.SPRING_DATASOURCE_URL}}
-          SPRING_DATASOURCE_USERNAME: ${{secrets.POSTGRES_USER}}
-          SPRING_DATASOURCE_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
-          JWT_SECRET: ${{secrets.JWT_SECRET}}
-          EMAIL: ${{secrets.EMAIL}}
-          EMAIL_PASSWORD: ${{secrets.EMAIL_PASSWORD}}
-        run: |
-          cd .docker
-          docker compose up
-          docker compose push ghcr.io/n3w-us3r/ecommerce-training:latest
-          cd ../
-
       - name: Run Tests With Maven
         run: |
           cd back-end
@@ -114,3 +74,46 @@ jobs:
           PROJECT_ID: 118383
           TYPE: junit
           REPORT_PATH: back-end/target/surefire-reports
+
+      - name: Log in to the Container registry
+        #        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{github.actor}}
+          password: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Build backend application with maven
+        #        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          cd back-end
+          mvn install -DskipTests
+          cd ../
+        env:
+          SPRING_DATASOURCE_URL: ${{secrets.SPRING_DATASOURCE_URL}}
+          SPRING_DATASOURCE_USERNAME: ${{secrets.POSTGRES_USER}}
+          SPRING_DATASOURCE_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
+          EMAIL: ${{secrets.EMAIL}}
+          EMAIL_PASSWORD: ${{secrets.EMAIL_PASSWORD}}
+
+      - name: Build docker compose
+        #        if: ${{ github.ref == 'refs/heads/main' }}
+        env:
+          POSTGRES_DB: ${{secrets.POSTGRES_DB}}
+          POSTGRES_USER: ${{secrets.POSTGRES_USER}}
+          POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+          SPRING_DATASOURCE_URL: ${{secrets.SPRING_DATASOURCE_URL}}
+          SPRING_DATASOURCE_USERNAME: ${{secrets.POSTGRES_USER}}
+          SPRING_DATASOURCE_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
+          EMAIL: ${{secrets.EMAIL}}
+          EMAIL_PASSWORD: ${{secrets.EMAIL_PASSWORD}}
+        run: |
+          cd .docker
+          docker-compose up -d
+
+      - name: Push docker compose
+        run: |
+          cd .docker
+          docker-compose push

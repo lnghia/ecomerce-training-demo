@@ -16,6 +16,7 @@ services:
     build:
       context: ../back-end
 #      dockerfile: Dockerfile
+    image: ghcr.io/n3w-us3r/docker_backend:latest
     ports:
       - "8080:8080"
 #    env_file:
@@ -26,6 +27,7 @@ services:
   admin-frontend:
     build:
       context: ../front-end/admin
+    image: ghcr.io/n3w-us3r/docker_admin-frontend:latest
     ports:
       - "5000:3000"
     networks:
@@ -34,6 +36,7 @@ services:
   user-frontend:
     build:
       context: ../front-end/user/
+    image: ghcr.io/n3w-us3r/docker_user-frontend:latest
     ports:
       - "5050:3000"
     networks:
