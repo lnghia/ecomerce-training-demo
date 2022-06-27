@@ -116,4 +116,4 @@ jobs:
       - name: Push docker compose
         run: |
           cd .docker
-          docker-compose push $(docker-compose images)
+          docker-compose push
