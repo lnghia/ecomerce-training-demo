@@ -24,7 +24,7 @@ services:
   admin-frontend:
     build:
       context: ../front-end/admin
-    image: ghcr.io/n3w-us3r/tryingout_admin-frontend:latest
+    image: ghcr.io/n3w-us3r/tryingout_frontend-admin:latest
     ports:
       - "5000:3000"
     networks:
@@ -33,7 +33,7 @@ services:
   user-frontend:
     build:
       context: ../front-end/user/
-    image: ghcr.io/n3w-us3r/tryingout_user-frontend:latest
+    image: ghcr.io/n3w-us3r/tryingout_frontend-user:latest
     ports:
       - "5050:3000"
     networks:
