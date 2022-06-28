@@ -4,13 +4,13 @@ on:
   push:
     branches: [ main ]
     paths:
-      - "backend/**"
+      - "back-end/**"
       - ".github/workflows/backend-ci.yaml"
 
   pull_request:
     branches: [ main ]
     paths:
-      - "backend/**"
+      - "back-end/**"
       - ".github/workflows/backend-ci.yaml"
 
 jobs:
