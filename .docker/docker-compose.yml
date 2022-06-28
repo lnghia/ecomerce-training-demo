@@ -5,22 +5,19 @@ services:
     image: postgres
     ports:
       - "5432:5432"
-#    restart: always
-#    env_file:
-#      - ./env/postgres-image.env
+    env_file:
+      - ./env/postgres-image.env
     networks:
       - app_network
 
   backend:
-#    restart: always
     build:
       context: ../back-end
-#      dockerfile: Dockerfile
     image: ghcr.io/n3w-us3r/tryingout_backend:latest
     ports:
       - "8080:8080"
-#    env_file:
-#      - ./env/backend-dockerfile.env
+    env_file:
+      - ./env/backend-dockerfile.env
     networks:
       - app_network
 
