@@ -1,11 +1,20 @@
 name: Java CI with Maven
 
 on:
+  push:
+    branches: [ main ]
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend-ci.yaml"
+
   pull_request:
     branches: [ main ]
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend-ci.yaml"
 
 jobs:
-  build:
+  Unit-Tests:
     runs-on: ubuntu-latest
 
     services:
@@ -75,45 +84,35 @@ jobs:
           TYPE: junit
           REPORT_PATH: back-end/target/surefire-reports
 
+
+  Build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run Maven Build Command
+        run: |
+          cd backend
+          mvn clean install -DskipTests
+        env:
+          SPRING_DATASOURCE_URL: ${{secrets.SPRING_DATASOURCE_URL}}
+          SPRING_DATASOURCE_USERNAME: ${{secrets.POSTGRES_USER}}
+          SPRING_DATASOURCE_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
+          EMAIL: ${{secrets.EMAIL}}
+          EMAIL_PASSWORD: ${{secrets.EMAIL_PASSWORD}}
+
       - name: Log in to the Container registry
-        #        if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{github.actor}}
           password: ${{secrets.GITHUB_TOKEN}}
 
-      - name: Build backend application with maven
-        #        if: ${{ github.ref == 'refs/heads/main' }}
-        run: |
-          cd back-end
-          mvn install -DskipTests
-          cd ../
-        env:
-          SPRING_DATASOURCE_URL: ${{secrets.SPRING_DATASOURCE_URL}}
-          SPRING_DATASOURCE_USERNAME: ${{secrets.POSTGRES_USER}}
-          SPRING_DATASOURCE_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
-          JWT_SECRET: ${{secrets.JWT_SECRET}}
-          EMAIL: ${{secrets.EMAIL}}
-          EMAIL_PASSWORD: ${{secrets.EMAIL_PASSWORD}}
-
-      - name: Build docker compose
-        #        if: ${{ github.ref == 'refs/heads/main' }}
-        env:
-          POSTGRES_DB: ${{secrets.POSTGRES_DB}}
-          POSTGRES_USER: ${{secrets.POSTGRES_USER}}
-          POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
-          SPRING_DATASOURCE_URL: ${{secrets.SPRING_DATASOURCE_URL}}
-          SPRING_DATASOURCE_USERNAME: ${{secrets.POSTGRES_USER}}
-          SPRING_DATASOURCE_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
-          JWT_SECRET: ${{secrets.JWT_SECRET}}
-          EMAIL: ${{secrets.EMAIL}}
-          EMAIL_PASSWORD: ${{secrets.EMAIL_PASSWORD}}
-        run: |
-          cd .docker
-          docker-compose up -d
-
-      - name: Push docker compose
-        run: |
-          cd .docker
-          docker-compose push
+      - name: Build and push Docker images
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: docker/build-push-action@v3
+        with:
+          context: ./backend
+          push: true
+          tags: ghcr.io/n3w-us3r/tryingout_backend:latest
