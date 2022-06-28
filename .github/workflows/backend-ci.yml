@@ -91,7 +91,7 @@ jobs:
     steps:
       - name: Run Maven Build Command
         run: |
-          cd backend
+          cd back-end
           mvn clean install -DskipTests
         env:
           SPRING_DATASOURCE_URL: ${{secrets.SPRING_DATASOURCE_URL}}
@@ -113,6 +113,6 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: docker/build-push-action@v3
         with:
-          context: ./backend
+          context: ./back-end
           push: true
           tags: ghcr.io/n3w-us3r/tryingout_backend:latest
