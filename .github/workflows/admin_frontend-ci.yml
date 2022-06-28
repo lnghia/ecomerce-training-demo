@@ -1,0 +1,40 @@
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "front-end/admin/**"
+      - ".github/workflows/admin_frontend-ci.yml"
+
+  pull_request:
+    branches: [ main ]
+    paths:
+      - "front-end/admin/**"
+      - ".github/workflows/admin_frontend-ci.yml"
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{secrets.PERSONAL_ACCESS_TOKEN}}
+
+      - name: Log in to the Container registry
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{github.actor}}
+          password: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Build and push Docker images
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: docker/build-push-action@v3
+        with:
+          context: ./front-end/admin
+          push: true
+          tags: ghcr.io/n3w-us3r/tryingout_frontend-admin:latest
