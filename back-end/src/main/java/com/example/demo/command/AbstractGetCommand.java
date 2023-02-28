@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractGetCommand<D extends Dto, ResponseBodyDto<List<D>>, I extends GetRequest, E extends BaseEntity>
-        extends AbstractCommand<D, O, I> {
+public abstract class AbstractGetCommand<D extends Dto, E extends BaseEntity>
+        extends AbstractCommand<D, ResponseBodyDto<List<D>>, GetRequest> {
     protected JpaRepository<E, Integer> repository;
 
     protected final CommonConverter mapper;
@@ -31,7 +31,7 @@ public abstract class AbstractGetCommand<D extends Dto, ResponseBodyDto<List<D>>
     }
 
     @Override
-    protected O doExecute(I request) throws IOException, ServerServiceException {
+    protected ResponseBodyDto<List<D>> doExecute(GetRequest request) throws IOException, ServerServiceException {
         Page<E> recordsInPage = repository.findAll(request.getPageable());
         List<D> result = new ArrayList<>();
 
@@ -39,6 +39,6 @@ public abstract class AbstractGetCommand<D extends Dto, ResponseBodyDto<List<D>>
             result.add(mapper.convertToResponse(e, responseClazz));
         }
 
-        return O.builder().data(result).status("200").build();
+        return new ResponseBodyDto<>("200", result);
     }
 }
