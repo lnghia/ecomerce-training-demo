@@ -5,6 +5,7 @@ import com.example.demo.dto.responses.product.ProductResponseDto;
 import com.example.demo.dto.responses.user.PageableUserRateProductResponseDto;
 import com.example.demo.dto.responses.user.UserRateProductResponseDto;
 import com.example.demo.entities.UserEntity;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public interface ProductService {
       String sortType,
       String sortBy);
 
-  List<ProductResponseDto> getAll();
+  List<ProductResponseDto> getAll(Pageable pageable);
 
   PageableUserRateProductResponseDto getLatestCommentUserProduct(
       Long productId, int page, int size);

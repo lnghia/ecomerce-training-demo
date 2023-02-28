@@ -1,11 +1,11 @@
 package com.example.demo.dto.responses.technology;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class TechnologyResponseDto {
   private Long id;

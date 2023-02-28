@@ -13,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @IdClass(ProductSizeId.class)
-public class ProductSizeEntity {
+public class ProductSizeEntity extends BaseEntity {
   @Id
   @ManyToOne
   @JoinColumn(name = "product_id", referencedColumnName = "id")

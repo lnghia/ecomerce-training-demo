@@ -1,3 +1,3 @@
 package com.example.demo.exceptions;
 
-public class InvalidTokenException extends RuntimeException {}
+public class InvalidTokenException extends ServerServiceException {}

@@ -1,3 +1,3 @@
 package com.example.demo.exceptions;
 
-public class UsernamePasswordInvalidException extends RuntimeException {}
+public class UsernamePasswordInvalidException extends ServerServiceException {}

@@ -12,7 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class RoleEntity {
+public class RoleEntity extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;

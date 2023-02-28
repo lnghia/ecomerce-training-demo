@@ -16,6 +16,8 @@ import com.example.demo.services.interfaces.productsize.ProductSizeService;
 import com.example.demo.services.interfaces.user.UserService;
 import com.example.demo.utilities.authentication.AuthenticationUtility;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -71,8 +73,9 @@ public class ProductUserController {
   }
 
   @GetMapping(path = "/all")
-  public ResponseEntity<ResponseBodyDto<List<ProductResponseDto>>> findAllProduct() {
-    List<ProductResponseDto> result = productService.getAll();
+  public ResponseEntity<ResponseBodyDto<List<ProductResponseDto>>> findAllProduct(
+          @PageableDefault(size = 50) Pageable pageable) {
+    List<ProductResponseDto> result = productService.getAll(pageable);
     ResponseBodyDto<List<ProductResponseDto>> response =
         responseBodyDtoFactory.buildResponseBody(result, "200");
 

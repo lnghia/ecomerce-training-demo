@@ -11,7 +11,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class TechnologyEntity {
+public class TechnologyEntity extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;

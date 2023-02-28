@@ -96,10 +96,10 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public List<ProductResponseDto> getAll() {
-    List<ProductEntity> productEntities = productRepository.findAll();
+  public List<ProductResponseDto> getAll(Pageable pageable) {
+    Page<ProductEntity> productEntities = productRepository.findAll(pageable);
 
-    return productEntities.stream()
+    return productEntities.getContent().stream()
         .map(product -> modelMapper.map(product, ProductResponseDto.class))
         .collect(Collectors.toList());
   }

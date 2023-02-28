@@ -12,7 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @IdClass(UserRateProductId.class)
-public class UserRateProductEntity extends Auditable {
+public class UserRateProductEntity extends BaseEntity {
   @Id
   @ManyToOne
   @JoinColumn(name = "product_id", referencedColumnName = "id")

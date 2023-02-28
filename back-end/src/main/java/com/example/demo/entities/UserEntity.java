@@ -13,7 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Table(name = "users")
-public class UserEntity extends Auditable {
+public class UserEntity extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;

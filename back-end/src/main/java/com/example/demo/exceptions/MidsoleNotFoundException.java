@@ -1,3 +1,3 @@
 package com.example.demo.exceptions;
 
-public class MidsoleNotFoundException extends RuntimeException {}
+public class MidsoleNotFoundException extends ServerServiceException {}
